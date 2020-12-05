@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:healthy_app/screens/authentication/register.dart';
-import 'package:healthy_app/screens/sign_in.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/screens/authentication/sign_in.dart';
 
 class Authenticate extends StatefulWidget {
 
