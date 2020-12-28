@@ -9,6 +9,7 @@ class DatabaseService {
   final CollectionReference userSettingsCollection = Firestore.instance.collection('userSettings');
 
   Future updateUserData(int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
+    //creating a new document in collection for user with id = uid
     return await userSettingsCollection.document(uid).setData({
       'kcalIntakeTarget': kcalIntakeTarget,
       'kcalOutputTarget': kcalOutputTarget,

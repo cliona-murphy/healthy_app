@@ -41,6 +41,8 @@ Future registerWithEmail(String email, String password) async {
       try {
         AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
         FirebaseUser user = result.user;
+        //create userSettings document for the new user
+        await DatabaseService(uid: user.uid).updateUserData(0, 0, 0.0);
         return _userFromFirebaseUser(user);
       } catch(e){
         print(e.toString());
@@ -52,9 +54,6 @@ Future registerWithEmail(String email, String password) async {
     try {
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
-
-      //create new document for user with uid
-      await DatabaseService(uid: user.uid).updateUserData(0, 0, 0.0);
       return _userFromFirebaseUser(user);
     } catch(e){
       print(e.toString());
