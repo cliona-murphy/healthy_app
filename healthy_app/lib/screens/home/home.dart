@@ -4,6 +4,7 @@ import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/screens/home/userSettings_list.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 
 class Home extends StatelessWidget {
 
@@ -29,7 +30,32 @@ class Home extends StatelessWidget {
           ],
         ),
         body: UserSettingsList(),
-      ),
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Progress',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.no_food),
+          label: 'Food',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.directions_run_outlined),
+          label: 'Activity',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.wb_sunny),
+          label: 'Nutrients',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.check),
+          label: 'Meds',
+        ),
+      ],
+     ),
+    ),
     );
   }
 }
