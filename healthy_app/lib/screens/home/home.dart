@@ -5,10 +5,20 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:healthy_app/shared/navbar.dart';
 
 class Home extends StatelessWidget {
 
   final AuthService _auth = AuthService();
+  final NavBar _bar = NavBar();
+
+  List<Widget> widgetOptions = <Widget>[
+    Text('Progress'),
+    Text('Food Diary'),
+    Text('Activity Diary'),
+    Text('Nutrient Checklist'),
+    Text('Medications'),
+  ];
 
   Widget build(BuildContext context){
     return StreamProvider<QuerySnapshot>.value(
@@ -30,31 +40,7 @@ class Home extends StatelessWidget {
           ],
         ),
         body: UserSettingsList(),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Progress',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.no_food),
-          label: 'Food',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.directions_run_outlined),
-          label: 'Activity',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.wb_sunny),
-          label: 'Nutrients',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.check),
-          label: 'Meds',
-        ),
-      ],
-     ),
+        bottomNavigationBar: NavBar(),
     ),
     );
   }
