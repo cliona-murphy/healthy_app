@@ -5,42 +5,85 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:healthy_app/shared/navbar.dart';
+import '../foodDiary.dart';
+import '../activityDiary.dart';
+import '../medicationTracker.dart';
+import '../nutrientChecklist.dart';
+import '../progress.dart';
 
-class Home extends StatelessWidget {
+// ignore: must_be_immutable
+class Home extends StatefulWidget {
+  //this class should be updated to be named Progress and all references updated
+  @override
+  _HomeState createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
-  final NavBar _bar = NavBar();
 
-  List<Widget> widgetOptions = <Widget>[
-    Text('Progress'),
-    Text('Food Diary'),
-    Text('Activity Diary'),
-    Text('Nutrient Checklist'),
-    Text('Medications'),
+  PageController _pageController = PageController();
+
+  List<Widget> _screens = [
+    Progress(), FoodDiary(), ActivityDiary(), MedicationTracker(), NutrientChecklist(),
   ];
+
+  int _selectedIndex = 0;
+
+  void _onPageChanged(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  int getSelectedIndex(){
+    return _selectedIndex;
+  }
+  void _onItemTapped(int selectedIndex){
+    _pageController.jumpToPage(selectedIndex);
+    setState(() {
+      _selectedIndex = selectedIndex;
+    });
+  }
 
   Widget build(BuildContext context){
     return StreamProvider<QuerySnapshot>.value(
       value: DatabaseService().userSettings,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title : Text("Home"),
-          backgroundColor: Colors.grey,
-          elevation: 0.0,
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.person),
-              label: Text("logout"),
-              onPressed: () async {
-                await _auth.signOut();
-              },
+        body: PageView(
+          controller: _pageController,
+          children: _screens,
+          physics: NeverScrollableScrollPhysics(),
+        ),
+        //Text("This is the progress page"),
+        //bottomNavigationBar: NavBar(),
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: _onItemTapped,
+          type: BottomNavigationBarType.fixed,
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.bar_chart,
+                color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
+              label: 'Progress',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.no_food),
+              label: 'Food',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.directions_run_outlined),
+              label: 'Activity',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.wb_sunny),
+              label: 'Nutrients',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.check),
+              label: 'Meds',
             ),
           ],
-        ),
-        body: UserSettingsList(),
-        bottomNavigationBar: NavBar(),
+          currentIndex: _selectedIndex,
+    ),
     ),
     );
   }
