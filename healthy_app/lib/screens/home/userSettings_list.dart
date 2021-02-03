@@ -14,9 +14,10 @@ class _UserSettingsListState extends State<UserSettingsList> {
     final userSettings = Provider.of<QuerySnapshot>(context);
     //print(userSettings.documents);
     //if(userSettings == null) return CircularProgressIndicator();
-
-    for(var doc in userSettings.documents){
-      print(doc.data);
+    if(userSettings != null){
+      for(var doc in userSettings.documents){
+        print(doc.data);
+      }
     }
     return Container();
   }
