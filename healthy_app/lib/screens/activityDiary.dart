@@ -15,20 +15,6 @@ class ActivityDiary extends StatelessWidget {
       value: DatabaseService().userSettings,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title : Text("Activity Diary"),
-          backgroundColor: Colors.grey,
-          elevation: 0.0,
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.person),
-              label: Text("logout"),
-              onPressed: () async {
-                await _auth.signOut();
-              },
-            ),
-          ],
-        ),
         body: Text("This is the activity diary"),
       ),
     );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/ConstantVars.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthy_app/screens/home/userSettings_list.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import '../foodDiary.dart';
 import '../activityDiary.dart';
 import '../medicationTracker.dart';
@@ -20,13 +19,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
-
   PageController _pageController = PageController();
-
   List<Widget> _screens = [
     Progress(), FoodDiary(), ActivityDiary(), MedicationTracker(), NutrientChecklist(),
   ];
-
   int _selectedIndex = 0;
 
   void _onPageChanged(int index){
@@ -34,9 +30,11 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
   }
+
   int getSelectedIndex(){
     return _selectedIndex;
   }
+
   void _onItemTapped(int selectedIndex){
     _pageController.jumpToPage(selectedIndex);
     setState(() {
@@ -48,14 +46,38 @@ class _HomeState extends State<Home> {
     return StreamProvider<QuerySnapshot>.value(
       value: DatabaseService().userSettings,
       child: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+            onTap: () {
+              /* Write listener code here */
+              print("Calendar View Selected");
+            },
+            child: Icon(
+              Icons.calendar_today_outlined,
+            ),
+          ),
+          title: new Text(getCurrentDate()),
+          centerTitle: true,
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: choiceAction,
+              itemBuilder: (BuildContext context){
+                return ConstantVars.choices.map((String choice){
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                })
+                    .toList();
+              }
+              ,)]
+          ,),
         backgroundColor: Colors.white,
         body: PageView(
           controller: _pageController,
           children: _screens,
           physics: NeverScrollableScrollPhysics(),
         ),
-        //Text("This is the progress page"),
-        //bottomNavigationBar: NavBar(),
         bottomNavigationBar: BottomNavigationBar(
           onTap: _onItemTapped,
           type: BottomNavigationBarType.fixed,
@@ -83,8 +105,27 @@ class _HomeState extends State<Home> {
             ),
           ],
           currentIndex: _selectedIndex,
-    ),
-    ),
+        ),
+      ),
     );
+  }
+  void choiceAction(String choice){
+    if(choice == ConstantVars.Settings){
+      print('Settings');
+    }
+    else if(choice == ConstantVars.Subscribe){
+      print('Subscribe');
+    }
+    else if(choice == ConstantVars.SignOut){
+      _auth.signOut();
+      print('SignOut');
+    }
+  }
+
+  String getCurrentDate(){
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formattedDate = "${dateParse.day}/${dateParse.month}/${dateParse.year}";
+    return formattedDate;
   }
 }
