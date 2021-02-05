@@ -6,8 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-class FoodDiary extends StatelessWidget {
+class FoodDiary extends StatefulWidget {
 
+  @override
+  _FoodDiaryState createState() => _FoodDiaryState();
+}
+
+class _FoodDiaryState extends State<FoodDiary> {
   final AuthService _auth = AuthService();
 
   Widget build(BuildContext context){

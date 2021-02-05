@@ -54,8 +54,6 @@ class _HomeState extends State<Home> {
           children: _screens,
           physics: NeverScrollableScrollPhysics(),
         ),
-        //Text("This is the progress page"),
-        //bottomNavigationBar: NavBar(),
         bottomNavigationBar: BottomNavigationBar(
           onTap: _onItemTapped,
           type: BottomNavigationBarType.fixed,
