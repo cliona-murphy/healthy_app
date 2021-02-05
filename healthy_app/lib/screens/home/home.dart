@@ -19,13 +19,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
-
   PageController _pageController = PageController();
-
   List<Widget> _screens = [
     Progress(), FoodDiary(), ActivityDiary(), MedicationTracker(), NutrientChecklist(),
   ];
-
   int _selectedIndex = 0;
 
   void _onPageChanged(int index){
@@ -33,9 +30,11 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
   }
+
   int getSelectedIndex(){
     return _selectedIndex;
   }
+
   void _onItemTapped(int selectedIndex){
     _pageController.jumpToPage(selectedIndex);
     setState(() {
@@ -106,8 +105,8 @@ class _HomeState extends State<Home> {
             ),
           ],
           currentIndex: _selectedIndex,
-    ),
-    ),
+        ),
+      ),
     );
   }
   void choiceAction(String choice){
@@ -122,6 +121,7 @@ class _HomeState extends State<Home> {
       print('SignOut');
     }
   }
+
   String getCurrentDate(){
     var date = new DateTime.now().toString();
     var dateParse = DateTime.parse(date);
