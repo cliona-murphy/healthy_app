@@ -20,20 +20,6 @@ class _FoodDiaryState extends State<FoodDiary> {
       value: DatabaseService().userSettings,
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          title : Text("Food Diary"),
-          backgroundColor: Colors.grey,
-          elevation: 0.0,
-          actions: <Widget>[
-            FlatButton.icon(
-              icon: Icon(Icons.person),
-              label: Text("logout"),
-              onPressed: () async {
-                await _auth.signOut();
-              },
-            ),
-          ],
-        ),
         body: Text("This is the food diary"),
       ),
     );
