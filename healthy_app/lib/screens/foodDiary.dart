@@ -15,12 +15,90 @@ class FoodDiary extends StatefulWidget {
 class _FoodDiaryState extends State<FoodDiary> {
   final AuthService _auth = AuthService();
 
-  Widget build(BuildContext context){
-    return StreamProvider<QuerySnapshot>.value(
-      value: DatabaseService().userSettings,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Text("This is the food diary"),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: new Container (
+          padding: const EdgeInsets.all(30.0),
+          color: Colors.white,
+          child: new Container(
+              child: new Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 0.0)),
+                    Text('Breakfast',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    TextField(
+                      decoration: InputDecoration(
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          hintText: 'What did you eat for breakfast?'
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 20.0)),
+                    Text('Lunch',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    TextField(
+                      decoration: InputDecoration(
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          hintText: 'What did you eat for lunch?'
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 20.0)),
+                    Text('Dinner',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    TextField(
+                      decoration: InputDecoration(
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          hintText: 'What did you eat for dinner?'
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 20.0)),
+                    Text('Snacks',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    TextField(
+                      decoration: InputDecoration(
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          hintText: 'What snacks did you have?'
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 20.0)),
+                    Text('Water',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    TextField(
+                      decoration: InputDecoration(
+                          border: new OutlineInputBorder(
+                            borderRadius: new BorderRadius.circular(25.0),
+                            borderSide: new BorderSide(),
+                          ),
+                          fillColor: Colors.blue, //not working for some reason
+                          hintText: 'How much water did you drink?'
+                      ),
+                    ),
+                  ]),
+          ),
+        ),
       ),
     );
   }
