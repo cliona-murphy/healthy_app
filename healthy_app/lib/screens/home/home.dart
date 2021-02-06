@@ -9,6 +9,7 @@ import '../activityDiary.dart';
 import '../medicationTracker.dart';
 import '../nutrientChecklist.dart';
 import '../progress.dart';
+import 'settings_list.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
@@ -44,7 +45,7 @@ class _HomeState extends State<Home> {
 
   Widget build(BuildContext context){
     return StreamProvider<QuerySnapshot>.value(
-      value: DatabaseService().userSettings,
+      value: DatabaseService().settings,
       child: Scaffold(
         appBar: AppBar(
           leading: GestureDetector(
@@ -111,6 +112,7 @@ class _HomeState extends State<Home> {
   }
   void choiceAction(String choice){
     if(choice == ConstantVars.Settings){
+      //SettingsList();
       print('Settings');
     }
     else if(choice == ConstantVars.Subscribe){

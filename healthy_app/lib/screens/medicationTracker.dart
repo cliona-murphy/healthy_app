@@ -11,12 +11,9 @@ class MedicationTracker extends StatelessWidget {
   final AuthService _auth = AuthService();
 
   Widget build(BuildContext context){
-    return StreamProvider<QuerySnapshot>.value(
-      value: DatabaseService().userSettings,
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: Text("This is the medication tracker"),
-      ),
     );
   }
 }

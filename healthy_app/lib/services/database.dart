@@ -18,7 +18,7 @@ class DatabaseService {
   }
 
   //get userSettings Stream
-  Stream<QuerySnapshot> get userSettings {
+  Stream<QuerySnapshot> get settings {
     return settingsCollection.snapshots();
   }
 
