@@ -40,7 +40,8 @@ class _SignInState extends State<SignIn> {
           ),
         ],
       ),
-      body: SingleChildScrollView( child: Container(
+      body: SingleChildScrollView(
+        child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
           child: Form(
             key: _formKey,
