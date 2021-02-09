@@ -6,11 +6,11 @@ class DatabaseService {
   DatabaseService({ this.uid });
 
   //collection reference
-  final CollectionReference userSettingsCollection = Firestore.instance.collection('userSettings');
+  final CollectionReference settingsCollection = Firestore.instance.collection('settings');
 
   Future updateUserData(int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
     //creating a new document in collection for user with id = uid
-    return await userSettingsCollection.document(uid).setData({
+    return await settingsCollection.document(uid).setData({
       'kcalIntakeTarget': kcalIntakeTarget,
       'kcalOutputTarget': kcalOutputTarget,
       'waterIntakeTarget': waterIntakeTarget,
@@ -18,8 +18,8 @@ class DatabaseService {
   }
 
   //get userSettings Stream
-  Stream<QuerySnapshot> get userSettings {
-    return userSettingsCollection.snapshots();
+  Stream<QuerySnapshot> get settings {
+    return settingsCollection.snapshots();
   }
 
 }
