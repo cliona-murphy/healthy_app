@@ -7,6 +7,8 @@ class DatabaseService {
 
   //collection reference
   final CollectionReference settingsCollection = Firestore.instance.collection('settings');
+  final CollectionReference foodCollection = Firestore.instance.collection('foods');
+  final CollectionReference entryCollection = Firestore.instance.collection('entries');
 
   Future updateUserData(int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
     //creating a new document in collection for user with id = uid
@@ -22,4 +24,32 @@ class DatabaseService {
     return settingsCollection.snapshots();
   }
 
+  Future createNewEntry(String date) async {
+    //creating a new document in collection for user with id = uid
+    return await entryCollection.document(uid).setData({
+      'date': date,
+    });
+  }
+  Future addNewFood(String foodName, int calories) async {
+    //creating a new document in collection for user with id = uid
+    // return await entryCollection.document(uid).foodCollection.document.add({
+    //   'foodName': foodName,
+    //   'calories': calories,
+    // });
+    return await Firestore
+        .instance
+        .collection('entries')
+        .document(uid)
+        .collection(
+        "foods")
+        .add({
+      'foodName': foodName,
+      'calories': calories,
+    });
+  }
+
+  //get foods Stream
+  Stream<QuerySnapshot> get foods {
+    return foodCollection.snapshots();
+  }
 }

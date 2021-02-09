@@ -3,7 +3,6 @@ import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class MedicationTracker extends StatelessWidget {

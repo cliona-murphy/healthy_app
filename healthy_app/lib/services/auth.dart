@@ -59,6 +59,7 @@ Future registerWithEmail(String email, String password) async {
       //likely because it was not picking up that the user was authenticated
       //so moved updateUserData to occur after user logs in, as system recognizes them as authenticated after login
       await DatabaseService(uid: user.uid).updateUserData(10, 0, 0.0);
+      await DatabaseService(uid: user.uid).createNewEntry(getCurrentDate());
       return _userFromFirebaseUser(user);
     } catch(e){
       print(e.toString());
@@ -66,4 +67,10 @@ Future registerWithEmail(String email, String password) async {
     }
   }
 
+  String getCurrentDate(){
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formattedDate = "${dateParse.day}/${dateParse.month}/${dateParse.year}";
+    return formattedDate;
+  }
 }

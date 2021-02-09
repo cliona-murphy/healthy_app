@@ -3,7 +3,6 @@ import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
 class FoodDiary extends StatefulWidget {
@@ -14,8 +13,12 @@ class FoodDiary extends StatefulWidget {
 
 class _FoodDiaryState extends State<FoodDiary> {
   final AuthService _auth = AuthService();
+  final DatabaseService _db = DatabaseService();
 
   TextEditingController customController = TextEditingController();
+  TextEditingController calorieController = TextEditingController();
+
+  bool foodLogged = false;
 
   Future <String> onContainerTapped(BuildContext context){
     print("Here");
@@ -29,13 +32,13 @@ class _FoodDiaryState extends State<FoodDiary> {
                 children: [
                   //Text("Food name"),
                   TextField(
-                    //controller: customController,
+                    controller: customController,
                     decoration: InputDecoration(
                       hintText: "food name",
                     ),
                   ),
                   TextField(
-                    //controller: customController,
+                    controller: calorieController,
                     decoration: InputDecoration(
                       hintText: "calories",
                     ),
@@ -49,12 +52,21 @@ class _FoodDiaryState extends State<FoodDiary> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                Navigator.of(context).pop(customController.text.toString());
+                //Navigator.of(context).pop(customController.text.toString());
+                foodLogged = true;
+               // print("foodLogged true");
+                updateDatabase(customController.text, int.parse(calorieController.text));
+                Navigator.pop(context);
               },
           ),
         ],
       );
    });
+  }
+
+  updateDatabase(String name, int calories){
+
+    DatabaseService(uid: "0aPJX6cTh3ZhswcugKp6ZHNItsI3").addNewFood(name, calories);
   }
 
   Widget build(BuildContext context) {
@@ -87,7 +99,16 @@ class _FoodDiaryState extends State<FoodDiary> {
                                // SnackBar customSnackBar = SnackBar(content: Text("hi $onValue"));
                               });
                             },
-                              child: Text('Enter what you ate for breakfast')),
+                              child: foodLogged ? Text('Enter what you ate for breakfast') :
+                                 Text('food logged is true'),
+                            ),
+                             // child: Text('Enter what you ate for breakfast')),
+                            // child: TextField(
+                            //   decoration: InputDecoration(
+                            //     labelText: "What did you eat for breakfast?"
+                            //   ),
+                            // ),
+                         // ),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.blueAccent)
                           ),
