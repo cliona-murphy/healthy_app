@@ -4,6 +4,7 @@ import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FoodDiary extends StatefulWidget {
 
@@ -12,15 +13,18 @@ class FoodDiary extends StatefulWidget {
 }
 
 class _FoodDiaryState extends State<FoodDiary> {
-  final AuthService _auth = AuthService();
+
   final DatabaseService _db = DatabaseService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  String userId = "";
 
   TextEditingController customController = TextEditingController();
   TextEditingController calorieController = TextEditingController();
 
   bool foodLogged = false;
 
-  Future <String> onContainerTapped(BuildContext context){
+  Future <String> onContainerTapped(BuildContext context, String mealId){
     print("Here");
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
@@ -55,7 +59,9 @@ class _FoodDiaryState extends State<FoodDiary> {
                 //Navigator.of(context).pop(customController.text.toString());
                 foodLogged = true;
                // print("foodLogged true");
-                updateDatabase(customController.text, int.parse(calorieController.text));
+                updateDatabase(customController.text, int.parse(calorieController.text), mealId);
+                customController.clear();
+                calorieController.clear();
                 Navigator.pop(context);
               },
           ),
@@ -64,9 +70,43 @@ class _FoodDiaryState extends State<FoodDiary> {
    });
   }
 
-  updateDatabase(String name, int calories){
+  updateDatabase(String name, int calories, String mealId) async{
+    userId = await getUid();
+    if(userId != ""){
+      DatabaseService(uid: userId).addNewFood(name, calories, mealId);
+      //error is because not using instance of databaseService to handle operation
+      DatabaseService(uid: userId).getFoods(mealId);
+      //displayFoods(mealId);
+      //userId = "";
+    }
+  }
 
-    DatabaseService(uid: "0aPJX6cTh3ZhswcugKp6ZHNItsI3").addNewFood(name, calories);
+   Future<String> getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    print(uid);
+    return uid;
+  }
+
+  displayFoods(String mealId) async{
+    final FirebaseUser user = await auth.currentUser();
+    Firestore.instance.collection("entries").getDocuments().then((querySnapshot) {
+      querySnapshot.documents.forEach((result) {
+        Firestore.instance
+            .collection("entries")
+            .document(result.documentID)
+            .collection("foods")
+            .where("mealId", isEqualTo: mealId)
+            .getDocuments()
+            .then((querySnapshot) {
+          querySnapshot.documents.forEach((result) {
+            final foodList = List<String>();
+            //foodList.add(result.data);
+            print(result.data);
+          });
+        });
+      });
+    });
   }
 
   Widget build(BuildContext context) {
@@ -94,13 +134,10 @@ class _FoodDiaryState extends State<FoodDiary> {
                           height: 60,
                           child: InkWell(
                             onTap: () {
-                              onContainerTapped(context).then((onValue){
-                                Text breakfastText = Text("$onValue");
-                               // SnackBar customSnackBar = SnackBar(content: Text("hi $onValue"));
-                              });
+                              onContainerTapped(context, "breakfast");
                             },
-                              child: foodLogged ? Text('Enter what you ate for breakfast') :
-                                 Text('food logged is true'),
+                              child: foodLogged ? Text('') :
+                                 Text('Enter what you ate for breakfast'),
                             ),
                              // child: Text('Enter what you ate for breakfast')),
                             // child: TextField(
