@@ -150,7 +150,8 @@ class _FoodDiaryState extends State<FoodDiary> {
                               onTap: () {
                                 onContainerTapped(context, "breakfast");
                               },
-                                child: foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
+                                child:
+                                //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
                                    Text('Enter what you ate for breakfast'),
                               ),
                                // child: Text('Enter what you ate for breakfast')),

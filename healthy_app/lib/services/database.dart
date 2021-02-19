@@ -37,44 +37,56 @@ class DatabaseService {
 
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
-    return await entryCollection.document(uid).setData({
-      'date': date,
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .add({
+      //'name': "entry1",
+      'entryDate': date,
     });
+    // return await entryCollection.document(uid).setData({
+    //   'date': date,
+    // });
   }
   Future addNewFood(String foodName, int calories, String mealId) async {
     //creating a new document in collection for user with id = uid
-    // return await entryCollection.document(uid).foodCollection.document.add({
-    //   'foodName': foodName,
-    //   'calories': calories,
-    // });
+    var dId;
+    await Firestore.instance.collection("users")
+        .document(uid)
+        .collection("entries")
+        .where('entryDate', isEqualTo: '19/2/2021')
+        .getDocuments()
+        .then((querySnapshot) {
+          print(querySnapshot.documents);
+          querySnapshot.documents.forEach((result) {
+            dId = result.documentID;
+           });
+        });
+    print(dId); //keep in for testing
     return await Firestore
         .instance
-        .collection('entries')
+        .collection('users')
         .document(uid)
-        .collection(
-        "foods")
+        .collection('entries')
+        .document(dId)
+        .collection('foods')
         .add({
       'foodName': foodName,
       'calories': calories,
-      'mealId' : mealId,
+      'mealId': mealId,
     });
   }
   //need to make reference to uid in this function
    List<Food> getFoods(mealId){
      List<Food> foods = new List<Food>();
     entryCollection.getDocuments().then((querySnapshot) {
-     // querySnapshot.documents.forEach((result) {
         Firestore.instance
             .collection("entries")
-            // foods were being printed twice because its looping through all entries so printing the data as many times as there are entries
             .document(uid)
             .collection("foods")
             .where("mealId", isEqualTo: mealId)
             .getDocuments()
             .then((querySnapshot) {
-          // List<Food> foods = foodListFromSnapshot(querySnapshot);
-          // foods[0].printFoodInfo();
-          // print(foods);
           querySnapshot.documents.forEach((result) {
             //make food object here
             foods.add(new Food(
