@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/settings.dart';
 
 class DatabaseService {
 
   final String uid;
+  var docId;
   DatabaseService({ this.uid });
 
   //collection reference
@@ -37,48 +39,62 @@ class DatabaseService {
 
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
-    return await entryCollection.document(uid).setData({
-      'date': date,
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .add({
+      //'name': "entry1",
+      'entryDate': date,
     });
-  }
-  Future addNewFood(String foodName, int calories, String mealId) async {
-    //creating a new document in collection for user with id = uid
-    // return await entryCollection.document(uid).foodCollection.document.add({
-    //   'foodName': foodName,
-    //   'calories': calories,
+    // return await entryCollection.document(uid).setData({
+    //   'date': date,
     // });
+  }
+  Future addNewFood(String foodName, int calories, String mealId, String date) async {
+    //creating a new document in collection for user with id = uid
+    await Firestore.instance.collection("users")
+        .document(uid)
+        .collection("entries")
+        .where('entryDate', isEqualTo: date)
+        .getDocuments()
+        .then((querySnapshot) {
+          print(querySnapshot.documents);
+          querySnapshot.documents.forEach((result) {
+            docId = result.documentID;
+           });
+        });
+    print(docId); //keep in for testing
     return await Firestore
         .instance
-        .collection('entries')
+        .collection('users')
         .document(uid)
-        .collection(
-        "foods")
+        .collection('entries')
+        .document(docId)
+        .collection('foods')
         .add({
       'foodName': foodName,
       'calories': calories,
-      'mealId' : mealId,
+      'mealId': mealId,
     });
   }
   //need to make reference to uid in this function
    List<Food> getFoods(mealId){
+
      List<Food> foods = new List<Food>();
     entryCollection.getDocuments().then((querySnapshot) {
-     // querySnapshot.documents.forEach((result) {
         Firestore.instance
-            .collection("entries")
-            // foods were being printed twice because its looping through all entries so printing the data as many times as there are entries
+            .collection("users")
             .document(uid)
+            .collection("entries")
+            .document(docId)
             .collection("foods")
             .where("mealId", isEqualTo: mealId)
             .getDocuments()
             .then((querySnapshot) {
-          // List<Food> foods = foodListFromSnapshot(querySnapshot);
-          // foods[0].printFoodInfo();
-          // print(foods);
           querySnapshot.documents.forEach((result) {
             //make food object here
             foods.add(new Food(
-                name: result.data['foodName'],
+                foodName: result.data['foodName'],
                 calories: result.data['calories'],
                 mealId: result.data['mealId'])
             );
@@ -87,34 +103,60 @@ class DatabaseService {
       });
     return foods;
     }
-
+    //'AxmGT2evOzSr2qiQnKsmGQyrjxr1
+  // 'oaSKwZqXVblVvfDhhvT2'
+  //docId causing problem here
     Stream<List<Food>> get foods {
-    return entryCollection
+    return  Firestore.instance
+        .collection("users")
         .document(uid)
+        .collection('entries')
+        .document('oaSKwZqXVblVvfDhhvT2')
         .collection('foods')
         //.where('mealId', isEqualTo: mealId)
         .snapshots()
       .map(foodListFromSnapshot);
-    // return entryCollection.getDocuments().then((querySnapshot) {
-    //   Firestore.instance
-    //       .collection("entries")
-    //       .document(uid)
-    //       .collection("foods")
-    //       .where("mealId", isEqualTo: mealId)
-    //       .getDocuments()
-    //       .then((querySnapshot) {
-    //     querySnapshot.map(_foodListFromSnapshot);
-    //     });
-    //   });
     }
     //food list from a snapshot
   List<Food> foodListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return Food(
-        name: doc.data['name'] ?? '',
+        foodName: doc.data['foodName'] ?? '',
         calories: doc.data['calories'] ?? 0,
         mealId: doc.data['mealId'] ?? '',
       );
     }).toList();
+  }
+
+  Stream<List<Settings>> get userSettings {
+    return  Firestore.instance
+        .collection("settings")
+        //.document(uid)
+        .snapshots()
+        .map(settingsListFromSnapshot);
+  }
+
+  List<Settings> settingsListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Settings(
+        kcalInput: doc.data['kcalIntakeTarget'] ?? 0,
+        kcalOutput: doc.data['kcalOutputTarget'] ?? 0,
+        targetWater: doc.data['waterIntakeTarget'] ?? 0.0,
+      );
+    }).toList();
+  }
+
+  setDocId(String date){
+    Firestore.instance.collection("users")
+        .document(uid)
+        .collection("entries")
+        .where('entryDate', isEqualTo: date)
+        .getDocuments()
+        .then((querySnapshot) {
+      print(querySnapshot.documents);
+      querySnapshot.documents.forEach((result) {
+        docId = result.documentID;
+      });
+    });
   }
 }

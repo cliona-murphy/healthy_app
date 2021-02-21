@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'home/food_list.dart';
+import 'home/settings_list.dart';
 
 class FoodDiary extends StatefulWidget {
 
@@ -78,8 +80,7 @@ class _FoodDiaryState extends State<FoodDiary> {
   updateDatabase(String name, int calories, String mealId) async{
     userId = await getUid();
     if(userId != ""){
-      DatabaseService(uid: userId).addNewFood(name, calories, mealId);
-      //error is because not using instance of databaseService to handle operation
+      DatabaseService(uid: userId).addNewFood(name, calories, mealId, getCurrentDate());
       foods = DatabaseService(uid: userId).getFoods(mealId);
       if(foods != null){
         print("not null");
@@ -96,6 +97,7 @@ class _FoodDiaryState extends State<FoodDiary> {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
     print(uid);
+    userId = uid;
     return uid;
   }
 
@@ -120,112 +122,139 @@ class _FoodDiaryState extends State<FoodDiary> {
     });
   }
 
+  String getCurrentDate(){
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formattedDate = "${dateParse.day}/${dateParse.month}/${dateParse.year}";
+    return formattedDate;
+  }
+
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: StreamProvider<List<Food>>.value(
-          value: DatabaseService().foods,
+    DatabaseService(uid: userId).setDocId(getCurrentDate());
+
+    return StreamProvider<List<Food>>.value(
+      value: DatabaseService(uid: userId).foods,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
           child: new Container (
             padding: const EdgeInsets.all(30.0),
             color: Colors.white,
             child: new Container(
                 child: new Column(
-                    children: [
-                      Padding(padding: EdgeInsets.only(top: 0.0)),
-                      GestureDetector(
-                        onTap: () {
-                          print("here - Text on tap");
+                  children: <Widget>[
+                    Padding(padding: EdgeInsets.only(top: 0.0)),
+                      Text('Breakfast',
+                      style: new TextStyle(
+                      color: Colors.blue, fontSize: 20.0),
+                      ),
+                      Padding(padding: EdgeInsets.only(top: 10.0)),
+                        InkWell(
+                          onTap: () {
+                            onContainerTapped(context, "breakfast");
                           },
-                          child: Text('Breakfast',
-                          style: new TextStyle(
-                          color: Colors.blue, fontSize: 20.0),
-                          ),
-                          ),
-                          Padding(padding: EdgeInsets.only(top: 10.0)),
-                          Container(
+                          child: Container(
                             width: 300,
                             height: 60,
-                            child: InkWell(
-                              onTap: () {
-                                onContainerTapped(context, "breakfast");
-                              },
-                                child: foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
-                                   Text('Enter what you ate for breakfast'),
-                              ),
-                               // child: Text('Enter what you ate for breakfast')),
-                              // child: TextField(
-                              //   decoration: InputDecoration(
-                              //     labelText: "What did you eat for breakfast?"
-                              //   ),
-                              // ),
-                           // ),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blueAccent)
+                                border: Border.all(color: Colors.blueAccent)
                             ),
-                                 //get food entered for breakfast from db and display here
-                          ),
-                          Padding(padding: EdgeInsets.only(top: 20.0)),
-                          Text('Lunch',
-                            style: new TextStyle(
-                                color: Colors.blue, fontSize: 20.0),),
-                          Padding(padding: EdgeInsets.only(top: 10.0)),
-                          TextField(
-                            decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: 'What did you eat for lunch?'
+                              child: FoodList(),
+                              //SettingsList(),
+                              // child: ListView.builder(
+                              //   shrinkWrap: true,
+                              //   itemCount: 1,
+                              //   itemBuilder: (BuildContext context, int index) {
+                              //     return Container(
+                              //       child: foodLogged ? Text('here'
+                              //       )
+                              //           :  Text('Enter what you ate for breakfast'),
+                              //     );
+                              //   }
+                              // ),
+                            //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
+                             //  Text('Enter what you ate for breakfast'),
                             ),
-                          ),
-                          Padding(padding: EdgeInsets.only(top: 20.0)),
-                          Text('Dinner',
-                            style: new TextStyle(
-                                color: Colors.blue, fontSize: 20.0),),
-                          Padding(padding: EdgeInsets.only(top: 10.0)),
-                          TextField(
-                            decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: 'What did you eat for dinner?'
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.only(top: 20.0)),
-                          Text('Snacks',
-                            style: new TextStyle(
-                                color: Colors.blue, fontSize: 20.0),),
-                          Padding(padding: EdgeInsets.only(top: 10.0)),
-                          TextField(
-                            decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                hintText: 'What snacks did you have?'
-                            ),
-                          ),
-                          Padding(padding: EdgeInsets.only(top: 20.0)),
-                          Text('Water',
-                            style: new TextStyle(
-                                color: Colors.blue, fontSize: 20.0),),
-                          Padding(padding: EdgeInsets.only(top: 10.0)),
-                          GestureDetector(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  border: new OutlineInputBorder(
-                                    borderRadius: new BorderRadius.circular(25.0),
-                                    borderSide: new BorderSide(),
-                                  ),
-                                  fillColor: Colors.blue, //not working for some reason
-                                  hintText: 'How much water did you drink?'
+                      ),
+                          //   child: ListView.builder(
+                          //     shrinkWrap: true,
+                          //     itemCount: listLength,
+                          //     itemBuilder: (BuildContext context, int index) {
+                          //       return Container(
+                          //         child: foodLogged ? Text(foods[index].name.toString())
+                          //             :  Text('Enter what you ate for breakfast'),
+                          //       );
+                          //     }
+                          //   ),
+                              // child:
+                              // //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
+                              //    Text('Enter what you ate for breakfast'),
+                            //),
+                             // child: Text('Enter what you ate for breakfast')),
+
+                    //get food entered for breakfast from db and display here
+
+                        Padding(padding: EdgeInsets.only(top: 20.0)),
+                        Text('Lunch',
+                          style: new TextStyle(
+                              color: Colors.blue, fontSize: 20.0),),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        TextField(
+                          decoration: InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
                               ),
+                              hintText: 'What did you eat for lunch?'
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 20.0)),
+                        Text('Dinner',
+                          style: new TextStyle(
+                              color: Colors.blue, fontSize: 20.0),),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        TextField(
+                          decoration: InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
+                              ),
+                              hintText: 'What did you eat for dinner?'
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 20.0)),
+                        Text('Snacks',
+                          style: new TextStyle(
+                              color: Colors.blue, fontSize: 20.0),),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        TextField(
+                          decoration: InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
+                              ),
+                              hintText: 'What snacks did you have?'
+                          ),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 20.0)),
+                        Text('Water',
+                          style: new TextStyle(
+                              color: Colors.blue, fontSize: 20.0),),
+                        Padding(padding: EdgeInsets.only(top: 10.0)),
+                        GestureDetector(
+                          child: TextField(
+                            decoration: InputDecoration(
+                                border: new OutlineInputBorder(
+                                  borderRadius: new BorderRadius.circular(25.0),
+                                  borderSide: new BorderSide(),
+                                ),
+                                fillColor: Colors.blue, //not working for some reason
+                                hintText: 'How much water did you drink?'
                             ),
-                      )
-                    ]),
-            ),
+                          ),
+                    )
+                  ]),
+          ),
           ),
         ),
       ),

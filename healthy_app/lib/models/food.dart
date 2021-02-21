@@ -1,15 +1,20 @@
 class Food {
-  final String name;
+  final String foodName;
   final int calories;
   final String mealId;
 
-  Food({this.name, this.calories, this.mealId});
+  Food({ this.foodName, this.calories, this.mealId });
 
   printFoodInfo(){
-    print("Food name is: " + name);
+    if(foodName != null){
+      print("Food name is: " + foodName);
+    }
+  else {
+    print("food name is null");
+    }
   }
   getName(){
-    return name;
+    return foodName;
   }
 
   getCalories(){
