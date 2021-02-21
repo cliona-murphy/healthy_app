@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:provider/provider.dart';
@@ -11,12 +12,16 @@ class FoodList extends StatefulWidget {
 class _FoodListState extends State<FoodList> {
   @override
   Widget build(BuildContext context) {
+    bool foodsNull = false;
+    final foods = Provider.of<List<Food>>(context);
+    foods.forEach((food) {
+      print(food.name.toString());
+    });
 
-    final foods = Provider.of<List<Food>>(context) ?? [];
     return ListView.builder(
       itemCount: foods.length,
       itemBuilder: (context, index) {
-        return FoodTile(food: foods[index]);
+        return Text(foods[index].name.toString());
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'home/food_list.dart';
+import 'home/settings_list.dart';
 
 class FoodDiary extends StatefulWidget {
 
@@ -127,11 +129,11 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: StreamProvider<List<Food>>.value(
-          value: DatabaseService().foods,
+    return StreamProvider<List<Settings>>.value(
+      value: DatabaseService().userSettings, //(uid: userId)
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
           child: new Container (
             padding: const EdgeInsets.all(30.0),
             color: Colors.white,
@@ -144,25 +146,32 @@ class _FoodDiaryState extends State<FoodDiary> {
                       color: Colors.blue, fontSize: 20.0),
                       ),
                       Padding(padding: EdgeInsets.only(top: 10.0)),
-                      Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)
-                        ),
-                        child: InkWell(
-                            onTap: () {
+                        InkWell(
+                          onTap: () {
                             onContainerTapped(context, "breakfast");
                           },
-                            child:
-                          //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
-                             Text('Enter what you ate for breakfast'),
-                          ),
+                          child: Container(
+                            width: 300,
+                            height: 60,
+                            decoration: BoxDecoration(
+                                border: Border.all(color: Colors.blueAccent)
+                            ),
+                              child: SettingsList(),
+                              // child: ListView.builder(
+                              //   shrinkWrap: true,
+                              //   itemCount: 1,
+                              //   itemBuilder: (BuildContext context, int index) {
+                              //     return Container(
+                              //       child: foodLogged ? Text('here'
+                              //       )
+                              //           :  Text('Enter what you ate for breakfast'),
+                              //     );
+                              //   }
+                              // ),
+                            //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
+                             //  Text('Enter what you ate for breakfast'),
+                            ),
                       ),
-                          // child: InkWell(
-                          //   onTap: () {
-                          //     onContainerTapped(context, "breakfast");
-                          //   },
                           //   child: ListView.builder(
                           //     shrinkWrap: true,
                           //     itemCount: listLength,
@@ -178,14 +187,8 @@ class _FoodDiaryState extends State<FoodDiary> {
                               //    Text('Enter what you ate for breakfast'),
                             //),
                              // child: Text('Enter what you ate for breakfast')),
-                            // child: TextField(
-                            //   decoration: InputDecoration(
-                            //     labelText: "What did you eat for breakfast?"
-                            //   ),
-                            // ),
-                         // ),
 
-                               //get food entered for breakfast from db and display here
+                    //get food entered for breakfast from db and display here
 
                         Padding(padding: EdgeInsets.only(top: 20.0)),
                         Text('Lunch',
@@ -248,8 +251,8 @@ class _FoodDiaryState extends State<FoodDiary> {
                     )
                   ]),
           ),
+          ),
         ),
-      ),
       ),
     );
   }

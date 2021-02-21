@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/settings.dart';
 
 class DatabaseService {
 
@@ -104,23 +105,15 @@ class DatabaseService {
     }
 
     Stream<List<Food>> get foods {
-    return entryCollection
+    return  Firestore.instance
+        .collection("users")
         .document(uid)
+        .collection('entries')
+        .document(docId)
         .collection('foods')
         //.where('mealId', isEqualTo: mealId)
         .snapshots()
       .map(foodListFromSnapshot);
-    // return entryCollection.getDocuments().then((querySnapshot) {
-    //   Firestore.instance
-    //       .collection("entries")
-    //       .document(uid)
-    //       .collection("foods")
-    //       .where("mealId", isEqualTo: mealId)
-    //       .getDocuments()
-    //       .then((querySnapshot) {
-    //     querySnapshot.map(_foodListFromSnapshot);
-    //     });
-    //   });
     }
     //food list from a snapshot
   List<Food> foodListFromSnapshot(QuerySnapshot snapshot) {
@@ -129,6 +122,35 @@ class DatabaseService {
         name: doc.data['name'] ?? '',
         calories: doc.data['calories'] ?? 0,
         mealId: doc.data['mealId'] ?? '',
+      );
+    }).toList();
+  }
+
+  Stream<QuerySnapshot> get foodsSnapshot {
+    Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('entries')
+        .document('4KkvLu20QaFjo45EZCEE')
+        .collection('foods')
+    //.where('mealId', isEqualTo: mealId)
+        .snapshots();
+  }
+
+  Stream<List<Settings>> get userSettings {
+    return  Firestore.instance
+        .collection("settings")
+        //.document(uid)
+        .snapshots()
+        .map(settingsListFromSnapshot);
+  }
+
+  List<Settings> settingsListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Settings(
+        kcalInput: doc.data['kcalIntakeTarget'] ?? 0,
+        kcalOutput: doc.data['kcalOutputTarget'] ?? 0,
+        targetWater: doc.data['waterIntakeTarget'] ?? 0.0,
       );
     }).toList();
   }
