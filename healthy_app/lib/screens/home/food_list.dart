@@ -15,20 +15,12 @@ class _FoodListState extends State<FoodList> {
   Widget build(BuildContext context) {
     bool foodsNull = false;
     final foods = Provider.of<List<Food>>(context) ?? [];
-    // milk
-
-    foods.forEach((food) {
-      print(food.name.toString());
-    });
 
     if(foods != null){
-      print("foods list isn't null");
-      print("length of list = " + foods.length.toString());
-      print(foods[0].calories.toString());
       return ListView.builder(
         itemCount: foods.length,
         itemBuilder: (context, index) {
-          return Text(foods[index].calories.toString());
+          return Text("${foods[index].foodName.toString()} ${foods[index].calories.toString()} calories");
         },
       );
     } else {

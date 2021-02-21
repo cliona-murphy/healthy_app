@@ -94,7 +94,7 @@ class DatabaseService {
           querySnapshot.documents.forEach((result) {
             //make food object here
             foods.add(new Food(
-                name: result.data['foodName'],
+                foodName: result.data['foodName'],
                 calories: result.data['calories'],
                 mealId: result.data['mealId'])
             );
@@ -103,11 +103,13 @@ class DatabaseService {
       });
     return foods;
     }
-
+    //'AxmGT2evOzSr2qiQnKsmGQyrjxr1
+  // 'oaSKwZqXVblVvfDhhvT2'
+  //docId causing problem here
     Stream<List<Food>> get foods {
     return  Firestore.instance
         .collection("users")
-        .document('AxmGT2evOzSr2qiQnKsmGQyrjxr1')
+        .document(uid)
         .collection('entries')
         .document('oaSKwZqXVblVvfDhhvT2')
         .collection('foods')
@@ -119,22 +121,11 @@ class DatabaseService {
   List<Food> foodListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return Food(
-        name: doc.data['name'] ?? '',
+        foodName: doc.data['foodName'] ?? '',
         calories: doc.data['calories'] ?? 0,
         mealId: doc.data['mealId'] ?? '',
       );
     }).toList();
-  }
-
-  Stream<QuerySnapshot> get foodsSnapshot {
-    Firestore.instance
-        .collection("users")
-        .document(uid)
-        .collection('entries')
-        .document(getDocId())
-        .collection('foods')
-    //.where('mealId', isEqualTo: mealId)
-        .snapshots();
   }
 
   Stream<List<Settings>> get userSettings {
@@ -155,7 +146,17 @@ class DatabaseService {
     }).toList();
   }
 
-  String getDocId(){
-    return docId;
+  setDocId(String date){
+    Firestore.instance.collection("users")
+        .document(uid)
+        .collection("entries")
+        .where('entryDate', isEqualTo: date)
+        .getDocuments()
+        .then((querySnapshot) {
+      print(querySnapshot.documents);
+      querySnapshot.documents.forEach((result) {
+        docId = result.documentID;
+      });
+    });
   }
 }

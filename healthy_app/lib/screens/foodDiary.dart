@@ -130,8 +130,10 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
+    DatabaseService(uid: userId).setDocId(getCurrentDate());
+
     return StreamProvider<List<Food>>.value(
-      value: DatabaseService(uid: 'AxmGT2evOzSr2qiQnKsmGQyrjxr1').foods,
+      value: DatabaseService(uid: userId).foods,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
