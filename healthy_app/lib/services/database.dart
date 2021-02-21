@@ -4,6 +4,7 @@ import 'package:healthy_app/models/food.dart';
 class DatabaseService {
 
   final String uid;
+  var docId;
   DatabaseService({ this.uid });
 
   //collection reference
@@ -48,27 +49,26 @@ class DatabaseService {
     //   'date': date,
     // });
   }
-  Future addNewFood(String foodName, int calories, String mealId) async {
+  Future addNewFood(String foodName, int calories, String mealId, String date) async {
     //creating a new document in collection for user with id = uid
-    var dId;
     await Firestore.instance.collection("users")
         .document(uid)
         .collection("entries")
-        .where('entryDate', isEqualTo: '19/2/2021')
+        .where('entryDate', isEqualTo: date)
         .getDocuments()
         .then((querySnapshot) {
           print(querySnapshot.documents);
           querySnapshot.documents.forEach((result) {
-            dId = result.documentID;
+            docId = result.documentID;
            });
         });
-    print(dId); //keep in for testing
+    print(docId); //keep in for testing
     return await Firestore
         .instance
         .collection('users')
         .document(uid)
         .collection('entries')
-        .document(dId)
+        .document(docId)
         .collection('foods')
         .add({
       'foodName': foodName,
@@ -78,11 +78,14 @@ class DatabaseService {
   }
   //need to make reference to uid in this function
    List<Food> getFoods(mealId){
+
      List<Food> foods = new List<Food>();
     entryCollection.getDocuments().then((querySnapshot) {
         Firestore.instance
-            .collection("entries")
+            .collection("users")
             .document(uid)
+            .collection("entries")
+            .document(docId)
             .collection("foods")
             .where("mealId", isEqualTo: mealId)
             .getDocuments()
