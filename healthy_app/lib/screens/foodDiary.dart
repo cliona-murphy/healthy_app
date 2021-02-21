@@ -97,6 +97,7 @@ class _FoodDiaryState extends State<FoodDiary> {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
     print(uid);
+    userId = uid;
     return uid;
   }
 
@@ -129,8 +130,8 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
-    return StreamProvider<List<Settings>>.value(
-      value: DatabaseService().userSettings, //(uid: userId)
+    return StreamProvider<List<Food>>.value(
+      value: DatabaseService(uid: 'AxmGT2evOzSr2qiQnKsmGQyrjxr1').foods,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -156,7 +157,8 @@ class _FoodDiaryState extends State<FoodDiary> {
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.blueAccent)
                             ),
-                              child: SettingsList(),
+                              child: FoodList(),
+                              //SettingsList(),
                               // child: ListView.builder(
                               //   shrinkWrap: true,
                               //   itemCount: 1,

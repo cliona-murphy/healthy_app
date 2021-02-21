@@ -107,9 +107,9 @@ class DatabaseService {
     Stream<List<Food>> get foods {
     return  Firestore.instance
         .collection("users")
-        .document(uid)
+        .document('AxmGT2evOzSr2qiQnKsmGQyrjxr1')
         .collection('entries')
-        .document(docId)
+        .document('oaSKwZqXVblVvfDhhvT2')
         .collection('foods')
         //.where('mealId', isEqualTo: mealId)
         .snapshots()
@@ -131,7 +131,7 @@ class DatabaseService {
         .collection("users")
         .document(uid)
         .collection('entries')
-        .document('4KkvLu20QaFjo45EZCEE')
+        .document(getDocId())
         .collection('foods')
     //.where('mealId', isEqualTo: mealId)
         .snapshots();
@@ -153,5 +153,9 @@ class DatabaseService {
         targetWater: doc.data['waterIntakeTarget'] ?? 0.0,
       );
     }).toList();
+  }
+
+  String getDocId(){
+    return docId;
   }
 }

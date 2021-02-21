@@ -11,16 +11,19 @@ class SettingsList extends StatefulWidget {
 class _SettingsListState extends State<SettingsList> {
   @override
   Widget build(BuildContext context) {
-
     final userSettings = Provider.of<List<Settings>>(context);
     userSettings.forEach((settings) {
       print(settings.kcalInput.toString());
     });
-    return ListView.builder(
-      itemCount: userSettings.length,
-      itemBuilder: (context, index){
-        return Text(userSettings[index].kcalOutput.toString());
-      },
-    );
+    if (userSettings != null) {
+      return ListView.builder(
+        itemCount: userSettings.length,
+        itemBuilder: (context, index) {
+          return Text(userSettings[index].kcalOutput.toString());
+        },
+      );
+    } else {
+      return CircularProgressIndicator();
+    }
   }
 }
