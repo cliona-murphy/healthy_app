@@ -17,6 +17,8 @@ class _FoodListState extends State<FoodList> {
     final foods = Provider.of<List<Food>>(context) ?? [];
 
     if(foods != null){
+      print("foods list is not null");
+      print("length of list = " + foods.length.toString());
       return ListView.builder(
         itemCount: foods.length,
         itemBuilder: (context, index) {
@@ -24,6 +26,7 @@ class _FoodListState extends State<FoodList> {
         },
       );
     } else {
+      print("foods list is null");
       return CircularProgressIndicator();
     }
   }

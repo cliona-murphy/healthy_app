@@ -130,7 +130,8 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
-    DatabaseService(uid: userId).setDocId(getCurrentDate());
+   // DatabaseService(uid: userId).setDocId(getCurrentDate());
+    print("food diary userId = " + userId.toString());
 
     return StreamProvider<List<Food>>.value(
       value: DatabaseService(uid: userId).foods,
@@ -160,40 +161,8 @@ class _FoodDiaryState extends State<FoodDiary> {
                                 border: Border.all(color: Colors.blueAccent)
                             ),
                               child: FoodList(),
-                              //SettingsList(),
-                              // child: ListView.builder(
-                              //   shrinkWrap: true,
-                              //   itemCount: 1,
-                              //   itemBuilder: (BuildContext context, int index) {
-                              //     return Container(
-                              //       child: foodLogged ? Text('here'
-                              //       )
-                              //           :  Text('Enter what you ate for breakfast'),
-                              //     );
-                              //   }
-                              // ),
-                            //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
-                             //  Text('Enter what you ate for breakfast'),
-                            ),
-                      ),
-                          //   child: ListView.builder(
-                          //     shrinkWrap: true,
-                          //     itemCount: listLength,
-                          //     itemBuilder: (BuildContext context, int index) {
-                          //       return Container(
-                          //         child: foodLogged ? Text(foods[index].name.toString())
-                          //             :  Text('Enter what you ate for breakfast'),
-                          //       );
-                          //     }
-                          //   ),
-                              // child:
-                              // //foodLogged ? Text("${foods[0].name.toString()} ${foods[0].calories.toString()} calories") :
-                              //    Text('Enter what you ate for breakfast'),
-                            //),
-                             // child: Text('Enter what you ate for breakfast')),
-
-                    //get food entered for breakfast from db and display here
-
+                          ),
+                        ),
                         Padding(padding: EdgeInsets.only(top: 20.0)),
                         Text('Lunch',
                           style: new TextStyle(
