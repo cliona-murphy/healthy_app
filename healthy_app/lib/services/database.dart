@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_app/models/medication.dart';
 
 class DatabaseService {
 
@@ -31,5 +32,23 @@ class DatabaseService {
       'medicationName': medName,
       'timeToTake': time,
     });
+  }
+
+  Stream<List<Medication>> get medications {
+    return  Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('medications')
+        .snapshots()
+        .map(medicationListFromSnapshot);
+  }
+
+  List<Medication> medicationListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Medication(
+        medicineName: doc.data['medicationName'] ?? '',
+        timeToTake: doc.data['timeToTake'] ?? '',
+      );
+    }).toList();
   }
 }
