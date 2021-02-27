@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   PageController _pageController = PageController();
   List<Widget> _screens = [
-    Progress(), FoodDiary(), ActivityDiary(), MedicationTracker(), NutrientChecklist(),
+    Progress(), FoodDiary(), ActivityDiary(), NutrientChecklist(), MedicationTracker(),
   ];
   int _selectedIndex = 0;
 
