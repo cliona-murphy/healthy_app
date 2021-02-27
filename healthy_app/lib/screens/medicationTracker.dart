@@ -1,11 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+
+import 'home/medication_list.dart';
 
 class MedicationTracker extends StatefulWidget {
 
@@ -87,34 +90,45 @@ class _MedicationTrackerState extends State<MedicationTracker> {
 
 
   Widget build(BuildContext context){
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Container(
-          height: 600,
-          child: Center(
-            child: Column(
-                children: [
-                    Padding(padding: EdgeInsets.only(top: 30.0)),
+    return StreamProvider<List<Medication>>.value(
+      value: DatabaseService(uid: userId).medications,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Container(
+            height: 600,
+            child: Center(
+              child: Column(
+                  children: [
+                      Padding(padding: EdgeInsets.only(top: 30.0)),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
+                        child: Text('You have not added anything to this list yet',
+                        textAlign: TextAlign.center,
+                        style: new TextStyle(
+                            color: Colors.blue, fontSize: 20.0),
+                      ),
+                      ),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-                      child: Text('You have not added anything to this list yet',
-                      textAlign: TextAlign.center,
-                      style: new TextStyle(
-                          color: Colors.blue, fontSize: 20.0),
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                        onPressed: (){
+                          print("button pressed");
+                          addItem(context);
+                        },
+                        child: Text("Add Item"),
+                      ),
                     ),
+                    Container(
+                      width: 300,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blueAccent)
+                      ),
+                      child: MedicationList(),
                     ),
-                  Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                      onPressed: (){
-                        print("button pressed");
-                        addItem(context);
-                      },
-                      child: Text("Add Item"),
-                    ),
-                  ),
-                ]),
+                  ]),
+            ),
           ),
         ),
       ),
