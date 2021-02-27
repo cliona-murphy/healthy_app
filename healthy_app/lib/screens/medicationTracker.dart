@@ -6,14 +6,90 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/screens/home/userSettings_list.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-class MedicationTracker extends StatelessWidget {
+class MedicationTracker extends StatefulWidget {
 
+  @override
+  _MedicationTrackerState createState() => _MedicationTrackerState();
+}
+
+class _MedicationTrackerState extends State<MedicationTracker> {
   final AuthService _auth = AuthService();
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+
+  Future <String> addItem(BuildContext context) {
+    print("Add item called");
+      return showDialog(context: context, builder: (context) {
+        return AlertDialog(
+          title: Text("Enter details here:"),
+          content: Container(
+            height: 100,
+            child : SingleChildScrollView(
+              child: Column(
+                children: [
+                  //Text("Food name"),
+                  TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      hintText: "medication/supplement name",
+                    ),
+                  ),
+                  Container(
+                    // child: Column(
+                    //   children: [
+                    //     InkWell(
+                    //       //onTap: () => _selectTime(context)
+                    //     ),
+                        child: TextField(
+                        controller: timeController,
+                        decoration: InputDecoration(
+                          hintText: "time to be taken at",
+                        ),
+                      ),
+                   // ]),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: <Widget> [
+            MaterialButton(
+              elevation: 5.0,
+              child: Text("Submit"),
+              onPressed: () {
+                nameController.clear();
+                timeController.clear();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      });
+  }
 
   Widget build(BuildContext context){
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Text("This is the medication tracker"),
+      body: SingleChildScrollView(
+        child: Container(
+          child: Center(
+            child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(30.0),
+                    child: ElevatedButton(
+                      onPressed: (){
+                        print("button pressed");
+                        addItem(context);
+                      },
+                      child: Text("Add Item"),
+                    ),
+                  ),
+                ]),
+          ),
+        ),
+      ),
     );
   }
 }
