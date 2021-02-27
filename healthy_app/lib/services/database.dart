@@ -86,14 +86,14 @@ class DatabaseService {
       Firestore.instance.collection("users")
           .document(uid)
           .collection("entries")
-          .where('entryDate', isEqualTo: "22/2/2021")
+          .where('entryDate', isEqualTo: "27/2/2021")
           .getDocuments()
           .then((querySnapshot) {
         print(querySnapshot.documents);
-        querySnapshot.documents.forEach((result) {
+        querySnapshot.documents.forEach((result) async {
           print("document id from within food stream getter is = " + result.documentID.toString());
           String _doc1Id = result.documentID.toString();
-          setDocumentId(_doc1Id);
+          await setDocumentId(_doc1Id);
         });
       });
       //print("docId from within food stream function = " + documentId.toString());
@@ -102,14 +102,14 @@ class DatabaseService {
         .collection("users")
         .document(uid)
         .collection('entries')
-        .document('ux5etQTwKicCkI3SpXzD')
+        .document('XDBJX46lcyszJZoUYjC1')
         .collection('foods')
         //.where('mealId', isEqualTo: mealId)
         .snapshots()
       .map(foodListFromSnapshot);
     }
     //food list from a snapshot
-  setDocumentId(String docId) {
+  setDocumentId(String docId) async {
     print("Set doc id called");
     print("doc Id passed in is: " + docId);
     documentId = docId;

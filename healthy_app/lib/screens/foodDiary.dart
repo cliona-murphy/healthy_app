@@ -79,6 +79,7 @@ class _FoodDiaryState extends State<FoodDiary> {
 
   updateDatabase(String name, int calories, String mealId) async{
     userId = await getUid();
+    print("user id from updateDatabase function is: " + userId);
     if(userId != ""){
       DatabaseService(uid: userId).addNewFood(name, calories, mealId, getCurrentDate());
       foods = DatabaseService(uid: userId).getFoods(mealId);
