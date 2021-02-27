@@ -23,10 +23,13 @@ class DatabaseService {
   }
 
   Future addMedication(String medName, String time) async {
-    return await Firestore.instance.collection('medications')
-        .document(uid).setData({
-        'medicationName': medName,
-        'timeToTake': time,
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(medName)
+        .setData({
+      'medicationName': medName,
+      'timeToTake': time,
     });
   }
 }

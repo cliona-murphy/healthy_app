@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
@@ -14,11 +15,14 @@ class MedicationTracker extends StatefulWidget {
 
 class _MedicationTrackerState extends State<MedicationTracker> {
   final AuthService _auth = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  var userId;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
 
-  Future <String> addItem(BuildContext context) {
+  Future<String> addItem(BuildContext context) {
     print("Add item called");
       return showDialog(context: context, builder: (context) {
         return AlertDialog(
@@ -58,6 +62,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
+                updateDatabase(nameController.text, timeController.text);
                 nameController.clear();
                 timeController.clear();
                 Navigator.pop(context);
@@ -67,6 +72,19 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         );
       });
   }
+
+  Future updateDatabase(String medName, String timeToTake) async {
+    userId = await getUid();
+    DatabaseService(uid: userId).addMedication(medName, timeToTake);
+  }
+
+  Future<String> getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    print(uid);
+    return uid;
+  }
+
 
   Widget build(BuildContext context){
     return Scaffold(
