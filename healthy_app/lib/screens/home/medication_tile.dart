@@ -12,13 +12,17 @@ class MedicationTile extends StatelessWidget {
       padding: const EdgeInsets.only(top: 8.0),
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-        child: ListTile(
-          leading: CircleAvatar(
-            radius: 25.0,
-           // backgroundColor: Colors.brown[medication.medicineName],
-          ),
-          title: Text(medication.medicineName),
-          subtitle: Text('Take at ${medication.timeToTake}'),
+        child: RadioListTile(
+          // leading: CircleAvatar(
+          //   radius: 25.0,
+          //  // backgroundColor: Colors.brown[medication.medicineName],
+          // ),
+          value: medication,
+          activeColor: Colors.blue,
+          title: Text(medication.medicineName,
+          style: TextStyle(color: Colors.black)),
+          subtitle: Text('Take at ${medication.timeToTake}',
+              style: TextStyle(color: Colors.grey[700])),
         ),
       ),
     );

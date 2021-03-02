@@ -17,6 +17,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   var userId;
+  bool userIdSet = false;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -91,10 +92,12 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     setState(() {
       userId = uid;
     });
+    setState(() {
+      userIdSet = true;
+    });
     print(uid);
     return uid;
   }
-
 
   Widget build(BuildContext context){
     return StreamProvider<List<Medication>>.value(

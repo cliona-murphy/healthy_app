@@ -29,6 +29,7 @@ class _MedicationListState extends State<MedicationList> {
         },
       );
     } else {
+      //return CircularProgressIndicator();
       print("medications list is null");
       return Container(
         height: 80,
