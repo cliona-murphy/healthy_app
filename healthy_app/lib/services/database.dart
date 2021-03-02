@@ -43,7 +43,7 @@ class DatabaseService {
   }
 
   Stream<List<Medication>> get medications {
-    print("uid from inside stream: " +uid);
+    //print("uid from inside stream: " +uid);
     return  Firestore.instance
         .collection("users")
         .document(uid)

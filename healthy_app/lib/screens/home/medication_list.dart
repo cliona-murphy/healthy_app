@@ -31,7 +31,7 @@ class _MedicationListState extends State<MedicationList> {
     } else {
       print("medications list is null");
       return Container(
-        height: 300,
+        height: 80,
         width: 300,
         padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
         child: Text('You have not added anything to this list yet',

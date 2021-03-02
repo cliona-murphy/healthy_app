@@ -4,10 +4,6 @@ import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthy_app/screens/home/userSettings_list.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-
 import 'home/medication_list.dart';
 
 class MedicationTracker extends StatefulWidget {
@@ -24,6 +20,14 @@ class _MedicationTrackerState extends State<MedicationTracker> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
+
+  void initState(){
+    print("init state called");
+    super.initState();
+    getUid();
+    print(userId);
+  }
+
 
   Future<String> addItem(BuildContext context) {
     print("Add item called");
@@ -84,6 +88,9 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   Future<String> getUid() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
+    setState(() {
+      userId = uid;
+    });
     print(uid);
     return uid;
   }
