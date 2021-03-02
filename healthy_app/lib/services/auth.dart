@@ -60,6 +60,7 @@ Future registerWithEmail(String email, String password) async {
       //permission was denied when trying to updateUserData immediately after registering
       //likely because it was not picking up that the user was authenticated
       //so moved updateUserData to occur after user logs in, as system recognizes them as authenticated after login
+      await DatabaseService(uid: user.uid).addUser(email);
       await DatabaseService(uid: user.uid).updateUserData(10, 0, 0.0);
       await DatabaseService(uid: user.uid).createNewEntry(getCurrentDate());
       return _userFromFirebaseUser(user);

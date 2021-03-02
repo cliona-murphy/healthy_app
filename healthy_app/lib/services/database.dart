@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/models/settings.dart';
+import 'package:healthy_app/models/medication.dart';
+
 
 class DatabaseService {
 
@@ -26,6 +28,12 @@ class DatabaseService {
     });
   }
 
+  Future addUser(String email) async {
+    //creating a new document in collection for user with id = uid
+    return await userCollection.document(uid).setData({
+      'email': email,
+    });
+  }
   Future updateUserData(int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
     //creating a new document in collection for user with id = uid
     return await settingsCollection.document(uid).setData({
@@ -201,5 +209,36 @@ class DatabaseService {
       });
     });
     return foods;
+  }
+  
+  Future addMedication(String medName, String time) async {
+    print("uid from inside addMedication = " +uid);
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(medName)
+        .setData({
+      'medicationName': medName,
+      'timeToTake': time,
+    });
+  }
+
+  Stream<List<Medication>> get medications {
+    //print("uid from inside stream: " +uid);
+    return  Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('medications')
+        .snapshots()
+        .map(medicationListFromSnapshot);
+  }
+
+  List<Medication> medicationListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Medication(
+        medicineName: doc.data['medicationName'] ?? '',
+        timeToTake: doc.data['timeToTake'] ?? '',
+      );
+    }).toList();
   }
 }
