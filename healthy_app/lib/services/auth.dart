@@ -42,6 +42,7 @@ Future registerWithEmail(String email, String password) async {
         AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
         FirebaseUser user = result.user;
         //create userSettings document for the new user
+        await DatabaseService(uid: user.uid).addUser(email);
         await DatabaseService(uid: user.uid).updateUserData(10, 0, 0.0);
         return _userFromFirebaseUser(user);
       } catch(e){
@@ -58,6 +59,7 @@ Future registerWithEmail(String email, String password) async {
       //permission was denied when trying to updateUserData immediately after registering
       //likely because it was not picking up that the user was authenticated
       //so moved updateUserData to occur after user logs in, as system recognizes them as authenticated after login
+      await DatabaseService(uid: user.uid).addUser(email);
       await DatabaseService(uid: user.uid).updateUserData(10, 0, 0.0);
       return _userFromFirebaseUser(user);
     } catch(e){

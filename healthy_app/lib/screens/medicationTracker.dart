@@ -101,32 +101,17 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               child: Column(
                   children: [
                       Padding(padding: EdgeInsets.only(top: 30.0)),
+                      MedicationList(),
                       Container(
-                        padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-                        child: Text('You have not added anything to this list yet',
-                        textAlign: TextAlign.center,
-                        style: new TextStyle(
-                            color: Colors.blue, fontSize: 20.0),
+                        padding: const EdgeInsets.all(10.0),
+                        child: ElevatedButton(
+                          onPressed: (){
+                            print("button pressed");
+                            addItem(context);
+                          },
+                          child: Text("Add Item"),
+                        ),
                       ),
-                      ),
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ElevatedButton(
-                        onPressed: (){
-                          print("button pressed");
-                          addItem(context);
-                        },
-                        child: Text("Add Item"),
-                      ),
-                    ),
-                    Container(
-                      width: 300,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blueAccent)
-                      ),
-                      child: MedicationList(),
-                    ),
                   ]),
             ),
           ),

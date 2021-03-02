@@ -8,7 +8,14 @@ class DatabaseService {
 
   //collection reference
   final CollectionReference settingsCollection = Firestore.instance.collection('settings');
+  final CollectionReference userCollection = Firestore.instance.collection('users');
 
+  Future addUser(String email) async {
+    //creating a new document in collection for user with id = uid
+    return await userCollection.document(uid).setData({
+      'email': email,
+    });
+  }
   Future updateUserData(int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
     //creating a new document in collection for user with id = uid
     return await settingsCollection.document(uid).setData({
@@ -24,6 +31,7 @@ class DatabaseService {
   }
 
   Future addMedication(String medName, String time) async {
+    print("uid from inside addMedication = " +uid);
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
@@ -35,6 +43,7 @@ class DatabaseService {
   }
 
   Stream<List<Medication>> get medications {
+    print("uid from inside stream: " +uid);
     return  Firestore.instance
         .collection("users")
         .document(uid)
