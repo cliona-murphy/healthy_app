@@ -13,12 +13,12 @@ class MedicationList extends StatefulWidget {
 class _MedicationListState extends State<MedicationList> {
   @override
   Widget build(BuildContext context) {
-    bool foodsNull = false;
     final medications = Provider.of<List<Medication>>(context) ?? [];
 
     if(medications.isNotEmpty){
       print("medications list is not empty");
       print(medications);
+
       print("length of list = " + medications.length.toString());
       return ListView.builder(
         shrinkWrap: true,

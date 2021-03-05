@@ -26,6 +26,7 @@ class _MedicationTileState extends State<MedicationTile> {
             value: timeDilation != 1.0,
              onChanged: (bool value) {
               setState(() {
+                print(value);
                 timeDilation = value ? 3.0 : 1.0;
           });
         },
