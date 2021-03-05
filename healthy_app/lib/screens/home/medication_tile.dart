@@ -1,6 +1,8 @@
 import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
+import 'package:healthy_app/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MedicationTile extends StatefulWidget {
 
@@ -13,7 +15,20 @@ class MedicationTile extends StatefulWidget {
 
 class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
+
+  Future<String> getUserid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    return uid;
+  }
+
+  updateDatabase(bool checked, String medName) async{
+    String userId = await getUserid();
+    DatabaseService(uid: userId).medTaken(medName, checked);
+  }
+
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
@@ -26,6 +41,8 @@ class _MedicationTileState extends State<MedicationTile> {
             value: timeDilation != 1.0,
              onChanged: (bool value) {
               setState(() {
+                updateDatabase(value, widget.medication.medicineName);
+                print(widget.medication.medicineName);
                 print(value);
                 timeDilation = value ? 3.0 : 1.0;
           });

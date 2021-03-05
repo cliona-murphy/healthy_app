@@ -247,4 +247,17 @@ class DatabaseService {
       );
     }).toList();
   }
+
+  medTaken(String medName, bool checked) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document('532021')
+        .collection('medChecklist')
+        .document(medName)
+        .setData({
+      'medicationName': medName,
+      'taken': checked,
+    });
+  }
 }
