@@ -27,13 +27,7 @@ class DatabaseService {
       'email': email,
     });
   }
-
-  Future addUser(String email) async {
-    //creating a new document in collection for user with id = uid
-    return await userCollection.document(uid).setData({
-      'email': email,
-    });
-  }
+  
   Future updateUserData(int kcalIntakeTarget, int kcalOutputTarget, double waterIntakeTarget) async {
     //creating a new document in collection for user with id = uid
     return await settingsCollection.document(uid).setData({
