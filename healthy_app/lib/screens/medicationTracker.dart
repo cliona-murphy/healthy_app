@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/services/pushNotification.dart';
 import 'package:provider/provider.dart';
 import 'home/medication_list.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class MedicationTracker extends StatefulWidget {
   //test comment
@@ -15,6 +17,7 @@ class MedicationTracker extends StatefulWidget {
 class _MedicationTrackerState extends State<MedicationTracker> {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging();
 
   var userId;
   bool userIdSet = false;
@@ -28,7 +31,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     getUid();
     print(userId);
   }
-
 
   Future<String> addItem(BuildContext context) {
     print("Add item called");
@@ -100,6 +102,8 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   }
 
   Widget build(BuildContext context){
+    final pushNotificationService = PushNotificationService(_fcm);
+    pushNotificationService.initialise();
     return StreamProvider<List<Medication>>.value(
       value: DatabaseService(uid: userId).medications,
       child: Scaffold(
