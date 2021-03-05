@@ -16,6 +16,9 @@ class MedicationTile extends StatefulWidget {
 class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
   @override
 
   Future<String> getUserid() async {
@@ -24,9 +27,85 @@ class _MedicationTileState extends State<MedicationTile> {
     return uid;
   }
 
-  updateDatabase(bool checked, String medName) async{
+  updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
+  }
+
+  updateDetails(String originalMedName, String newMedName, String timeToTake) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).updateMedicationDetails(originalMedName, newMedName, timeToTake);
+  }
+
+  deleteMedication(String medName) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).deleteMedication(medName);
+  }
+
+  Future<String> editItem(BuildContext context, String medName, String timeToTake) {
+    print("Edit item called");
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Edit details here:"),
+        content: Container(
+          height: 100,
+          child : SingleChildScrollView(
+            child: Column(
+              children: [
+                //Text("Food name"),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: medName,
+                  ),
+                ),
+                Container(
+                  // child: Column(
+                  //   children: [
+                  //     InkWell(
+                  //       //onTap: () => _selectTime(context)
+                  //     ),
+                  child: TextField(
+                    controller: timeController,
+                    decoration: InputDecoration(
+                      hintText: timeToTake,
+                    ),
+                  ),
+                  // ]),
+                ),
+                //Padding(padding: EdgeInsets.only(top: 15.0)),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget> [
+          IconButton(
+            icon: Icon(Icons.delete),
+            //elevation: 5.0,
+            color: Colors.red,
+            //child: Text("Delete Item"),
+            onPressed: () {
+              //updateDatabase(nameController.text, timeController.text);
+              deleteMedication(widget.medication.medicineName);
+              nameController.clear();
+              timeController.clear();
+              Navigator.pop(context);
+            },
+          ),
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Update"),
+            onPressed: () {
+              //updateDatabase(nameController.text, timeController.text);
+              updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
+              nameController.clear();
+              timeController.clear();
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    });
   }
 
   Widget build(BuildContext context) {
@@ -38,12 +117,18 @@ class _MedicationTileState extends State<MedicationTile> {
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
             subtitle: Text("Take at ${widget.medication.timeToTake}"),
+            secondary: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: (){
+                editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
+                setState(() {
+                });
+              },
+            ),
             value: timeDilation != 1.0,
              onChanged: (bool value) {
               setState(() {
                 updateDatabase(value, widget.medication.medicineName);
-                print(widget.medication.medicineName);
-                print(value);
                 timeDilation = value ? 3.0 : 1.0;
           });
         },
