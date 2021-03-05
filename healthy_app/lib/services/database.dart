@@ -44,10 +44,21 @@ class DatabaseService {
 
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
+    // return await Firestore.instance.collection('users')
+    //     .document(uid)
+    //     .collection('entries')
+    //     .add({
+    //   'entryDate': date,
+    // });
+    var newDateArr = date.split("/");
+    String newDate = "";
+    print(date);
+    newDate = newDate + newDateArr[0] + newDateArr[1] + newDateArr[2];
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
-        .add({
+        .document(newDate)
+        .setData({
       'entryDate': date,
     });
   }
