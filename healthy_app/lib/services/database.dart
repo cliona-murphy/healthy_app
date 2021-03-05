@@ -271,4 +271,11 @@ class DatabaseService {
       'timeToTake': timeToTake,
     });
   }
+  deleteMedication(String medName) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(medName)
+        .delete();
+  }
 }

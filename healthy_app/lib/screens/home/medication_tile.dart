@@ -37,6 +37,11 @@ class _MedicationTileState extends State<MedicationTile> {
     DatabaseService(uid: userId).updateMedicationDetails(originalMedName, newMedName, timeToTake);
   }
 
+  deleteMedication(String medName) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).deleteMedication(medName);
+  }
+
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
     print("Edit item called");
     return showDialog(context: context, builder: (context) {
@@ -81,6 +86,7 @@ class _MedicationTileState extends State<MedicationTile> {
             //child: Text("Delete Item"),
             onPressed: () {
               //updateDatabase(nameController.text, timeController.text);
+              deleteMedication(widget.medication.medicineName);
               nameController.clear();
               timeController.clear();
               Navigator.pop(context);
