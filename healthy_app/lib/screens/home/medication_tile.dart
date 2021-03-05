@@ -27,9 +27,14 @@ class _MedicationTileState extends State<MedicationTile> {
     return uid;
   }
 
-  updateDatabase(bool checked, String medName) async{
+  updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
+  }
+
+  updateDetails(String originalMedName, String newMedName, String timeToTake) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).updateMedicationDetails(originalMedName, newMedName, timeToTake);
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
@@ -63,16 +68,30 @@ class _MedicationTileState extends State<MedicationTile> {
                   ),
                   // ]),
                 ),
+                //Padding(padding: EdgeInsets.only(top: 15.0)),
               ],
             ),
           ),
         ),
         actions: <Widget> [
-          MaterialButton(
-            elevation: 5.0,
-            child: Text("Submit"),
+          IconButton(
+            icon: Icon(Icons.delete),
+            //elevation: 5.0,
+            color: Colors.red,
+            //child: Text("Delete Item"),
             onPressed: () {
               //updateDatabase(nameController.text, timeController.text);
+              nameController.clear();
+              timeController.clear();
+              Navigator.pop(context);
+            },
+          ),
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Update"),
+            onPressed: () {
+              //updateDatabase(nameController.text, timeController.text);
+              updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
               nameController.clear();
               timeController.clear();
               Navigator.pop(context);

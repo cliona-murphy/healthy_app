@@ -260,4 +260,15 @@ class DatabaseService {
       'taken': checked,
     });
   }
+
+  updateMedicationDetails(String originalMedName, String newMedName, String timeToTake) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(originalMedName)
+        .updateData({
+      'medicationName': newMedName,
+      'timeToTake': timeToTake,
+    });
+  }
 }
