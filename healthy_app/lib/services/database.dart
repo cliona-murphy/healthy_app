@@ -84,7 +84,8 @@ class DatabaseService {
         .collection('entries')
         .document(docId)
         .collection('foods')
-        .add({
+        .document(foodName)
+        .setData({
       'foodName': foodName,
       'calories': calories,
       'mealId': mealId,
@@ -115,7 +116,7 @@ class DatabaseService {
         .collection("users")
         .document(uid)
         .collection('entries')
-        .document('XDBJX46lcyszJZoUYjC1')
+        .document('532021')
         .collection('foods')
         //.where('mealId', isEqualTo: mealId)
         .snapshots()
