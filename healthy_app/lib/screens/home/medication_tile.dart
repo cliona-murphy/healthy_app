@@ -16,6 +16,9 @@ class MedicationTile extends StatefulWidget {
 class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
   @override
 
   Future<String> getUserid() async {
@@ -27,6 +30,57 @@ class _MedicationTileState extends State<MedicationTile> {
   updateDatabase(bool checked, String medName) async{
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
+  }
+
+  Future<String> editItem(BuildContext context, String medName, String timeToTake) {
+    print("Edit item called");
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Edit details here:"),
+        content: Container(
+          height: 100,
+          child : SingleChildScrollView(
+            child: Column(
+              children: [
+                //Text("Food name"),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: medName,
+                  ),
+                ),
+                Container(
+                  // child: Column(
+                  //   children: [
+                  //     InkWell(
+                  //       //onTap: () => _selectTime(context)
+                  //     ),
+                  child: TextField(
+                    controller: timeController,
+                    decoration: InputDecoration(
+                      hintText: timeToTake,
+                    ),
+                  ),
+                  // ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget> [
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Submit"),
+            onPressed: () {
+              //updateDatabase(nameController.text, timeController.text);
+              nameController.clear();
+              timeController.clear();
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    });
   }
 
   Widget build(BuildContext context) {
@@ -41,6 +95,7 @@ class _MedicationTileState extends State<MedicationTile> {
             secondary: IconButton(
               icon: Icon(Icons.edit),
               onPressed: (){
+                editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
                 setState(() {
                 });
               },
