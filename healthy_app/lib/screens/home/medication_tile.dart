@@ -38,12 +38,17 @@ class _MedicationTileState extends State<MedicationTile> {
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
             subtitle: Text("Take at ${widget.medication.timeToTake}"),
+            secondary: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: (){
+                setState(() {
+                });
+              },
+            ),
             value: timeDilation != 1.0,
              onChanged: (bool value) {
               setState(() {
                 updateDatabase(value, widget.medication.medicineName);
-                print(widget.medication.medicineName);
-                print(value);
                 timeDilation = value ? 3.0 : 1.0;
           });
         },
