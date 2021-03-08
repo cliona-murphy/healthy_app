@@ -116,7 +116,7 @@ class DatabaseService {
         .collection("users")
         .document(uid)
         .collection('entries')
-        .document('532021')
+        .document('832021')
         .collection('foods')
         //.where('mealId', isEqualTo: mealId)
         .snapshots()
@@ -252,7 +252,7 @@ class DatabaseService {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
-        .document('532021')
+        .document('832021')
         .collection('medChecklist')
         .document(medName)
         .setData({
