@@ -20,9 +20,11 @@ class _FoodListState extends State<FoodList> {
       print("foods list is not null");
       print("length of list = " + foods.length.toString());
       return ListView.builder(
+        //scrollDirection: Axis.horizontal,
         itemCount: foods.length,
         itemBuilder: (context, index) {
-          return Text("${foods[index].foodName.toString()} ${foods[index].calories.toString()} calories");
+          return FoodTile(food: foods[index]);
+          //return Text("${foods[index].foodName.toString()} ${foods[index].calories.toString()} calories");
         },
       );
     } else {

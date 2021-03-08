@@ -89,8 +89,6 @@ class _FoodDiaryState extends State<FoodDiary> {
         print("null");
       }
       listLength = foods.length;
-      //displayFoods(mealId);
-      //userId = "";
     }
   }
 
@@ -100,27 +98,6 @@ class _FoodDiaryState extends State<FoodDiary> {
     print(uid);
     userId = uid;
     return uid;
-  }
-
-  displayFoods(String mealId) async{
-    final FirebaseUser user = await auth.currentUser();
-    Firestore.instance.collection("entries").getDocuments().then((querySnapshot) {
-      querySnapshot.documents.forEach((result) {
-        Firestore.instance
-            .collection("entries")
-            .document(result.documentID)
-            .collection("foods")
-            .where("mealId", isEqualTo: mealId)
-            .getDocuments()
-            .then((querySnapshot) {
-          querySnapshot.documents.forEach((result) {
-            final foodList = List<String>();
-            //foodList.add(result.data);
-            print(result.data);
-          });
-        });
-      });
-    });
   }
 
   String getCurrentDate(){
@@ -162,8 +139,21 @@ class _FoodDiaryState extends State<FoodDiary> {
                                 border: Border.all(color: Colors.blueAccent)
                             ),
                               child: FoodList(),
+                            // child: ListView.builder(
+                            //     scrollDirection: Axis.vertical,
+                            //     itemExtent: 100.0,
+                            //     itemCount: 3,
+                            //     itemBuilder: (BuildContext context, int index) {
+                            //       return ListTile(
+                            //           title: Text("test"),
+                            //           onTap: () {
+                            //             //print(temp[index]);
+                            //           });
+                            //     }),
                           ),
-                        ),
+                          ),
+
+
                         Padding(padding: EdgeInsets.only(top: 20.0)),
                         Text('Lunch',
                           style: new TextStyle(

@@ -19,7 +19,6 @@ class _MedicationTileState extends State<MedicationTile> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
-  @override
 
   Future<String> getUserid() async {
     final FirebaseUser user = await auth.currentUser();
