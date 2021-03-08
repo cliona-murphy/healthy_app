@@ -26,10 +26,17 @@ class _FoodDiaryState extends State<FoodDiary> {
   List<Food> foods = new List<Food>();
   int listLength = 0;
   bool foodLogged = false;
+  bool userIdSet = false;
 
   TextEditingController customController = TextEditingController();
   TextEditingController calorieController = TextEditingController();
 
+  void initState(){
+    print("init state called");
+    super.initState();
+    getUid();
+    print(userId);
+  }
 
   Future <String> onContainerTapped(BuildContext context, String mealId){
     print("Here");
@@ -93,11 +100,16 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
    Future<String> getUid() async {
-    final FirebaseUser user = await auth.currentUser();
-    final uid = user.uid;
-    print(uid);
-    userId = uid;
-    return uid;
+     final FirebaseUser user = await auth.currentUser();
+     final uid = user.uid;
+     setState(() {
+       userId = uid;
+     });
+     setState(() {
+       userIdSet = true;
+     });
+     print(uid);
+     return uid;
   }
 
   String getCurrentDate(){
@@ -139,21 +151,8 @@ class _FoodDiaryState extends State<FoodDiary> {
                                 border: Border.all(color: Colors.blueAccent)
                             ),
                               child: FoodList(),
-                            // child: ListView.builder(
-                            //     scrollDirection: Axis.vertical,
-                            //     itemExtent: 100.0,
-                            //     itemCount: 3,
-                            //     itemBuilder: (BuildContext context, int index) {
-                            //       return ListTile(
-                            //           title: Text("test"),
-                            //           onTap: () {
-                            //             //print(temp[index]);
-                            //           });
-                            //     }),
                           ),
                           ),
-
-
                         Padding(padding: EdgeInsets.only(top: 20.0)),
                         Text('Lunch',
                           style: new TextStyle(

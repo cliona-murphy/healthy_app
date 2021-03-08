@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/constants.dart';
 
 class FoodTile extends StatefulWidget {
 
@@ -40,21 +41,41 @@ class _FoodTileState extends State<FoodTile> {
     DatabaseService(uid: userId).deleteFood(foodName);
   }
 
+  String validateNameEntry(String value) {
+    print(value);
+    if (value.isNotEmpty) {
+      return "Please enter a valid food name";
+    }
+    return null;
+  }
+
+  String validateCalorieEntry(String value) {
+    print(value);
+    if (!(value.length > 5) && value.isNotEmpty) {
+      return "Please enter a valid value for calories";
+    }
+    return null;
+  }
+
   Future<String> editItem(BuildContext context, String foodName, int calories) {
     print("Edit item called");
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Edit details here:"),
         content: Container(
-          height: 100,
+          height: 130,
           child : SingleChildScrollView(
             child: Column(
               children: [
-                TextField(
+                TextFormField(
                   controller: nameController,
                   decoration: InputDecoration(
-                    hintText: foodName,
+                    hintText: widget.food.foodName,
+                    errorText: validateNameEntry(nameController.text),
                   ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10.0),
                 ),
                 Container(
                   // child: Column(
@@ -62,10 +83,11 @@ class _FoodTileState extends State<FoodTile> {
                   //     InkWell(
                   //       //onTap: () => _selectTime(context)
                   //     ),
-                  child: TextField(
+                  child:  TextFormField(
                     controller: calorieController,
                     decoration: InputDecoration(
-                      hintText: calories.toString(),
+                      hintText: widget.food.calories.toString(),
+                      errorText: validateCalorieEntry(calorieController.text),
                     ),
                   ),
                 ),
@@ -80,8 +102,8 @@ class _FoodTileState extends State<FoodTile> {
             color: Colors.red,
             onPressed: () {
               deleteFood(widget.food.foodName);
-              nameController.clear();
-              calorieController.clear();
+             // nameController.clear();
+             // calorieController.clear();
               Navigator.pop(context);
             },
           ),
@@ -113,8 +135,9 @@ class _FoodTileState extends State<FoodTile> {
         ),
         title: Text(widget.food.foodName),
         subtitle: Text("${widget.food.calories.toString()} calories"),
-        onTap: () {
-          //print(temp[index]);
-      });
+      //   onTap: () {
+      //     //print(temp[index]);
+      // }
+      );
   }
 }
