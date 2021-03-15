@@ -86,6 +86,7 @@ class _FoodTileState extends State<FoodTile> {
                   //     ),
                   child:  TextFormField(
                     controller: calorieController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       //hintText: widget.food.calories.toString(),
                       hintText: "calories",

@@ -57,6 +57,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                   ),
                   TextField(
                     controller: calorieController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: "calories",
                     ),
