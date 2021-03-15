@@ -31,9 +31,9 @@ class _FoodTileState extends State<FoodTile> {
     return uid;
   }
 
-  updateDetails(String foodName, String newFoodName, int calories) async {
+  updateDetails(String foodName, int calories) async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).updateFoodDetails(foodName, newFoodName, calories);
+    DatabaseService(uid: userId).updateFoodDetails(foodName, calories);
   }
 
   deleteFood(String foodName) async {
@@ -61,19 +61,20 @@ class _FoodTileState extends State<FoodTile> {
     print("Edit item called");
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
-        title: Text("Edit details here:"),
+        title: Text("Edit the calories for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
+        //subtitle: Text("subtitle"),
         content: Container(
-          height: 130,
+          height: 100,
           child : SingleChildScrollView(
             child: Column(
               children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: widget.food.foodName,
-                    errorText: validateNameEntry(nameController.text),
-                  ),
-                ),
+                // TextFormField(
+                //   controller: nameController,
+                //   decoration: InputDecoration(
+                //     hintText: widget.food.foodName,
+                //     errorText: validateNameEntry(nameController.text),
+                //   ),
+                // ),
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                 ),
@@ -86,7 +87,8 @@ class _FoodTileState extends State<FoodTile> {
                   child:  TextFormField(
                     controller: calorieController,
                     decoration: InputDecoration(
-                      hintText: widget.food.calories.toString(),
+                      //hintText: widget.food.calories.toString(),
+                      hintText: "calories",
                       errorText: validateCalorieEntry(calorieController.text),
                     ),
                   ),
@@ -111,7 +113,7 @@ class _FoodTileState extends State<FoodTile> {
             elevation: 5.0,
             child: Text("Update"),
             onPressed: () {
-              updateDetails(widget.food.foodName, nameController.text, int.parse(calorieController.text));
+              updateDetails(widget.food.foodName, int.parse(calorieController.text));
               nameController.clear();
               calorieController.clear();
               Navigator.pop(context);

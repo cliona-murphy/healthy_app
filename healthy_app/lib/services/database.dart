@@ -142,7 +142,7 @@ class DatabaseService {
     }).toList();
   }
 
-  updateFoodDetails(String foodName, String newFoodName, int calories) async {
+  updateFoodDetails(String foodName, int calories) async {
     var entryName = reformatDate(getCurrentDate());
     return await Firestore.instance.collection('users')
         .document(uid)
@@ -151,7 +151,7 @@ class DatabaseService {
         .collection('foods')
         .document(foodName)
         .updateData({
-      'foodName': newFoodName,
+      'foodName': foodName,
       'calories': calories,
     });
   }
