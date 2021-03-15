@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/services/push_notification.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +22,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   PageController _pageController = PageController();
+  final PushNotificationService2 _pushNotificationService = PushNotificationService2();
   List<Widget> _screens = [
     Progress(), FoodDiary(), ActivityDiary(), NutrientChecklist(), MedicationTracker(),
   ];
@@ -30,6 +32,12 @@ class _HomeState extends State<Home> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  void initState(){
+    print("initState in home page called");
+    super.initState();
+    _pushNotificationService.initialise();
   }
 
   int getSelectedIndex(){
