@@ -5,36 +5,37 @@ import 'package:healthy_app/models/food.dart';
 import 'package:provider/provider.dart';
 import 'package:healthy_app/screens/home/food_tile.dart';
 
-class FoodList extends StatefulWidget {
+class WaterTile extends StatefulWidget {
   @override
-  _FoodListState createState() => _FoodListState();
+  _WaterTileState createState() => _WaterTileState();
 }
 
-class _FoodListState extends State<FoodList> {
+class _WaterTileState extends State<WaterTile> {
   @override
   Widget build(BuildContext context) {
     bool foodsNull = false;
-    final foods = Provider.of<List<Food>>(context) ?? [];
+    final water = Provider.of<QuerySnapshot>(context) ?? [];
 
     //if(foods != null){
-    if(foods.isNotEmpty){
+    if(water.isNotEmpty){
       print("foods list is not null");
-      print("length of list = " + foods.length.toString());
+      print("length of list = " + water.length.toString());
       return ListView.builder(
         //scrollDirection: Axis.horizontal,
-        itemCount: foods.length,
+        itemCount: water.length,
         itemBuilder: (context, index) {
-          return FoodTile(food: foods[index]);
-          //return Text("${foods[index].foodName.toString()} ${foods[index].calories.toString()} calories");
+          return ListTile(
+            title: Text(water.quantity),
+           // subtitle: Text("${widget.food.calories.toString()} calories"),
+          );
         },
       );
     } else {
-      print("foods list is null");
       return Container(
         height: 80,
         width: 300,
         padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
-        child: Text('Click to log a food',
+        child: Text('Click to log water',
           textAlign: TextAlign.center,
           style: new TextStyle(
               color: Colors.grey, fontSize: 15.0),
