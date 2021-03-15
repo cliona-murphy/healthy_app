@@ -16,7 +16,8 @@ class _FoodListState extends State<FoodList> {
     bool foodsNull = false;
     final foods = Provider.of<List<Food>>(context) ?? [];
 
-    if(foods != null){
+    //if(foods != null){
+    if(foods.isNotEmpty){
       print("foods list is not null");
       print("length of list = " + foods.length.toString());
       return ListView.builder(
@@ -29,7 +30,17 @@ class _FoodListState extends State<FoodList> {
       );
     } else {
       print("foods list is null");
-      return CircularProgressIndicator();
+      //return Text("What did you eat for breakfast?");
+      return Container(
+        height: 80,
+        width: 300,
+        padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
+        child: Text('What did you eat for breakfast?',
+          textAlign: TextAlign.center,
+          style: new TextStyle(
+              color: Colors.grey, fontSize: 15.0),
+        ),
+      );
     }
   }
 }
