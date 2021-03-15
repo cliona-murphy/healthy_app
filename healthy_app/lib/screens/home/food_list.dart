@@ -30,7 +30,6 @@ class _FoodListState extends State<FoodList> {
       );
     } else {
       print("foods list is null");
-      //return Text("What did you eat for breakfast?");
       return Container(
         height: 80,
         width: 300,

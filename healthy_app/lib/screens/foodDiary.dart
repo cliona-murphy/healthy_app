@@ -136,83 +136,100 @@ class _FoodDiaryState extends State<FoodDiary> {
                 child: new Column(
                   children: <Widget>[
                     Padding(padding: EdgeInsets.only(top: 0.0)),
-                      Text('Breakfast',
+                    Text('Breakfast',
                       style: new TextStyle(
-                      color: Colors.blue, fontSize: 20.0),
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "breakfast");
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)
+                        ),
+                        child: FoodList(),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 10.0)),
-                        InkWell(
-                          onTap: () {
-                            onContainerTapped(context, "breakfast");
-                          },
-                          child: Container(
-                            width: 300,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent)
-                            ),
-                              child: FoodList(),
-                          ),
-                          ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Lunch',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(),
-                              ),
-                              hintText: 'What did you eat for lunch?'
-                          ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Lunch',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "lunch");
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)
                         ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Dinner',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(),
-                              ),
-                              hintText: 'What did you eat for dinner?'
-                          ),
+                        child: FoodList(),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Dinner',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "dinner");
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)
                         ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Snacks',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(),
-                              ),
-                              hintText: 'What snacks did you have?'
-                          ),
+                        child: FoodList(),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Snacks',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "snack");
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)
                         ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Water',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        GestureDetector(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                fillColor: Colors.blue, //not working for some reason
-                                hintText: 'How much water did you drink?'
-                            ),
-                          ),
-                    )
+                        child: FoodList(),
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Water',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "water");
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 60,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.blueAccent)
+                        ),
+                        child: FoodList(),
+                      ),
+                    ),
                   ]),
           ),
           ),

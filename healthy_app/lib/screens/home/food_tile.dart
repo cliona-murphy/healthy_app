@@ -62,9 +62,8 @@ class _FoodTileState extends State<FoodTile> {
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Edit the calories for '${widget.food.foodName}' here:", textAlign: TextAlign.left),
-        //subtitle: Text("subtitle"),
         content: Container(
-          height: 100,
+          height: 90,
           child : SingleChildScrollView(
             child: Column(
               children: [
@@ -78,20 +77,13 @@ class _FoodTileState extends State<FoodTile> {
                 Padding(
                   padding: EdgeInsets.only(top: 10.0),
                 ),
-                Container(
-                  // child: Column(
-                  //   children: [
-                  //     InkWell(
-                  //       //onTap: () => _selectTime(context)
-                  //     ),
-                  child:  TextFormField(
-                    controller: calorieController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      //hintText: widget.food.calories.toString(),
-                      hintText: "calories",
-                      errorText: validateCalorieEntry(calorieController.text),
-                    ),
+                TextFormField(
+                  controller: calorieController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    //hintText: widget.food.calories.toString(),
+                    hintText: "calories",
+                    errorText: validateCalorieEntry(calorieController.text),
                   ),
                 ),
               ],

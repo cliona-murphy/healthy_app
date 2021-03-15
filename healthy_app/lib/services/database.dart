@@ -102,7 +102,7 @@ class DatabaseService {
   }
 
     Stream<List<Food>> get foods {
-    //String _doc1Id = '';
+    //First part of this function doesn't do anything
       String test = 'test string';
       Firestore.instance.collection("users")
           .document(uid)
