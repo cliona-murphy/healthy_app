@@ -55,21 +55,39 @@ class _CalorieCountState extends State<CalorieCount> {
   }
 
   generateData(int consumed) {
+    getData();
     int kcalTarget;
     int remaining;
-    if (data != null) {
-      kcalTarget = data['kcalIntakeTarget'];
-      remaining = kcalTarget - consumed;
-      print("Remaining = "+remaining.toString());
+    double percentageIntake;
+
+    if(consumed == 0){
+      percentageIntake = 0;
+      remaining = 100;
     }
     else {
-      remaining = 2000;
+      if (data != null) {
+        kcalTarget = data['kcalIntakeTarget'];
+        remaining = kcalTarget - consumed;
+        print("Remaining = "+remaining.toString());
+      }
+      else {
+        remaining = 2000;
+      }
+      var piedata = [
+        new PieData('Consumed', percentageIntake),
+        new PieData('Remaining', 100 - percentageIntake),
+        // new PieData('Consumed', 10.10),
+        // new PieData('Remaining', 20.20),
+      ];
+      percentageIntake = calculatePercentage();
     }
+
     print("target: " + kcalTarget.toString());
-    double percentageIntake = calculatePercentage();
+
+    print(percentageIntake);
     var piedata = [
-      new PieData('Consumed', 100 - percentageIntake),
-      new PieData('Remaining', percentageIntake),
+      new PieData('Consumed', percentageIntake),
+      new PieData('Remaining', 100 - percentageIntake),
       // new PieData('Consumed', 10.10),
       // new PieData('Remaining', 20.20),
     ];
@@ -87,38 +105,20 @@ class _CalorieCountState extends State<CalorieCount> {
   }
 
   double calculatePercentage(){
-    int kcalTarget = 0;
+    int kcalTarget = 2000;
     if (data != null) {
       kcalTarget = data['kcalIntakeTarget'];
     }
     double percentage = totalCalories/data['kcalIntakeTarget'];
-    return percentage;
+    return (percentage*10);
   }
-  generateDataTest(){
-    var piedata = [
-      new PieData('Consumed', 90),
-      new PieData('Remaining', 10),
-    ];
-
-    _pieData.add(
-      charts.Series(
-        domainFn: (PieData data, _) => data.activity,
-        measureFn: (PieData data, _) => data.time,
-        id: 'Time spent',
-        data: piedata,
-        labelAccessorFn: (PieData row, _) => '${row.activity}',
-      ),
-    );
-    print(_pieData);
-    return _pieData;
-  }
-
 
   @override
   Widget build(BuildContext context) {
     final foods = Provider.of<List<Food>>(context) ?? [];
     print("userId within calorie count is "+userId);
     if (foods.isNotEmpty) {
+      bool notEmpty = true;
       print("foods list is not null");
       print("length of list = " + foods.length.toString());
       //
@@ -145,15 +145,32 @@ class _CalorieCountState extends State<CalorieCount> {
     } else {
       print("foods list is null");
       return Container(
-        height: 80,
-        width: 300,
-        padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
-        child: Text('Click to log a food',
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-              color: Colors.grey, fontSize: 15.0),
+        width: 175,
+        height: 175,
+        //child: Text("test"),
+        child: charts.PieChart(
+          generateData(0),
+          animate: true,
+          animationDuration: Duration(seconds: 1),
+          // defaultRenderer: new charts.ArcRendererConfig(
+          //   arcWidth: 100,
+          //   arcRendererDecorators: [
+          //     new charts.ArcLabelDecorator(
+          //         labelPosition: charts.ArcLabelPosition.inside)
+          //   ],
+          // ),
         ),
       );
+      // return Container(
+      //   height: 80,
+      //   width: 300,
+      //   padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
+      //   child: Text('Click to log a food',
+      //     textAlign: TextAlign.center,
+      //     style: new TextStyle(
+      //         color: Colors.grey, fontSize: 15.0),
+      //   ),
+      // );
     }
   }
 }
