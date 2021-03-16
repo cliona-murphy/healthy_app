@@ -34,7 +34,7 @@ class _FoodListState extends State<FoodList> {
         height: 80,
         width: 300,
         padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
-        child: Text('What did you eat for breakfast?',
+        child: Text('Click to log a food',
           textAlign: TextAlign.center,
           style: new TextStyle(
               color: Colors.grey, fontSize: 15.0),

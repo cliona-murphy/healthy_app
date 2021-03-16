@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'home/food_list.dart';
 import 'home/settings_list.dart';
+import 'home/water_tile.dart';
 
 class FoodDiary extends StatefulWidget {
 
@@ -85,6 +86,42 @@ class _FoodDiaryState extends State<FoodDiary> {
    });
   }
 
+  Future <String> onWaterContainerTapped(BuildContext context, String mealId){
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("How much did you drink?"),
+        content: Container(
+          height: 60,
+          child : SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: calorieController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Enter water in ml",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget> [
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Submit"),
+            onPressed: () {
+              addWater(int.parse(calorieController.text));
+              customController.clear();
+              calorieController.clear();
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    });
+  }
+
   updateDatabase(String name, int calories, String mealId) async{
     userId = await getUid();
     print("user id from updateDatabase function is: " + userId);
@@ -98,6 +135,11 @@ class _FoodDiaryState extends State<FoodDiary> {
       }
       listLength = foods.length;
     }
+  }
+
+  addWater(int qty) async {
+    userId = await getUid();
+    DatabaseService(uid: userId).addWater(qty, getCurrentDate());
   }
 
    Future<String> getUid() async {
@@ -121,12 +163,7 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
-   // DatabaseService(uid: userId).setDocId(getCurrentDate());
-    print("food diary userId = " + userId.toString());
-
-    return StreamProvider<List<Food>>.value(
-      value: DatabaseService(uid: userId).foods,
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: new Container (
@@ -145,13 +182,16 @@ class _FoodDiaryState extends State<FoodDiary> {
                       onTap: () {
                         onContainerTapped(context, "breakfast");
                       },
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)
+                      child: StreamProvider<List<Food>>.value(
+                        value: DatabaseService(uid:userId).breakFastFoods,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
+                          ),
+                          child: FoodList(),
                         ),
-                        child: FoodList(),
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(top: 30.0)),
@@ -164,13 +204,16 @@ class _FoodDiaryState extends State<FoodDiary> {
                       onTap: () {
                         onContainerTapped(context, "lunch");
                       },
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)
+                      child: StreamProvider<List<Food>>.value(
+                        value: DatabaseService(uid:userId).lunchFoods,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
+                          ),
+                          child: FoodList(),
                         ),
-                        child: FoodList(),
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(top: 30.0)),
@@ -183,13 +226,16 @@ class _FoodDiaryState extends State<FoodDiary> {
                       onTap: () {
                         onContainerTapped(context, "dinner");
                       },
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)
+                      child: StreamProvider<List<Food>>.value(
+                          value: DatabaseService(uid:userId).dinnerFoods,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
+                          ),
+                          child: FoodList(),
                         ),
-                        child: FoodList(),
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(top: 30.0)),
@@ -202,39 +248,44 @@ class _FoodDiaryState extends State<FoodDiary> {
                       onTap: () {
                         onContainerTapped(context, "snack");
                       },
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)
+                      child: StreamProvider<List<Food>>.value(
+                          value: DatabaseService(uid:userId).snacks,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
+                          ),
+                          child: FoodList(),
                         ),
-                        child: FoodList(),
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(top: 30.0)),
-                    Text('Water',
-                      style: new TextStyle(
-                          color: Colors.blue, fontSize: 20.0),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10.0)),
-                    InkWell(
-                      onTap: () {
-                        onContainerTapped(context, "water");
-                      },
-                      child: Container(
-                        width: 300,
-                        height: 60,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blueAccent)
-                        ),
-                        child: FoodList(),
-                      ),
-                    ),
+                    // Text('Water',
+                    //   style: new TextStyle(
+                    //       color: Colors.blue, fontSize: 20.0),
+                    // ),
+                    // Padding(padding: EdgeInsets.only(top: 10.0)),
+                    // InkWell(
+                    //   onTap: () {
+                    //     onWaterContainerTapped(context, "water");
+                    //   },
+                    //   child: StreamProvider<List<Food>>.value(
+                    //       value: DatabaseService(uid:userId).lunchFoods,
+                    //     child: Container(
+                    //       width: 300,
+                    //       height: 60,
+                    //       decoration: BoxDecoration(
+                    //           border: Border.all(color: Colors.blueAccent)
+                    //       ),
+                    //       child: WaterTile(),
+                    //     ),
+                    //   ),
+                    // ),
                   ]),
           ),
           ),
         ),
-      ),
     );
   }
 }

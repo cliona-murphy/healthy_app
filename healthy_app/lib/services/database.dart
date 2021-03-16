@@ -101,25 +101,36 @@ class DatabaseService {
     });
   }
 
-    Stream<List<Food>> get foods {
-    //First part of this function doesn't do anything
-      String test = 'test string';
-      Firestore.instance.collection("users")
-          .document(uid)
-          .collection("entries")
-          .where('entryDate', isEqualTo: "27/2/2021")
-          .getDocuments()
-          .then((querySnapshot) {
-        print(querySnapshot.documents);
-        querySnapshot.documents.forEach((result) async {
-          print("document id from within food stream getter is = " + result.documentID.toString());
-          String _doc1Id = result.documentID.toString();
-          await setDocumentId(_doc1Id);
-        });
-      });
-      //print("docId from within food stream function = " + documentId.toString());
-      print("user id from within food stream is " + documentId.toString());
-      var entryName = reformatDate(getCurrentDate());
+  Future addWater(int quantity, String date) async {
+    var entryName = reformatDate(getCurrentDate());
+    return await Firestore
+        .instance
+        .collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('foods')
+        .document('water')
+        .setData({
+      'quantity': quantity,
+    });
+  }
+  // Stream<QuerySnapshot> get water {
+  //   var entryName = reformatDate(getCurrentDate());
+  //   return Firestore.instance
+  //       .collection("users")
+  //       .document(uid)
+  //       .collection('entries')
+  //       .document(entryName)
+  //       .collection('foods')
+  //       .where('mealId', isEqualTo: 'breakfast')
+  //       .snapshots();
+  //
+  //       //.map(foodListFromSnapshot);
+  // }
+
+  Stream<List<Food>> get breakFastFoods {
+    var entryName = reformatDate(getCurrentDate());
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -130,6 +141,45 @@ class DatabaseService {
         .snapshots()
       .map(foodListFromSnapshot);
     }
+
+  Stream<List<Food>> get lunchFoods {
+    var entryName = reformatDate(getCurrentDate());
+    return Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('foods')
+        .where('mealId', isEqualTo: 'lunch')
+        .snapshots()
+        .map(foodListFromSnapshot);
+  }
+
+  Stream<List<Food>> get dinnerFoods {
+    var entryName = reformatDate(getCurrentDate());
+    return Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('foods')
+        .where('mealId', isEqualTo: 'dinner')
+        .snapshots()
+        .map(foodListFromSnapshot);
+  }
+
+  Stream<List<Food>> get snacks {
+    var entryName = reformatDate(getCurrentDate());
+    return Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('foods')
+        .where('mealId', isEqualTo: 'snack')
+        .snapshots()
+        .map(foodListFromSnapshot);
+  }
 
     //food list from a snapshot
   List<Food> foodListFromSnapshot(QuerySnapshot snapshot) {
