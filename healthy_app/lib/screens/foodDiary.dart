@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
-import 'package:healthy_app/models/settings.dart';
-import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'home/food_list.dart';
-import 'home/settings_list.dart';
-import 'home/water_tile.dart';
 
 class FoodDiary extends StatefulWidget {
 
@@ -20,7 +13,6 @@ class FoodDiary extends StatefulWidget {
 
 class _FoodDiaryState extends State<FoodDiary> {
 
-  final DatabaseService _db = DatabaseService();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   String userId = "";

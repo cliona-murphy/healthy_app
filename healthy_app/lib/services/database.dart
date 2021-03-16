@@ -33,6 +33,20 @@ class DatabaseService {
       'kcalOutputTarget': kcalOutputTarget,
       'waterIntakeTarget': waterIntakeTarget,
     });
+    // return await userCollection.document(uid)
+    // .collection('settings')
+    // .add({
+    //   'kcalIntakeTarget': kcalIntakeTarget,
+    //   'kcalOutputTarget': kcalOutputTarget,
+    //   'waterIntakeTarget': waterIntakeTarget,
+    // });
+  }
+
+  Stream<List<Settings>> get testUserSettings {
+    return userCollection.document(uid)
+        .collection('settings')
+        .snapshots()
+        .map(settingsListFromSnapshot);
   }
 
   //get userSettings Stream
@@ -128,6 +142,18 @@ class DatabaseService {
   //
   //       //.map(foodListFromSnapshot);
   // }
+  Stream<List<Food>> get allFoods {
+    var entryName = reformatDate(getCurrentDate());
+    print("uid from within allFoods = "+uid);
+    return Firestore.instance
+        .collection('users')
+        .document('MPVEF06jRYXyQhGwWPs2BfyU6QE2')
+        .collection('entries')
+        .document(entryName)
+        .collection('foods')
+        .snapshots()
+        .map(foodListFromSnapshot);
+  }
 
   Stream<List<Food>> get breakFastFoods {
     var entryName = reformatDate(getCurrentDate());
