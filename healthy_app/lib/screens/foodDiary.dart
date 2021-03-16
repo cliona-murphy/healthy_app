@@ -261,27 +261,27 @@ class _FoodDiaryState extends State<FoodDiary> {
                       ),
                     ),
                     Padding(padding: EdgeInsets.only(top: 30.0)),
-                    Text('Water',
-                      style: new TextStyle(
-                          color: Colors.blue, fontSize: 20.0),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10.0)),
-                    InkWell(
-                      onTap: () {
-                        onWaterContainerTapped(context, "water");
-                      },
-                      child: StreamProvider<List<Food>>.value(
-                          value: DatabaseService(uid:userId).lunchFoods,
-                        child: Container(
-                          width: 300,
-                          height: 60,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blueAccent)
-                          ),
-                          child: WaterTile(),
-                        ),
-                      ),
-                    ),
+                    // Text('Water',
+                    //   style: new TextStyle(
+                    //       color: Colors.blue, fontSize: 20.0),
+                    // ),
+                    // Padding(padding: EdgeInsets.only(top: 10.0)),
+                    // InkWell(
+                    //   onTap: () {
+                    //     onWaterContainerTapped(context, "water");
+                    //   },
+                    //   child: StreamProvider<List<Food>>.value(
+                    //       value: DatabaseService(uid:userId).lunchFoods,
+                    //     child: Container(
+                    //       width: 300,
+                    //       height: 60,
+                    //       decoration: BoxDecoration(
+                    //           border: Border.all(color: Colors.blueAccent)
+                    //       ),
+                    //       child: WaterTile(),
+                    //     ),
+                    //   ),
+                    // ),
                   ]),
           ),
           ),

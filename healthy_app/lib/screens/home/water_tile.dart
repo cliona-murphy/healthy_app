@@ -17,30 +17,30 @@ class _WaterTileState extends State<WaterTile> {
     final water = Provider.of<QuerySnapshot>(context) ?? [];
 
     //if(foods != null){
-    if(water.isNotEmpty){
-      print("foods list is not null");
-      print("length of list = " + water.length.toString());
-      return ListView.builder(
-        //scrollDirection: Axis.horizontal,
-        itemCount: water.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(water.quantity),
-           // subtitle: Text("${widget.food.calories.toString()} calories"),
-          );
-        },
-      );
-    } else {
-      return Container(
-        height: 80,
-        width: 300,
-        padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
-        child: Text('Click to log water',
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-              color: Colors.grey, fontSize: 15.0),
-        ),
-      );
-    }
+    // if(water.isNotEmpty){
+    //   print("foods list is not null");
+    //   print("length of list = " + water.length.toString());
+    //   return ListView.builder(
+    //     //scrollDirection: Axis.horizontal,
+    //     itemCount: water.length,
+    //     itemBuilder: (context, index) {
+    //       return ListTile(
+    //         title: Text(water.quantity),
+    //        // subtitle: Text("${widget.food.calories.toString()} calories"),
+    //       );
+    //     },
+    //   );
+    // } else {
+    //   return Container(
+    //     height: 80,
+    //     width: 300,
+    //     padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
+    //     child: Text('Click to log water',
+    //       textAlign: TextAlign.center,
+    //       style: new TextStyle(
+    //           color: Colors.grey, fontSize: 15.0),
+    //     ),
+    //   );
+    //}
   }
 }

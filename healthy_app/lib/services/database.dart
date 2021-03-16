@@ -115,19 +115,19 @@ class DatabaseService {
       'quantity': quantity,
     });
   }
-  Stream<QuerySnapshot> get water {
-    var entryName = reformatDate(getCurrentDate());
-    return Firestore.instance
-        .collection("users")
-        .document(uid)
-        .collection('entries')
-        .document(entryName)
-        .collection('foods')
-        .where('mealId', isEqualTo: 'breakfast')
-        .snapshots();
-
-        //.map(foodListFromSnapshot);
-  }
+  // Stream<QuerySnapshot> get water {
+  //   var entryName = reformatDate(getCurrentDate());
+  //   return Firestore.instance
+  //       .collection("users")
+  //       .document(uid)
+  //       .collection('entries')
+  //       .document(entryName)
+  //       .collection('foods')
+  //       .where('mealId', isEqualTo: 'breakfast')
+  //       .snapshots();
+  //
+  //       //.map(foodListFromSnapshot);
+  // }
 
   Stream<List<Food>> get breakFastFoods {
     var entryName = reformatDate(getCurrentDate());
