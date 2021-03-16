@@ -16,18 +16,30 @@ class _FoodListState extends State<FoodList> {
     bool foodsNull = false;
     final foods = Provider.of<List<Food>>(context) ?? [];
 
-    if(foods != null){
+    //if(foods != null){
+    if(foods.isNotEmpty){
       print("foods list is not null");
       print("length of list = " + foods.length.toString());
       return ListView.builder(
+        //scrollDirection: Axis.horizontal,
         itemCount: foods.length,
         itemBuilder: (context, index) {
-          return Text("${foods[index].foodName.toString()} ${foods[index].calories.toString()} calories");
+          return FoodTile(food: foods[index]);
+          //return Text("${foods[index].foodName.toString()} ${foods[index].calories.toString()} calories");
         },
       );
     } else {
       print("foods list is null");
-      return CircularProgressIndicator();
+      return Container(
+        height: 80,
+        width: 300,
+        padding: const EdgeInsets.fromLTRB(30, 20, 30, 15),
+        child: Text('Click to log a food',
+          textAlign: TextAlign.center,
+          style: new TextStyle(
+              color: Colors.grey, fontSize: 15.0),
+        ),
+      );
     }
   }
 }

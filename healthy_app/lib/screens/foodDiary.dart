@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'home/food_list.dart';
 import 'home/settings_list.dart';
+import 'home/water_tile.dart';
 
 class FoodDiary extends StatefulWidget {
 
@@ -26,10 +27,17 @@ class _FoodDiaryState extends State<FoodDiary> {
   List<Food> foods = new List<Food>();
   int listLength = 0;
   bool foodLogged = false;
+  bool userIdSet = false;
 
   TextEditingController customController = TextEditingController();
   TextEditingController calorieController = TextEditingController();
 
+  void initState(){
+    print("init state called");
+    super.initState();
+    getUid();
+    print(userId);
+  }
 
   Future <String> onContainerTapped(BuildContext context, String mealId){
     print("Here");
@@ -50,6 +58,7 @@ class _FoodDiaryState extends State<FoodDiary> {
                   ),
                   TextField(
                     controller: calorieController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: "calories",
                     ),
@@ -77,6 +86,42 @@ class _FoodDiaryState extends State<FoodDiary> {
    });
   }
 
+  Future <String> onWaterContainerTapped(BuildContext context, String mealId){
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("How much did you drink?"),
+        content: Container(
+          height: 60,
+          child : SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  controller: calorieController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Enter water in ml",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget> [
+          MaterialButton(
+            elevation: 5.0,
+            child: Text("Submit"),
+            onPressed: () {
+              addWater(int.parse(calorieController.text));
+              customController.clear();
+              calorieController.clear();
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      );
+    });
+  }
+
   updateDatabase(String name, int calories, String mealId) async{
     userId = await getUid();
     print("user id from updateDatabase function is: " + userId);
@@ -89,38 +134,25 @@ class _FoodDiaryState extends State<FoodDiary> {
         print("null");
       }
       listLength = foods.length;
-      //displayFoods(mealId);
-      //userId = "";
     }
   }
 
-   Future<String> getUid() async {
-    final FirebaseUser user = await auth.currentUser();
-    final uid = user.uid;
-    print(uid);
-    userId = uid;
-    return uid;
+  addWater(int qty) async {
+    userId = await getUid();
+    DatabaseService(uid: userId).addWater(qty, getCurrentDate());
   }
 
-  displayFoods(String mealId) async{
-    final FirebaseUser user = await auth.currentUser();
-    Firestore.instance.collection("entries").getDocuments().then((querySnapshot) {
-      querySnapshot.documents.forEach((result) {
-        Firestore.instance
-            .collection("entries")
-            .document(result.documentID)
-            .collection("foods")
-            .where("mealId", isEqualTo: mealId)
-            .getDocuments()
-            .then((querySnapshot) {
-          querySnapshot.documents.forEach((result) {
-            final foodList = List<String>();
-            //foodList.add(result.data);
-            print(result.data);
-          });
-        });
-      });
-    });
+   Future<String> getUid() async {
+     final FirebaseUser user = await auth.currentUser();
+     final uid = user.uid;
+     setState(() {
+       userId = uid;
+     });
+     setState(() {
+       userIdSet = true;
+     });
+     print(uid);
+     return uid;
   }
 
   String getCurrentDate(){
@@ -131,12 +163,7 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
-   // DatabaseService(uid: userId).setDocId(getCurrentDate());
-    print("food diary userId = " + userId.toString());
-
-    return StreamProvider<List<Food>>.value(
-      value: DatabaseService(uid: userId).foods,
-      child: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: new Container (
@@ -146,88 +173,119 @@ class _FoodDiaryState extends State<FoodDiary> {
                 child: new Column(
                   children: <Widget>[
                     Padding(padding: EdgeInsets.only(top: 0.0)),
-                      Text('Breakfast',
+                    Text('Breakfast',
                       style: new TextStyle(
-                      color: Colors.blue, fontSize: 20.0),
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "breakfast");
+                      },
+                      child: StreamProvider<List<Food>>.value(
+                        value: DatabaseService(uid:userId).breakFastFoods,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
+                          ),
+                          child: FoodList(),
+                        ),
                       ),
-                      Padding(padding: EdgeInsets.only(top: 10.0)),
-                        InkWell(
-                          onTap: () {
-                            onContainerTapped(context, "breakfast");
-                          },
-                          child: Container(
-                            width: 300,
-                            height: 60,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.blueAccent)
-                            ),
-                              child: FoodList(),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Lunch',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "lunch");
+                      },
+                      child: StreamProvider<List<Food>>.value(
+                        value: DatabaseService(uid:userId).lunchFoods,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
                           ),
+                          child: FoodList(),
                         ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Lunch',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(),
-                              ),
-                              hintText: 'What did you eat for lunch?'
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Dinner',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "dinner");
+                      },
+                      child: StreamProvider<List<Food>>.value(
+                          value: DatabaseService(uid:userId).dinnerFoods,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
                           ),
+                          child: FoodList(),
                         ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Dinner',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(),
-                              ),
-                              hintText: 'What did you eat for dinner?'
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    Text('Snacks',
+                      style: new TextStyle(
+                          color: Colors.blue, fontSize: 20.0),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    InkWell(
+                      onTap: () {
+                        onContainerTapped(context, "snack");
+                      },
+                      child: StreamProvider<List<Food>>.value(
+                          value: DatabaseService(uid:userId).snacks,
+                        child: Container(
+                          width: 300,
+                          height: 60,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.blueAccent)
                           ),
+                          child: FoodList(),
                         ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Snacks',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        TextField(
-                          decoration: InputDecoration(
-                              border: new OutlineInputBorder(
-                                borderRadius: new BorderRadius.circular(25.0),
-                                borderSide: new BorderSide(),
-                              ),
-                              hintText: 'What snacks did you have?'
-                          ),
-                        ),
-                        Padding(padding: EdgeInsets.only(top: 20.0)),
-                        Text('Water',
-                          style: new TextStyle(
-                              color: Colors.blue, fontSize: 20.0),),
-                        Padding(padding: EdgeInsets.only(top: 10.0)),
-                        GestureDetector(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderRadius: new BorderRadius.circular(25.0),
-                                  borderSide: new BorderSide(),
-                                ),
-                                fillColor: Colors.blue, //not working for some reason
-                                hintText: 'How much water did you drink?'
-                            ),
-                          ),
-                    )
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 30.0)),
+                    // Text('Water',
+                    //   style: new TextStyle(
+                    //       color: Colors.blue, fontSize: 20.0),
+                    // ),
+                    // Padding(padding: EdgeInsets.only(top: 10.0)),
+                    // InkWell(
+                    //   onTap: () {
+                    //     onWaterContainerTapped(context, "water");
+                    //   },
+                    //   child: StreamProvider<List<Food>>.value(
+                    //       value: DatabaseService(uid:userId).lunchFoods,
+                    //     child: Container(
+                    //       width: 300,
+                    //       height: 60,
+                    //       decoration: BoxDecoration(
+                    //           border: Border.all(color: Colors.blueAccent)
+                    //       ),
+                    //       child: WaterTile(),
+                    //     ),
+                    //   ),
+                    // ),
                   ]),
           ),
           ),
         ),
-      ),
     );
   }
 }
