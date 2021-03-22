@@ -59,37 +59,38 @@ class _CalorieCountState extends State<CalorieCount> {
     int kcalTarget;
     int remaining;
     double percentageIntake;
-
-    if(consumed == 0){
-      percentageIntake = 0;
-      remaining = 100;
-    }
-    else {
-      if (data != null) {
+    print("Consumed = " + consumed.toString());
+    // if(consumed == 0){
+    //   percentageIntake = 1;
+    //   remaining = 9;
+    // }
+   // else {
+      if (data != null && data.isNotEmpty) {
         kcalTarget = data['kcalIntakeTarget'];
         remaining = kcalTarget - consumed;
-        print("Remaining = "+remaining.toString());
       }
       else {
         remaining = 2000;
       }
-      var piedata = [
-        new PieData('Consumed', percentageIntake),
-        new PieData('Remaining', 100 - percentageIntake),
-        // new PieData('Consumed', 10.10),
-        // new PieData('Remaining', 20.20),
-      ];
-      percentageIntake = calculatePercentage();
-    }
-
+      // var piedata = [
+      //   new PieData('Consumed', percentageIntake),
+      //   new PieData('Remaining', 100 - percentageIntake),
+      //   // new PieData('Consumed', 10.10),
+      //   // new PieData('Remaining', 20.20),
+      // ];
+     // percentageIntake = 30;
+    percentageIntake = calculatePercentage();
+    // }
+    // setState(() {
+    //   percentageIntake = calculatePercentage();
+    // });
     print("target: " + kcalTarget.toString());
 
+    print("percentage intake = " + percentageIntake.toString());
     print(percentageIntake);
     var piedata = [
-      new PieData('Consumed', percentageIntake),
-      new PieData('Remaining', 100 - percentageIntake),
-      // new PieData('Consumed', 10.10),
-      // new PieData('Remaining', 20.20),
+      new PieData('Consumed', 30),
+      new PieData('Remaining', 70.0),
     ];
 
     _pieData.add(
@@ -106,11 +107,17 @@ class _CalorieCountState extends State<CalorieCount> {
 
   double calculatePercentage(){
     int kcalTarget = 2000;
-    if (data != null) {
+    if (data != null && data.isNotEmpty) {
       kcalTarget = data['kcalIntakeTarget'];
     }
-    double percentage = totalCalories/data['kcalIntakeTarget'];
-    return (percentage*10);
+    double percentage = totalCalories/kcalTarget;
+        //data['kcalIntakeTarget'];
+
+    print("Percentage "+(percentage*100).toString() + "kcalTarget = "+kcalTarget.toString()+"calories = "+totalCalories.toString());
+    setState(() {
+      totalCalories = 0;
+    });
+    return (percentage*100);
   }
 
   @override
