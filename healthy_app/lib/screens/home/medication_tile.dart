@@ -17,12 +17,18 @@ class MedicationTile extends StatefulWidget {
 class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  bool isChecked = false;
-  double timeDilation = 1.0;
-
+ // timeDilation = 1.0;
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
+  bool isSelected = true;
 
+  void initState(){
+    super.initState();
+    setState(() {
+      isSelected = widget.taken;
+    });
+    print(isSelected);
+  }
   Future<String> getUserid() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
@@ -49,7 +55,6 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
-    print("Edit item called");
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Edit details here:"),
@@ -115,7 +120,6 @@ class _MedicationTileState extends State<MedicationTile> {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: CheckboxListTile(
-            //value : isChecked,
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
             subtitle: Text("Take at ${widget.medication.timeToTake}"),
@@ -127,11 +131,16 @@ class _MedicationTileState extends State<MedicationTile> {
                 });
               },
             ),
-            value: timeDilation != 1.0,
-             onChanged: (bool value) {
+           // value: timeDilation != 1.0,
+            value: isSelected,
+             onChanged: (bool newValue) {
               setState(() {
-                updateDatabase(value, widget.medication.medicineName);
-                timeDilation = value ? 3.0 : 1.0;
+                print(isSelected);
+                updateDatabase(newValue, widget.medication.medicineName);
+                isSelected = newValue;
+                //widget.taken = false;
+                //timeDilation = value ? 3.0 : 1.0;
+
           });
         },
       ),

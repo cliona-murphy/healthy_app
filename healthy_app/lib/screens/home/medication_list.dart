@@ -34,10 +34,14 @@ class _MedicationListState extends State<MedicationList> {
         if (medication.medicineName == loggedMed.medicineName){
           if (loggedMed.taken){
             returnBool = true;
+          } else {
+            returnBool = false;
           }
+        } else {
+          returnBool = false;
         }
-        returnBool = false;
       }
+      print("returnBool = " + returnBool.toString());
       return returnBool;
     }
 
