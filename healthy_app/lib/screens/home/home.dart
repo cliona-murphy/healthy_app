@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
   int getSelectedIndex(){
     return _selectedIndex;
   }
-
+ //adding comment for commit to master backup 23/03
   void _onItemTapped(int selectedIndex){
     _pageController.jumpToPage(selectedIndex);
     setState(() {
