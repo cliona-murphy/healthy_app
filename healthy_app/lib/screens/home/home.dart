@@ -4,6 +4,7 @@ import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../calendar.dart';
 import '../foodDiary.dart';
 import '../activityDiary.dart';
 import '../medicationTracker.dart';
@@ -52,6 +53,10 @@ class _HomeState extends State<Home> {
             onTap: () {
               /* Write listener code here */
               print("Calendar View Selected");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CalendarView()),
+              );
             },
             child: Icon(
               Icons.calendar_today_outlined,
