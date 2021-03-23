@@ -309,7 +309,7 @@ class DatabaseService {
         .document(medName)
         .delete();
   }
-  Stream<List<MedicationChecklist>> checkIfMedTaken() {
+  Stream<List<MedicationChecklist>> getLoggedMedications() {
     var entryName = reformatDate(getCurrentDate());
     return Firestore.instance.collection('users')
         .document(uid)
@@ -319,7 +319,7 @@ class DatabaseService {
         .snapshots()
         .map(medicationChecklistFromSnapshot);
   }
-  
+
   List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return MedicationChecklist(

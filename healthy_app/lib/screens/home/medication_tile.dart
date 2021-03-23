@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class MedicationTile extends StatefulWidget {
 
   final Medication medication;
-  MedicationTile({ this.medication });
+  final bool taken;
+  MedicationTile({ this.medication, this.taken });
 
   @override
   _MedicationTileState createState() => _MedicationTileState();
@@ -17,6 +18,7 @@ class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
   final FirebaseAuth auth = FirebaseAuth.instance;
   bool isChecked = false;
+  double timeDilation = 1.0;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -29,7 +31,7 @@ class _MedicationTileState extends State<MedicationTile> {
 
   checkIfTaken() async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).checkIfMedTaken();
+    //DatabaseService(uid: userId).checkIfMedTaken(widget.medication.medicineName);
   }
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
@@ -113,7 +115,7 @@ class _MedicationTileState extends State<MedicationTile> {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: CheckboxListTile(
-            value : isChecked,
+            //value : isChecked,
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
             subtitle: Text("Take at ${widget.medication.timeToTake}"),
@@ -125,7 +127,7 @@ class _MedicationTileState extends State<MedicationTile> {
                 });
               },
             ),
-            //value: timeDilation != 1.0,
+            value: timeDilation != 1.0,
              onChanged: (bool value) {
               setState(() {
                 updateDatabase(value, widget.medication.medicineName);

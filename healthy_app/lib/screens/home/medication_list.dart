@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:healthy_app/models/medication.dart';
@@ -27,9 +28,23 @@ class _MedicationListState extends State<MedicationList> {
     });
   }
 
+  bool checkIfTaken(Medication medication, List<MedicationChecklist> medsLogged){
+      bool returnBool;
+      for(var loggedMed in medsLogged){
+        if (medication.medicineName == loggedMed.medicineName){
+          if (loggedMed.taken){
+            returnBool = true;
+          }
+        }
+        returnBool = false;
+      }
+      return returnBool;
+    }
+
   @override
   Widget build(BuildContext context) {
     final medications = Provider.of<List<Medication>>(context) ?? [];
+    final loggedMedications = Provider.of<List<MedicationChecklist>>(context) ?? [];
 
     if(medications.isNotEmpty){
       print(medications);
@@ -38,7 +53,7 @@ class _MedicationListState extends State<MedicationList> {
         shrinkWrap: true,
         itemCount: medications.length,
         itemBuilder: (context, index) {
-          return MedicationTile(medication: medications[index]);
+          return MedicationTile(medication: medications[index], taken: checkIfTaken(medications[index], loggedMedications));
         },
       );
     } else {

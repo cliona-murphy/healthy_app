@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/medication.dart';
+import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -111,7 +112,10 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               child: Column(
                   children: [
                       Padding(padding: EdgeInsets.only(top: 30.0)),
-                      MedicationList(),
+                      StreamProvider<List<MedicationChecklist>>.value(
+                          value: DatabaseService(uid: userId).getLoggedMedications(),
+                        child: MedicationList(),
+                      ),
                       Container(
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
