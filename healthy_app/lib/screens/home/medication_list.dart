@@ -32,21 +32,16 @@ class _MedicationListState extends State<MedicationList> {
     final medications = Provider.of<List<Medication>>(context) ?? [];
 
     if(medications.isNotEmpty){
-      print("medications list is not empty");
       print(medications);
 
-      print("length of list = " + medications.length.toString());
       return loading ? Loading() : ListView.builder(
         shrinkWrap: true,
         itemCount: medications.length,
         itemBuilder: (context, index) {
-          //return Text("${medications[index].medicineName.toString()} ${medications[index].timeToTake.toString()} calories");
           return MedicationTile(medication: medications[index]);
         },
       );
     } else {
-      //return CircularProgressIndicator();
-      print("medications list is null");
       return loading ? Loading() : Container(
         height: 80,
         width: 300,

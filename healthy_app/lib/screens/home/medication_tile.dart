@@ -16,6 +16,7 @@ class MedicationTile extends StatefulWidget {
 class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  bool isChecked = false;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -26,6 +27,10 @@ class _MedicationTileState extends State<MedicationTile> {
     return uid;
   }
 
+  checkIfTaken() async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).checkIfMedTaken();
+  }
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
@@ -51,7 +56,6 @@ class _MedicationTileState extends State<MedicationTile> {
           child : SingleChildScrollView(
             child: Column(
               children: [
-                //Text("Food name"),
                 TextField(
                   controller: nameController,
                   decoration: InputDecoration(
@@ -70,9 +74,7 @@ class _MedicationTileState extends State<MedicationTile> {
                       hintText: timeToTake,
                     ),
                   ),
-                  // ]),
                 ),
-                //Padding(padding: EdgeInsets.only(top: 15.0)),
               ],
             ),
           ),
@@ -84,7 +86,6 @@ class _MedicationTileState extends State<MedicationTile> {
             color: Colors.red,
             //child: Text("Delete Item"),
             onPressed: () {
-              //updateDatabase(nameController.text, timeController.text);
               deleteMedication(widget.medication.medicineName);
               nameController.clear();
               timeController.clear();
@@ -95,7 +96,6 @@ class _MedicationTileState extends State<MedicationTile> {
             elevation: 5.0,
             child: Text("Update"),
             onPressed: () {
-              //updateDatabase(nameController.text, timeController.text);
               updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
               nameController.clear();
               timeController.clear();
@@ -113,6 +113,7 @@ class _MedicationTileState extends State<MedicationTile> {
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
           child: CheckboxListTile(
+            value : isChecked,
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
             subtitle: Text("Take at ${widget.medication.timeToTake}"),
@@ -124,7 +125,7 @@ class _MedicationTileState extends State<MedicationTile> {
                 });
               },
             ),
-            value: timeDilation != 1.0,
+            //value: timeDilation != 1.0,
              onChanged: (bool value) {
               setState(() {
                 updateDatabase(value, widget.medication.medicineName);

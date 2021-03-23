@@ -116,7 +116,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                         padding: const EdgeInsets.all(10.0),
                         child: ElevatedButton(
                           onPressed: (){
-                            print("button pressed");
                             addItem(context);
                           },
                           child: Text("Add Item"),
