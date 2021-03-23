@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class MedicationTile extends StatefulWidget {
 
   final Medication medication;
-  MedicationTile({ this.medication });
+  final bool taken;
+  MedicationTile({ this.medication, this.taken });
 
   @override
   _MedicationTileState createState() => _MedicationTileState();
@@ -16,16 +17,28 @@ class MedicationTile extends StatefulWidget {
 class _MedicationTileState extends State<MedicationTile> {
   Medication _medication;
   final FirebaseAuth auth = FirebaseAuth.instance;
-
+ // timeDilation = 1.0;
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
+  bool isSelected = true;
 
+  void initState(){
+    super.initState();
+    setState(() {
+      isSelected = widget.taken;
+    });
+    print(isSelected);
+  }
   Future<String> getUserid() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
     return uid;
   }
 
+  checkIfTaken() async {
+    String userId = await getUserid();
+    //DatabaseService(uid: userId).checkIfMedTaken(widget.medication.medicineName);
+  }
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
@@ -42,7 +55,6 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
-    print("Edit item called");
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
         title: Text("Edit details here:"),
@@ -51,7 +63,6 @@ class _MedicationTileState extends State<MedicationTile> {
           child : SingleChildScrollView(
             child: Column(
               children: [
-                //Text("Food name"),
                 TextField(
                   controller: nameController,
                   decoration: InputDecoration(
@@ -70,9 +81,7 @@ class _MedicationTileState extends State<MedicationTile> {
                       hintText: timeToTake,
                     ),
                   ),
-                  // ]),
                 ),
-                //Padding(padding: EdgeInsets.only(top: 15.0)),
               ],
             ),
           ),
@@ -84,7 +93,6 @@ class _MedicationTileState extends State<MedicationTile> {
             color: Colors.red,
             //child: Text("Delete Item"),
             onPressed: () {
-              //updateDatabase(nameController.text, timeController.text);
               deleteMedication(widget.medication.medicineName);
               nameController.clear();
               timeController.clear();
@@ -95,7 +103,6 @@ class _MedicationTileState extends State<MedicationTile> {
             elevation: 5.0,
             child: Text("Update"),
             onPressed: () {
-              //updateDatabase(nameController.text, timeController.text);
               updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
               nameController.clear();
               timeController.clear();
@@ -124,11 +131,16 @@ class _MedicationTileState extends State<MedicationTile> {
                 });
               },
             ),
-            value: timeDilation != 1.0,
-             onChanged: (bool value) {
+           // value: timeDilation != 1.0,
+            value: isSelected,
+             onChanged: (bool newValue) {
               setState(() {
-                updateDatabase(value, widget.medication.medicineName);
-                timeDilation = value ? 3.0 : 1.0;
+                print(isSelected);
+                updateDatabase(newValue, widget.medication.medicineName);
+                isSelected = newValue;
+                //widget.taken = false;
+                //timeDilation = value ? 3.0 : 1.0;
+
           });
         },
       ),

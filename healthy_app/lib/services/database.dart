@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
+import 'package:healthy_app/models/medication_checklist.dart';
 
 
 class DatabaseService {
@@ -308,7 +309,25 @@ class DatabaseService {
         .document(medName)
         .delete();
   }
+  Stream<List<MedicationChecklist>> getLoggedMedications() {
+    var entryName = reformatDate(getCurrentDate());
+    return Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('medChecklist')
+        .snapshots()
+        .map(medicationChecklistFromSnapshot);
+  }
 
+  List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return MedicationChecklist(
+        medicineName: doc.data['medicationName'] ?? '',
+        taken: doc.data['taken'] ?? '',
+      );
+    }).toList();
+  }
   //misc
   String getCurrentDate(){
     var date = new DateTime.now().toString();

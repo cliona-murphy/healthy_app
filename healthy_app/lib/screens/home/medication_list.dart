@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:healthy_app/models/medication.dart';
@@ -27,26 +28,41 @@ class _MedicationListState extends State<MedicationList> {
     });
   }
 
+  bool checkIfTaken(Medication medication, List<MedicationChecklist> medsLogged){
+    print(medication.medicineName);
+      bool returnBool = false;
+      for(var loggedMed in medsLogged){
+        if (medication.medicineName == loggedMed.medicineName){
+          print("match found btw " + medication.medicineName + " & " + loggedMed.medicineName);
+          if (loggedMed.taken){
+            print("med taken");
+            returnBool = true;
+          } else {
+            print("line 41");
+            returnBool = false;
+          }
+        }
+      }
+      print("returnBool = " + returnBool.toString());
+      return returnBool;
+    }
+
   @override
   Widget build(BuildContext context) {
     final medications = Provider.of<List<Medication>>(context) ?? [];
+    final loggedMedications = Provider.of<List<MedicationChecklist>>(context) ?? [];
 
     if(medications.isNotEmpty){
-      print("medications list is not empty");
       print(medications);
 
-      print("length of list = " + medications.length.toString());
       return loading ? Loading() : ListView.builder(
         shrinkWrap: true,
         itemCount: medications.length,
         itemBuilder: (context, index) {
-          //return Text("${medications[index].medicineName.toString()} ${medications[index].timeToTake.toString()} calories");
-          return MedicationTile(medication: medications[index]);
+          return MedicationTile(medication: medications[index], taken: checkIfTaken(medications[index], loggedMedications));
         },
       );
     } else {
-      //return CircularProgressIndicator();
-      print("medications list is null");
       return loading ? Loading() : Container(
         height: 80,
         width: 300,
