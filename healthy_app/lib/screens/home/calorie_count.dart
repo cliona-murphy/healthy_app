@@ -131,10 +131,10 @@ class _CalorieCountState extends State<CalorieCount> {
         height: 175,
         //child: Text("test"),
         child: charts.PieChart(
-          generateData(500),
-          animate: true,
-          animationDuration: Duration(seconds: 1),
-        ),
+        generateData(500),
+        animate: true,
+        animationDuration: Duration(milliseconds: 500),
+          ),
       );
     } else {
       print("foods list is null");
@@ -145,7 +145,7 @@ class _CalorieCountState extends State<CalorieCount> {
         child: charts.PieChart(
           generateData(0),
           animate: true,
-          animationDuration: Duration(seconds: 1),
+          animationDuration: Duration(milliseconds: 500),
         ),
       );
     }
