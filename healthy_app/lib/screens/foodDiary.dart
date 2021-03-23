@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home/food_list.dart';
@@ -20,6 +21,7 @@ class _FoodDiaryState extends State<FoodDiary> {
   int listLength = 0;
   bool foodLogged = false;
   bool userIdSet = false;
+  bool loading = true;
 
   TextEditingController customController = TextEditingController();
   TextEditingController calorieController = TextEditingController();
@@ -29,8 +31,15 @@ class _FoodDiaryState extends State<FoodDiary> {
     super.initState();
     getUid();
     print(userId);
+    updateBoolean();
   }
-
+  updateBoolean(){
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
   Future <String> onContainerTapped(BuildContext context, String mealId){
     print("Here");
     return showDialog(context: context, builder: (context) {
@@ -155,7 +164,7 @@ class _FoodDiaryState extends State<FoodDiary> {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: new Container (
