@@ -117,7 +117,14 @@ class DatabaseService {
   }
 
   Future addWater(int quantity, String date) async {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return await Firestore
         .instance
         .collection('users')
@@ -144,14 +151,14 @@ class DatabaseService {
   //       //.map(foodListFromSnapshot);
   // }
   Stream<List<Food>> get allFoods {
-    // var entryName;
-    // if (globals.selectedDate != getCurrentDate()){
-    //   entryName = reformatDate(globals.selectedDate);
-    //   print("entry name = "+ entryName);
-    // }
-    // entryName = reformatDate(getCurrentDate());
-    // print("uid from within allFoods = "+uid);
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return Firestore.instance
         .collection('users')
         .document('MPVEF06jRYXyQhGwWPs2BfyU6QE2')
@@ -256,7 +263,14 @@ class DatabaseService {
   }
 
   updateFoodDetails(String foodName, int calories) async {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -270,7 +284,14 @@ class DatabaseService {
   }
 
   deleteFood(foodName) async {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
