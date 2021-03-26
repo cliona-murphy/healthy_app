@@ -17,12 +17,8 @@ class CalendarView extends StatefulWidget {
 }
 
 class _CalendarViewState extends State<CalendarView> {
-  DateTime _currentDate = DateTime.now();
-  DateTime _currentDate2 = DateTime.now();
-  String _currentMonth = DateFormat.yMMM().format(DateTime.now());
-  DateTime _targetDateTime = DateTime.now();
-
   CalendarController _controller = CalendarController();
+  String selectedDay = "";
 
   void initState() {
     super.initState();
@@ -50,6 +46,13 @@ class _CalendarViewState extends State<CalendarView> {
                     CalendarFormat.month: 'Week',
                     CalendarFormat.twoWeeks: "Month",
                   },
+                  startingDayOfWeek: StartingDayOfWeek.monday,
+                    onDaySelected: (date, events,e) {
+                    //print(date.)
+                      selectedDay = "${date.day}/${date.month}/${date.year}";
+                      print("${date.day}/${date.month}/${date.year}");
+                      print(date.toUtc());
+                    },
                 ),
                 // child: TableCalendar(
                 //   initialCalendarFormat: CalendarFormat.month,
@@ -70,10 +73,7 @@ class _CalendarViewState extends State<CalendarView> {
                 //     formatButtonTextStyle: TextStyle(color: Colors.white),
                 //     formatButtonShowsNext: true,
                 //   ),
-                //   startingDayOfWeek: StartingDayOfWeek.monday,
-                //   onDaySelected: (date, events,e) {
-                //     print(date.toUtc());
-                //   },
+                //
                 //   builders: CalendarBuilders(
                 //     selectedDayBuilder: (context, date, events) => Container(
                 //         margin: const EdgeInsets.all(5.0),
