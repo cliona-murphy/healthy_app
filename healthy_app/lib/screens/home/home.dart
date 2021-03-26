@@ -10,7 +10,7 @@ import '../activityDiary.dart';
 import '../medicationTracker.dart';
 import '../nutrientChecklist.dart';
 import '../progress.dart';
-import 'package:healthy_app/shared/globals.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
 
@@ -53,9 +53,10 @@ class _HomeState extends State<Home> {
           builder: (context) => CalendarView(),
         ));
     if(result.isNotEmpty){
-      selectedDate = result;
       setState(() {
+        selectedDate = result;
         newDate = true;
+        globals.selectedDate = selectedDate;
       });
     }
     //print(result);
