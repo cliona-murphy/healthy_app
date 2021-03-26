@@ -3,7 +3,7 @@ import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
-
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class DatabaseService {
 
@@ -144,8 +144,14 @@ class DatabaseService {
   //       //.map(foodListFromSnapshot);
   // }
   Stream<List<Food>> get allFoods {
+    // var entryName;
+    // if (globals.selectedDate != getCurrentDate()){
+    //   entryName = reformatDate(globals.selectedDate);
+    //   print("entry name = "+ entryName);
+    // }
+    // entryName = reformatDate(getCurrentDate());
+    // print("uid from within allFoods = "+uid);
     var entryName = reformatDate(getCurrentDate());
-    print("uid from within allFoods = "+uid);
     return Firestore.instance
         .collection('users')
         .document('MPVEF06jRYXyQhGwWPs2BfyU6QE2')
@@ -157,7 +163,16 @@ class DatabaseService {
   }
 
   Stream<List<Food>> get breakFastFoods {
-    var entryName = reformatDate(getCurrentDate());
+    //check if entry exists before trying to retrieve it?
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
+    print("uid from within allFoods = "+uid);
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -170,7 +185,14 @@ class DatabaseService {
     }
 
   Stream<List<Food>> get lunchFoods {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -183,7 +205,14 @@ class DatabaseService {
   }
 
   Stream<List<Food>> get dinnerFoods {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -196,7 +225,14 @@ class DatabaseService {
   }
 
   Stream<List<Food>> get snacks {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -277,7 +313,14 @@ class DatabaseService {
   }
 
   medTaken(String medName, bool checked) async {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
@@ -310,7 +353,14 @@ class DatabaseService {
         .delete();
   }
   Stream<List<MedicationChecklist>> getLoggedMedications() {
-    var entryName = reformatDate(getCurrentDate());
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
     return Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')

@@ -6,6 +6,7 @@ import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
 import 'home/medication_list.dart';
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class MedicationTracker extends StatefulWidget {
   //test comment
@@ -28,6 +29,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     super.initState();
     getUid();
     print(userId);
+    print("date = " + globals.selectedDate);
   }
 
 
@@ -101,6 +103,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   }
 
   Widget build(BuildContext context){
+    // rebuildAllChildren(context);
     return StreamProvider<List<Medication>>.value(
       value: DatabaseService(uid: userId).medications,
       child: Scaffold(

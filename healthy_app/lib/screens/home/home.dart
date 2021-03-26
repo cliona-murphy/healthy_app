@@ -10,11 +10,10 @@ import '../activityDiary.dart';
 import '../medicationTracker.dart';
 import '../nutrientChecklist.dart';
 import '../progress.dart';
-import 'settings_list.dart';
-
+import 'package:healthy_app/shared/globals.dart' as globals;
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
-  //this class should be updated to be named Progress and all references updated
+
   @override
   _HomeState createState() => _HomeState();
 }
@@ -26,6 +25,8 @@ class _HomeState extends State<Home> {
     Progress(), FoodDiary(), ActivityDiary(), NutrientChecklist(), MedicationTracker(),
   ];
   int _selectedIndex = 0;
+  String selectedDate = "";
+  bool newDate = false;
 
   void _onPageChanged(int index){
     setState(() {
@@ -44,6 +45,23 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void renderCalendar() async {
+    final result = await
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CalendarView(),
+        ));
+    if(result.isNotEmpty){
+      setState(() {
+        selectedDate = result;
+        newDate = true;
+        globals.selectedDate = selectedDate;
+      });
+    }
+    //print(result);
+  }
+
   Widget build(BuildContext context){
     return StreamProvider<QuerySnapshot>.value(
       value: DatabaseService().settings,
@@ -53,16 +71,13 @@ class _HomeState extends State<Home> {
             onTap: () {
               /* Write listener code here */
               print("Calendar View Selected");
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CalendarView()),
-              );
+              renderCalendar();
             },
             child: Icon(
               Icons.calendar_today_outlined,
             ),
           ),
-          title: new Text(getCurrentDate()),
+          title: newDate ? new Text(selectedDate) : new Text(getCurrentDate()),
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(
@@ -73,11 +88,10 @@ class _HomeState extends State<Home> {
                     value: choice,
                     child: Text(choice),
                   );
-                })
-                    .toList();
+                }).toList();
               }
-              ,)]
-          ,),
+              ,)],
+          ),
         backgroundColor: Colors.white,
         body: PageView(
           controller: _pageController,
