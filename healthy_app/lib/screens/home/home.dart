@@ -26,6 +26,7 @@ class _HomeState extends State<Home> {
   ];
   int _selectedIndex = 0;
   String selectedDate = "";
+  bool newDate = false;
 
   void _onPageChanged(int index){
     setState(() {
@@ -53,6 +54,9 @@ class _HomeState extends State<Home> {
         ));
     if(result.isNotEmpty){
       selectedDate = result;
+      setState(() {
+        newDate = true;
+      });
     }
     //print(result);
   }
@@ -72,7 +76,7 @@ class _HomeState extends State<Home> {
               Icons.calendar_today_outlined,
             ),
           ),
-          title: new Text(getCurrentDate()),
+          title: newDate ? new Text(selectedDate) : new Text(getCurrentDate()),
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(
