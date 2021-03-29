@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_app/screens/home/settings_list.dart';
+import 'package:healthy_app/screens/settings_page.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
@@ -60,6 +62,22 @@ class _HomeState extends State<Home> {
       });
     }
     //print(result);
+  }
+
+  renderSettingsPage() async {
+    final result = await
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SettingsPage(),
+        ));
+    if(result.isNotEmpty){
+      setState(() {
+        // selectedDate = result;
+        // newDate = true;
+        // globals.selectedDate = selectedDate;
+      });
+    }
   }
 
   Widget build(BuildContext context){
@@ -131,7 +149,7 @@ class _HomeState extends State<Home> {
   }
   void choiceAction(String choice){
     if(choice == ConstantVars.Settings){
-      //SettingsList();
+      renderSettingsPage();
       print('Settings');
     }
     else if(choice == ConstantVars.Subscribe){
