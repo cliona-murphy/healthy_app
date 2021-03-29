@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home/food_list.dart';
 
+//comment for backup
 class FoodDiary extends StatefulWidget {
 
   @override
