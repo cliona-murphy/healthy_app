@@ -34,24 +34,11 @@ class _CalorieCountState extends State<CalorieCount> {
     });
   }
 
-  // Future<dynamic> getData() async {
-  //   print("getData called");
-  //   final DocumentReference document = Firestore.instance.collection("settings")
-  //       .document(userId);
-  //
-  //   await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
-  //     setState(() {
-  //       data = snapshot.data;
-  //     });
-  //   });
-  // }
-
   void initState() {
     super.initState();
     updateBoolean();
     getUid();
     print("user id within initState = " + userId);
-    // getData();
     _pieData = List<charts.Series<PieData, String>>();
   }
 
@@ -61,16 +48,11 @@ class _CalorieCountState extends State<CalorieCount> {
     setState(() {
       userId = uid;
     });
-    // setState(() {
-    //   userIdSet = true;
-    // });
     print(uid);
-    // await getData();
     return uid;
   }
 
   generateData(int consumed) {
-    // getData();
     double percentageIntake;
     if(consumed == 0){
       percentageIntake = .1;
@@ -100,47 +82,27 @@ class _CalorieCountState extends State<CalorieCount> {
 
   double calculatePercentage() {
     int kcalTarget = widget.calorieTarget;
-    //getData();
-    // if (data != null) {
-    //   kcalTarget = data['kcalIntakeTarget'];
-    //   print("target = "+kcalTarget.toString());
-    // } else {
-    //   kcalTarget = 2000;
-    // }
     double percentage = totalCalories / kcalTarget;
-    //data['kcalIntakeTarget'];
 
     print("Percentage " + (percentage * 100).toString() + "kcalTarget = " +
         kcalTarget.toString() + "calories = " + totalCalories.toString());
     setState(() {
       totalCalories = 0;
     });
+
     return (percentage * 100);
   }
-
   @override
   Widget build(BuildContext context) {
     final foods = Provider.of<List<Food>>(context) ?? [];
-    //final settings = Provider.of<DocumentSnapshot>(context) ?? [];
 
-   // print(settings);
-    //print(settings.data.toString());
-   //print(settings.data['kcalIntakeTarget']);
-
-
-    print("userId within calorie count is " + userId);
     if (foods.isNotEmpty) {
-      bool notEmpty = true;
-      print("foods list is not null");
-      print("length of list = " + foods.length.toString());
-      //
       for (var food in foods)
         totalCalories += food.calories;
 
       return Container(
         width: 175,
         height: 175,
-        //child: Text("test"),
         child: charts.PieChart(
         generateData(500),
         animate: true,
@@ -148,7 +110,6 @@ class _CalorieCountState extends State<CalorieCount> {
           ),
       );
     } else {
-      print("foods list is null");
       return loading ? Loading() : Container(
         width: 175,
         height: 175,
