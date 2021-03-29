@@ -163,7 +163,16 @@ class _FoodDiaryState extends State<FoodDiary> {
     return formattedDate;
   }
 
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+    (context as Element).visitChildren(rebuild);
+  }
+
   Widget build(BuildContext context) {
+    rebuildAllChildren(context);
     return loading ? Loading() : Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(

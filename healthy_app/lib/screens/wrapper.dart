@@ -19,4 +19,11 @@ class Wrapper extends StatelessWidget {
       return Home();
     }
   }
+
+  String getCurrentDate(){
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formattedDate = "${dateParse.day}/${dateParse.month}/${dateParse.year}";
+    return formattedDate;
+  }
 }
