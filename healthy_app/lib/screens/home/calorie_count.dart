@@ -7,8 +7,12 @@ import 'package:healthy_app/models/pie_data.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:healthy_app/models/settings.dart';
 
 class CalorieCount extends StatefulWidget {
+
+  final calorieTarget;
+  CalorieCount({ this.calorieTarget });
 
   @override
   _CalorieCountState createState() => _CalorieCountState();
@@ -30,24 +34,24 @@ class _CalorieCountState extends State<CalorieCount> {
     });
   }
 
-  Future<dynamic> getData() async {
-    print("getData called");
-    final DocumentReference document = Firestore.instance.collection("settings")
-        .document(userId);
-
-    await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
-      setState(() {
-        data = snapshot.data;
-      });
-    });
-  }
+  // Future<dynamic> getData() async {
+  //   print("getData called");
+  //   final DocumentReference document = Firestore.instance.collection("settings")
+  //       .document(userId);
+  //
+  //   await document.get().then<dynamic>((DocumentSnapshot snapshot) async {
+  //     setState(() {
+  //       data = snapshot.data;
+  //     });
+  //   });
+  // }
 
   void initState() {
     super.initState();
     updateBoolean();
     getUid();
     print("user id within initState = " + userId);
-    getData();
+    // getData();
     _pieData = List<charts.Series<PieData, String>>();
   }
 
@@ -61,12 +65,12 @@ class _CalorieCountState extends State<CalorieCount> {
     //   userIdSet = true;
     // });
     print(uid);
-    await getData();
+    // await getData();
     return uid;
   }
 
   generateData(int consumed) {
-    getData();
+    // getData();
     double percentageIntake;
     if(consumed == 0){
       percentageIntake = .1;
@@ -95,14 +99,14 @@ class _CalorieCountState extends State<CalorieCount> {
   }
 
   double calculatePercentage() {
-    int kcalTarget;
+    int kcalTarget = widget.calorieTarget;
     //getData();
-    if (data != null) {
-      kcalTarget = data['kcalIntakeTarget'];
-      print("target = "+kcalTarget.toString());
-    } else {
-      kcalTarget = 2000;
-    }
+    // if (data != null) {
+    //   kcalTarget = data['kcalIntakeTarget'];
+    //   print("target = "+kcalTarget.toString());
+    // } else {
+    //   kcalTarget = 2000;
+    // }
     double percentage = totalCalories / kcalTarget;
     //data['kcalIntakeTarget'];
 
@@ -117,6 +121,13 @@ class _CalorieCountState extends State<CalorieCount> {
   @override
   Widget build(BuildContext context) {
     final foods = Provider.of<List<Food>>(context) ?? [];
+    //final settings = Provider.of<DocumentSnapshot>(context) ?? [];
+
+   // print(settings);
+    //print(settings.data.toString());
+   //print(settings.data['kcalIntakeTarget']);
+
+
     print("userId within calorie count is " + userId);
     if (foods.isNotEmpty) {
       bool notEmpty = true;

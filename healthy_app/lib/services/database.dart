@@ -43,12 +43,35 @@ class DatabaseService {
     // });
   }
 
-  Stream<List<Settings>> get testUserSettings {
-    return userCollection.document(uid)
-        .collection('settings')
-        .snapshots()
-        .map(settingsListFromSnapshot);
+  Stream<DocumentSnapshot> get testUserSettings {
+    return settingsCollection.document(uid)
+        .snapshots();
   }
+  // Stream<DocumentSnapshot> get testUserSettings {
+  //   Firestore.instance
+  //       .collection('settings')
+  //       .document(uid)
+  //       .get()
+  //       .then((DocumentSnapshot documentSnapshot) {
+  //     if (documentSnapshot.exists) {
+  //       print('Document exists on the database');
+  //       print(documentSnapshot.data['kcalIntakeTarget']);
+  //     }
+  //   });
+  // }
+  // Stream<DocumentSnapshot> get testUserSettings {
+  //   return Firestore.instance
+  //       .collection('settings')
+  //       .document(uid)
+  //       .get()
+  //       .then((DocumentSnapshot documentSnapshot) {
+  //     if (documentSnapshot.exists) {
+  //       print('Document exists on the database');
+  //       print(documentSnapshot.data['kcalIntakeTarget']);
+  //       //return documentSnapshot;
+  //     }
+  //   });
+  // }
 
   //get userSettings Stream
   Stream<QuerySnapshot> get settings {
