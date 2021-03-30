@@ -81,8 +81,8 @@ class _CalorieCountState extends State<CalorieCount> {
   }
 
   double calculatePercentage() {
-    double kcalTarget = widget.calorieTarget;
-    double percentage = totalCalories.toDouble() / kcalTarget;
+    double kcalTarget = widget.calorieTarget.toDouble();
+    double percentage = (totalCalories.toDouble() / kcalTarget);
 
     print("Percentage " + (percentage * 100).toString() + "kcalTarget = " +
         kcalTarget.toString() + "calories = " + totalCalories.toString());
