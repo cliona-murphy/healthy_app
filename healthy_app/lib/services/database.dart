@@ -34,20 +34,11 @@ class DatabaseService {
       'kcalOutputTarget': kcalOutputTarget,
       'waterIntakeTarget': waterIntakeTarget,
     });
-    // return await userCollection.document(uid)
-    // .collection('settings')
-    // .add({
-    //   'kcalIntakeTarget': kcalIntakeTarget,
-    //   'kcalOutputTarget': kcalOutputTarget,
-    //   'waterIntakeTarget': waterIntakeTarget,
-    // });
   }
 
-  Stream<List<Settings>> get testUserSettings {
-    return userCollection.document(uid)
-        .collection('settings')
-        .snapshots()
-        .map(settingsListFromSnapshot);
+  Stream<DocumentSnapshot> get testUserSettings {
+    return settingsCollection.document(uid)
+        .snapshots();
   }
 
   //get userSettings Stream
