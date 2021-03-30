@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cupertino_setting_control/cupertino_setting_control.dart';
+import 'package:healthy_app/services/database.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -42,7 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       _searchAreaResult = data;
     });
-    
+    DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
   }
 
   @override

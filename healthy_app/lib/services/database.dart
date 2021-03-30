@@ -63,6 +63,13 @@ class DatabaseService {
       );
     }).toList();
   }
+  //entering user profile info
+  Future enterUserCountry(String country) async {
+    return await userCollection.document(uid).updateData({
+      'country': country,
+    });
+  }
+
   //entry creation
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
@@ -152,7 +159,7 @@ class DatabaseService {
     }
     return Firestore.instance
         .collection('users')
-        .document('MPVEF06jRYXyQhGwWPs2BfyU6QE2')
+        .document(uid)
         .collection('entries')
         .document(entryName)
         .collection('foods')
