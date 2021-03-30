@@ -70,31 +70,31 @@ class DatabaseService {
     });
   }
 
-  Future enterUserAge(double age) async {
+  Future enterUserAge(int age) async {
     return await userCollection.document(uid).updateData({
       'age': age,
     });
   }
 
-  Future enterUserWeight(double weight) async {
+  Future enterUserWeight(int weight) async {
     return await userCollection.document(uid).updateData({
       'weight': weight,
     });
   }
 
-  Future updateKcalIntakeTarget(double kcal) async {
+  Future updateKcalIntakeTarget(int kcal) async {
     return await settingsCollection.document(uid).updateData({
       'kcalIntakeTarget': kcal,
     });
   }
 
-  Future updateKcalOutputTarget(double kcal) async {
+  Future updateKcalOutputTarget(int kcal) async {
     return await settingsCollection.document(uid).updateData({
       'kcalOutputTarget': kcal,
     });
   }
 
-  Future updateWaterIntakeTarget(double water) async {
+  Future updateWaterIntakeTarget(int water) async {
     return await settingsCollection.document(uid).updateData({
       'waterIntakeTarget': water,
     });

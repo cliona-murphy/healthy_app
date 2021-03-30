@@ -1,5 +1,5 @@
 library healthy_app.globals;
 
 bool newDateSelected = false;
-String selectedDate = "00/00/0000";
+String selectedDate = "30/3/2021";
 int kcalIntakeTarget = 2000;

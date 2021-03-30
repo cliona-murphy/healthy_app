@@ -97,7 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
               unit: ' years',
             ),
             onSettingDataRowChange: (double resultVal) {
-              DatabaseService(uid: userId).enterUserAge(resultVal);
+              DatabaseService(uid: userId).enterUserAge(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
@@ -116,7 +116,7 @@ class _SettingsPageState extends State<SettingsPage> {
               unit: ' kg',
             ),
             onSettingDataRowChange: (double resultVal) {
-              DatabaseService(uid: userId).enterUserWeight(resultVal);
+              DatabaseService(uid: userId).enterUserWeight(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
@@ -155,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
               unit: ' kcal',
             ),
             onSettingDataRowChange: (double resultVal) {
-              DatabaseService(uid: userId).updateKcalIntakeTarget(resultVal);
+              DatabaseService(uid: userId).updateKcalIntakeTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
@@ -173,8 +173,8 @@ class _SettingsPageState extends State<SettingsPage> {
               justIntValues: true,
               unit: ' kcal',
             ),
-            onSettingDataRowChange: (resultVal) {
-              DatabaseService(uid: userId).updateKcalOutputTarget(resultVal);
+            onSettingDataRowChange: (double resultVal) {
+              DatabaseService(uid: userId).updateKcalOutputTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
@@ -192,8 +192,8 @@ class _SettingsPageState extends State<SettingsPage> {
               justIntValues: true,
               unit: ' litres',
             ),
-            onSettingDataRowChange: (resultVal) {
-              DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal);
+            onSettingDataRowChange: (double resultVal) {
+              DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal.toInt());
             },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
