@@ -8,7 +8,10 @@ class SettingsWidgets extends StatefulWidget {
   final String country;
   final double age;
   final double weight;
-  SettingsWidgets({this.country, this.age, this.weight });
+  final double intakeTarget;
+  final double outputTarget;
+  final double waterTarget;
+  SettingsWidgets({this.country, this.age, this.weight, this.intakeTarget, this.outputTarget, this.waterTarget });
 
   @override
   _SettingsWidgetsState createState() => _SettingsWidgetsState();
@@ -150,7 +153,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               title: 'Daily Calorie Intake Target',
               from: 1500,
               to: 5000,
-              initialValue: 2500,
+              initialValue: widget.intakeTarget.toDouble(),
               justIntValues: true,
               unit: ' kcal',
             ),
@@ -169,7 +172,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               title: 'Daily Calorie Output Target',
               from: 1000,
               to: 4000,
-              initialValue: 2000,
+              initialValue: widget.outputTarget.toDouble(),
               justIntValues: true,
               unit: ' kcal',
             ),
@@ -188,7 +191,7 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
               title: 'Daily Water Intake Target',
               from: 2,
               to: 5,
-              initialValue: 2,
+              initialValue: widget.waterTarget.toDouble(),
               justIntValues: true,
               unit: ' litres',
             ),

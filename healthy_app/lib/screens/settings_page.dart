@@ -259,11 +259,14 @@ class _SettingsPageState extends State<SettingsPage> {
     return StreamBuilder(
       stream: Firestore.instance.collection('settings').document(userId).snapshots(),
       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        var country, age, weight;
+        var country, age, weight, intakeTarget, outputTarget, waterTarget;
         if (snapshot.hasData) {
           country = snapshot.data['country'];
           age = snapshot.data['age'].toDouble();
           weight = snapshot.data['weight'].toDouble();
+          intakeTarget = snapshot.data['kcalIntakeTarget'].toDouble();
+          outputTarget = snapshot.data['kcalOutputTarget'].toDouble();
+          waterTarget = snapshot.data['waterIntakeTarget'].toDouble();
         } else {
           country = '';
           age = 0.0;
@@ -275,7 +278,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           body: Padding(
               padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: SettingsWidgets(country: country, age: age, weight: weight),
+              child: SettingsWidgets(country: country, age: age, weight: weight, intakeTarget: intakeTarget, outputTarget: outputTarget, waterTarget: waterTarget),
                   //country: country, age: age, weight: weight),
         ),
         );
