@@ -154,7 +154,9 @@ class _SettingsPageState extends State<SettingsPage> {
               justIntValues: true,
               unit: ' kcal',
             ),
-            onSettingDataRowChange: (double resultVal) {},
+            onSettingDataRowChange: (double resultVal) {
+              DatabaseService(uid: userId).updateKcalIntakeTarget(resultVal);
+            },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
                 showTitleLeft: !_titleOnTop,
@@ -171,7 +173,9 @@ class _SettingsPageState extends State<SettingsPage> {
               justIntValues: true,
               unit: ' kcal',
             ),
-            onSettingDataRowChange: (List<double> resultVals) {},
+            onSettingDataRowChange: (resultVal) {
+              DatabaseService(uid: userId).updateKcalOutputTarget(resultVal);
+            },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
                 showTitleLeft: !_titleOnTop,
@@ -188,7 +192,9 @@ class _SettingsPageState extends State<SettingsPage> {
               justIntValues: true,
               unit: ' litres',
             ),
-            onSettingDataRowChange: (List<double> resultVals) {},
+            onSettingDataRowChange: (resultVal) {
+              DatabaseService(uid: userId).updateWaterIntakeTarget(resultVal);
+            },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
                 showTitleLeft: !_titleOnTop,

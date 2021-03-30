@@ -82,6 +82,28 @@ class DatabaseService {
     });
   }
 
+  Future updateKcalIntakeTarget(double kcal) async {
+    return await settingsCollection.document(uid).updateData({
+      'kcalIntakeTarget': kcal,
+    });
+  }
+
+  Future updateKcalOutputTarget(double kcal) async {
+    return await settingsCollection.document(uid).updateData({
+      'kcalOutputTarget': kcal,
+    });
+  }
+
+  Future updateWaterIntakeTarget(double water) async {
+    return await settingsCollection.document(uid).updateData({
+      'waterIntakeTarget': water,
+    });
+  }
+
+  Future deleteAccount() async {
+   //needs to be developed
+  }
+
   //entry creation
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
