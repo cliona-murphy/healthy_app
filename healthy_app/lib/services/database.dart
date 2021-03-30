@@ -70,6 +70,14 @@ class DatabaseService {
     });
   }
 
+  Future enterUserAge(double age) async {
+    return await userCollection.document(uid).updateData({
+      'age': age,
+    });
+  }
+
+  
+
   //entry creation
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid

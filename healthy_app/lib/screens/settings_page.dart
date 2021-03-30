@@ -96,7 +96,9 @@ class _SettingsPageState extends State<SettingsPage> {
               justIntValues: true,
               unit: ' years',
             ),
-            onSettingDataRowChange: (double resultVal) {},
+            onSettingDataRowChange: (double resultVal) {
+              DatabaseService(uid: userId).enterUserAge(resultVal);
+            },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
                 showTitleLeft: !_titleOnTop,
@@ -249,47 +251,5 @@ class _SettingsPageState extends State<SettingsPage> {
               children: widgetList,
               physics: const AlwaysScrollableScrollPhysics())),
     );
-    // return StreamBuilder(
-    //   stream: Firestore.instance.collection('settings').document(userId).snapshots(),
-    //     builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-    //     // var targetIntake = snapshot.data['kcalIntakeTarget'];
-    //     // var targetOutput = snapshot.data['kcalOutputTarget'];
-    //     // var targetWater = snapshot.data['waterIntakeTarget'];
-    //     return new Scaffold(
-    //       appBar: new AppBar(
-    //         title: new Text("Settings"),
-    //       ),
-    //       body: SingleChildScrollView(
-    //         child: Container(
-    //           child: Text("test"),
-    //         ),
-    //         // child: Expanded(
-            //   child: Flexible(
-            //     child: ListView(
-            //       padding: const EdgeInsets.all(8),
-            //       children: <Widget>[
-            //         Container(
-            //           height: 50,
-            //           color: Colors.amber[600],
-            //           child: const Center(child: Text('Entry A')),
-            //         ),
-            //         Container(
-            //           height: 50,
-            //           color: Colors.amber[500],
-            //           child: const Center(child: Text('Entry B')),
-            //         ),
-            //         Container(
-            //           height: 50,
-            //           color: Colors.amber[100],
-            //           child: const Center(child: Text('Entry C')),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-    //       ),
-    //     );
-    //     //return SettingsTile(targetIntake: targetIntake, targetOutput: targetOutput, targetWater: targetWater);
-    // });
   }
 }
