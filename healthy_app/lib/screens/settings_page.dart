@@ -40,30 +40,33 @@ class _SettingsPageState extends State<SettingsPage> {
             title: new Text("Settings"),
           ),
           body: SingleChildScrollView(
-            child: Expanded(
-              child: Flexible(
-                child: ListView(
-                  padding: const EdgeInsets.all(8),
-                  children: <Widget>[
-                    Container(
-                      height: 50,
-                      color: Colors.amber[600],
-                      child: const Center(child: Text('Entry A')),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.amber[500],
-                      child: const Center(child: Text('Entry B')),
-                    ),
-                    Container(
-                      height: 50,
-                      color: Colors.amber[100],
-                      child: const Center(child: Text('Entry C')),
-                    ),
-                  ],
-                ),
-              ),
+            child: Container(
+              child: Text("test"),
             ),
+            // child: Expanded(
+            //   child: Flexible(
+            //     child: ListView(
+            //       padding: const EdgeInsets.all(8),
+            //       children: <Widget>[
+            //         Container(
+            //           height: 50,
+            //           color: Colors.amber[600],
+            //           child: const Center(child: Text('Entry A')),
+            //         ),
+            //         Container(
+            //           height: 50,
+            //           color: Colors.amber[500],
+            //           child: const Center(child: Text('Entry B')),
+            //         ),
+            //         Container(
+            //           height: 50,
+            //           color: Colors.amber[100],
+            //           child: const Center(child: Text('Entry C')),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ),
         );
         //return SettingsTile(targetIntake: targetIntake, targetOutput: targetOutput, targetWater: targetWater);
