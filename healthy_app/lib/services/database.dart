@@ -65,19 +65,19 @@ class DatabaseService {
   }
   //entering user profile info
   Future enterUserCountry(String country) async {
-    return await userCollection.document(uid).updateData({
+    return await settingsCollection.document(uid).updateData({
       'country': country,
     });
   }
 
   Future enterUserAge(int age) async {
-    return await userCollection.document(uid).updateData({
+    return await settingsCollection.document(uid).updateData({
       'age': age,
     });
   }
 
   Future enterUserWeight(int weight) async {
-    return await userCollection.document(uid).updateData({
+    return await settingsCollection.document(uid).updateData({
       'weight': weight,
     });
   }

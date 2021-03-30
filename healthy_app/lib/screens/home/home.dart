@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
 import 'package:healthy_app/screens/settings_page.dart';
@@ -22,6 +23,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   PageController _pageController = PageController();
   List<Widget> _screens = [
     Progress(), FoodDiary(), ActivityDiary(), NutrientChecklist(), MedicationTracker(),
@@ -29,6 +31,22 @@ class _HomeState extends State<Home> {
   int _selectedIndex = 0;
   String selectedDate = "";
   bool newDate = false;
+  String userId = "";
+
+  void initState() {
+    super.initState();
+    getUid();
+  }
+
+  Future<String> getUid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    setState(() {
+      userId = uid;
+    });
+    print(uid);
+    return uid;
+  }
 
   void _onPageChanged(int index){
     setState(() {
@@ -81,71 +99,82 @@ class _HomeState extends State<Home> {
   }
 
   Widget build(BuildContext context){
-    return StreamProvider<QuerySnapshot>.value(
-      value: DatabaseService().settings,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: GestureDetector(
-            onTap: () {
-              /* Write listener code here */
-              print("Calendar View Selected");
-              renderCalendar();
-            },
-            child: Icon(
-              Icons.calendar_today_outlined,
+    return StreamBuilder(
+      stream: Firestore.instance.collection('settings').document(userId).snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          var country, age, weight;
+          if (snapshot.hasData) {
+            country = snapshot.data['country'];
+            age = snapshot.data['age'].toDouble();
+            weight = snapshot.data['weight'].toDouble();
+          } else {
+            country = "";
+            age = 0.0;
+            weight = 0.0;
+          }
+          return Scaffold(
+            appBar: AppBar(
+              leading: GestureDetector(
+                onTap: () {
+                  /* Write listener code here */
+                  print("Calendar View Selected");
+                  renderCalendar();
+                },
+                child: Icon(
+                  Icons.calendar_today_outlined,
+                ),
+              ),
+              title: newDate ? new Text(selectedDate) : new Text(getCurrentDate()),
+              centerTitle: true,
+              actions: <Widget>[
+                PopupMenuButton<String>(
+                  onSelected: choiceAction,
+                  itemBuilder: (BuildContext context){
+                    return ConstantVars.choices.map((String choice){
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  }
+                  ,)],
             ),
-          ),
-          title: newDate ? new Text(selectedDate) : new Text(getCurrentDate()),
-          centerTitle: true,
-          actions: <Widget>[
-            PopupMenuButton<String>(
-              onSelected: choiceAction,
-              itemBuilder: (BuildContext context){
-                return ConstantVars.choices.map((String choice){
-                  return PopupMenuItem<String>(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
-              }
-              ,)],
-          ),
-        backgroundColor: Colors.white,
-        body: PageView(
-          controller: _pageController,
-          children: _screens,
-          physics: NeverScrollableScrollPhysics(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: _onItemTapped,
-          type: BottomNavigationBarType.fixed,
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart,
-                color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
-              label: 'Progress',
+            backgroundColor: Colors.white,
+            body: PageView(
+              controller: _pageController,
+              children: _screens,
+              physics: NeverScrollableScrollPhysics(),
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.no_food),
-              label: 'Food',
+            bottomNavigationBar: BottomNavigationBar(
+              onTap: _onItemTapped,
+              type: BottomNavigationBarType.fixed,
+              items: <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.bar_chart,
+                      color: getSelectedIndex() == 0 ? Colors.blue: Colors.grey),
+                  label: 'Progress',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.no_food),
+                  label: 'Food',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.directions_run_outlined),
+                  label: 'Activity',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.wb_sunny),
+                  label: 'Nutrients',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.check),
+                  label: 'Meds',
+                ),
+              ],
+              currentIndex: _selectedIndex,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.directions_run_outlined),
-              label: 'Activity',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.wb_sunny),
-              label: 'Nutrients',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.check),
-              label: 'Meds',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-        ),
-      ),
-    );
+          );
+        });
   }
   void choiceAction(String choice){
     if(choice == ConstantVars.Settings){

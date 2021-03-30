@@ -57,7 +57,7 @@ class _ProgressState extends State<Progress> {
   Widget build(BuildContext context){
    // final foods = Provider.of<List<Food>>(context) ?? [];
   print("user Id = " +userId);
-    return loading ? Loading() : StreamBuilder(
+    return StreamBuilder(
       stream: Firestore.instance.collection('settings').document(userId).snapshots(),
       builder:  (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         var target;
@@ -66,7 +66,8 @@ class _ProgressState extends State<Progress> {
         } else {
           target = 2000;
         }
-        return Scaffold(
+        print("target = " +target.toString());
+        return loading ? Loading() : Scaffold(
           backgroundColor: Colors.white,
           body: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
