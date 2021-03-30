@@ -63,6 +63,47 @@ class DatabaseService {
       );
     }).toList();
   }
+  //entering user profile info
+  Future enterUserCountry(String country) async {
+    return await settingsCollection.document(uid).updateData({
+      'country': country,
+    });
+  }
+
+  Future enterUserAge(int age) async {
+    return await settingsCollection.document(uid).updateData({
+      'age': age,
+    });
+  }
+
+  Future enterUserWeight(int weight) async {
+    return await settingsCollection.document(uid).updateData({
+      'weight': weight,
+    });
+  }
+
+  Future updateKcalIntakeTarget(int kcal) async {
+    return await settingsCollection.document(uid).updateData({
+      'kcalIntakeTarget': kcal,
+    });
+  }
+
+  Future updateKcalOutputTarget(int kcal) async {
+    return await settingsCollection.document(uid).updateData({
+      'kcalOutputTarget': kcal,
+    });
+  }
+
+  Future updateWaterIntakeTarget(int water) async {
+    return await settingsCollection.document(uid).updateData({
+      'waterIntakeTarget': water,
+    });
+  }
+
+  Future deleteAccount() async {
+   //needs to be developed
+  }
+
   //entry creation
   Future createNewEntry(String date) async {
     //creating a new document in collection for user with id = uid
@@ -152,7 +193,7 @@ class DatabaseService {
     }
     return Firestore.instance
         .collection('users')
-        .document('MPVEF06jRYXyQhGwWPs2BfyU6QE2')
+        .document(uid)
         .collection('entries')
         .document(entryName)
         .collection('foods')

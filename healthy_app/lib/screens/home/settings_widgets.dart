@@ -1,32 +1,35 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cupertino_setting_control/cupertino_setting_control.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cupertino_setting_control/cupertino_setting_control.dart';
-import 'package:healthy_app/screens/home/settings_widgets.dart';
 import 'package:healthy_app/services/database.dart';
-import 'package:healthy_app/shared/loading.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsWidgets extends StatefulWidget {
+  final String country;
+  final double age;
+  final double weight;
+  final double intakeTarget;
+  final double outputTarget;
+  final double waterTarget;
+  SettingsWidgets({this.country, this.age, this.weight, this.intakeTarget, this.outputTarget, this.waterTarget });
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _SettingsWidgetsState createState() => _SettingsWidgetsState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _SettingsWidgetsState extends State<SettingsWidgets> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userId = "";
   bool _titleOnTop = false;
   String _searchAreaResult = "";
   double _age = 0;
   double _weight = 0;
-  bool loading = true;
 
 
   void initState() {
     super.initState();
     getUid();
-    updateBoolean();
+    //print(widget.country + widget.age.toString() + widget.weight.toString());
   }
 
   Future<String> getUid() async {
@@ -37,14 +40,6 @@ class _SettingsPageState extends State<SettingsPage> {
     });
     print(uid);
     return uid;
-  }
-
-  updateBoolean(){
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      setState(() {
-        loading = false;
-      });
-    });
   }
 
   void onSearchAreaChange(String data) {
@@ -82,7 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
           new SettingRow(
             rowData: SettingsDropDownConfig(
                 title: 'User Area',
-                initialKey: _searchAreaResult,
+                initialKey: widget.country,
                 choices: {
                   'Ireland': 'Ireland',
                   'United Kingdom': 'United Kingdom',
@@ -100,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
               title: 'Age',
               from: 18,
               to: 120,
-              initialValue: _age,
+              initialValue: widget.age,
               justIntValues: true,
               unit: ' years',
             ),
@@ -119,7 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
               title: 'Weight',
               from: 40,
               to: 120,
-              initialValue: _weight,
+              initialValue: widget.weight.toDouble(),
               justIntValues: true,
               unit: ' kg',
             ),
@@ -158,7 +153,7 @@ class _SettingsPageState extends State<SettingsPage> {
               title: 'Daily Calorie Intake Target',
               from: 1500,
               to: 5000,
-              initialValue: 2500,
+              initialValue: widget.intakeTarget.toDouble(),
               justIntValues: true,
               unit: ' kcal',
             ),
@@ -177,7 +172,7 @@ class _SettingsPageState extends State<SettingsPage> {
               title: 'Daily Calorie Output Target',
               from: 1000,
               to: 4000,
-              initialValue: 2000,
+              initialValue: widget.outputTarget.toDouble(),
               justIntValues: true,
               unit: ' kcal',
             ),
@@ -196,7 +191,7 @@ class _SettingsPageState extends State<SettingsPage> {
               title: 'Daily Water Intake Target',
               from: 2,
               to: 5,
-              initialValue: 2,
+              initialValue: widget.waterTarget.toDouble(),
               justIntValues: true,
               unit: ' litres',
             ),
@@ -256,32 +251,8 @@ class _SettingsPageState extends State<SettingsPage> {
       Row(children: [Expanded(child: modifyProfileTile)]),
     ];
 
-    return StreamBuilder(
-      stream: Firestore.instance.collection('settings').document(userId).snapshots(),
-      builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        var country, age, weight, intakeTarget, outputTarget, waterTarget;
-        if (snapshot.hasData) {
-          country = snapshot.data['country'];
-          age = snapshot.data['age'].toDouble();
-          weight = snapshot.data['weight'].toDouble();
-          intakeTarget = snapshot.data['kcalIntakeTarget'].toDouble();
-          outputTarget = snapshot.data['kcalOutputTarget'].toDouble();
-          waterTarget = snapshot.data['waterIntakeTarget'].toDouble();
-        } else {
-          country = '';
-          age = 0.0;
-          weight = 0.0;
-        }
-        return loading ? Loading() : Scaffold(
-          appBar: AppBar(
-            title: Text('Settings'),
-          ),
-          body: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: SettingsWidgets(country: country, age: age, weight: weight, intakeTarget: intakeTarget, outputTarget: outputTarget, waterTarget: waterTarget),
-                  //country: country, age: age, weight: weight),
-        ),
-        );
-      });
+    return ListView(
+        children: widgetList,
+        physics: const AlwaysScrollableScrollPhysics());
   }
 }
