@@ -107,16 +107,17 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           SizedBox(height: _titleOnTop ? 10.0 : 0.0),
           new SettingRow(
-            rowData: SettingsSliderFromToConfig(
+            rowData: SettingsSliderConfig(
               title: 'Weight',
               from: 40,
               to: 120,
-              initialFrom: 50,
-              initialTo: 80,
+              initialValue: 50,
               justIntValues: true,
-              unit: 'kg',
+              unit: ' kg',
             ),
-            onSettingDataRowChange: (List<double> resultVals) {},
+            onSettingDataRowChange: (double resultVal) {
+              DatabaseService(uid: userId).enterUserWeight(resultVal);
+            },
             config: SettingsRowConfiguration(
                 showAsTextField: false,
                 showTitleLeft: !_titleOnTop,

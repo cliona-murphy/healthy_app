@@ -76,7 +76,11 @@ class DatabaseService {
     });
   }
 
-  
+  Future enterUserWeight(double weight) async {
+    return await userCollection.document(uid).updateData({
+      'weight': weight,
+    });
+  }
 
   //entry creation
   Future createNewEntry(String date) async {
