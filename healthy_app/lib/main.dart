@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthy_app/screens/home/home.dart';
 import 'package:healthy_app/screens/wrapper.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/models/user.dart';
@@ -14,6 +15,10 @@ class myApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
+           initialRoute: '/',
+           routes: {
+            '/second': (context) => Home(),
+           },
            home: Wrapper(),
       ),
     );
