@@ -59,6 +59,7 @@ class _CalorieCountState extends State<CalorieCount> {
     }
     else {
       percentageIntake = calculatePercentage();
+      if(percentageIntake >= 100) percentageIntake = 99.99;
     }
 
     print("percentage intake = " + percentageIntake.toString());
