@@ -3,6 +3,9 @@ library healthy_app.globals;
 bool newDateSelected = false;
 String selectedDate = getCurrentDate();
 int kcalIntakeTarget = 2000;
+int kcalOutputTarget = 2000;
+int waterIntakeTarget = 0;
+
 
 String getCurrentDate(){
   var date = new DateTime.now().toString();

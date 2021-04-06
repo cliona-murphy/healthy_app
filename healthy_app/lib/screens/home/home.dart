@@ -117,11 +117,6 @@ class _HomeState extends State<Home> {
             age = 0.0;
             weight = 0.0;
           }
-          // final Arguments args = ModalRoute.of(context).settings.arguments;
-         // final Arguments arg = ModalRoute.of(context).settings.arguments as Arguments;
-          //selectedDate = args.date;
-          //final CompactLinkedHashSet<Arguments> arguments = ModalRoute.of(context).settings.arguments as _CompactLinkedHashSet;
-          //if (arguments != null) print(arguments['date']);
           return Scaffold(
             appBar: AppBar(
               leading: GestureDetector(

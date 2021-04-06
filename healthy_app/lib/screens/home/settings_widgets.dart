@@ -24,12 +24,14 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
   String _searchAreaResult = "";
   double _age = 0;
   double _weight = 0;
+  double _kcalIntake = 0;
+  double _kcalOutput = 0;
+  double _waterIntake = 0;
 
 
   void initState() {
     super.initState();
     getUid();
-    //print(widget.country + widget.age.toString() + widget.weight.toString());
   }
 
   Future<String> getUid() async {
@@ -47,6 +49,10 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
       _searchAreaResult = data;
     });
     DatabaseService(uid: userId).enterUserCountry(_searchAreaResult);
+  }
+
+  void pushChangesToDatabase(){
+
   }
 
   @override
@@ -240,15 +246,15 @@ class _SettingsWidgetsState extends State<SettingsWidgets> {
             ]));
 
     final List<Widget> widgetList = [
-      titleOnTopSwitch,
-      const SizedBox(height: 15.0),
+      // titleOnTopSwitch,
+      // const SizedBox(height: 15.0),
       profileSettingsTile,
       const SizedBox(height: 15.0),
       accountSettingsTile,
       // const SizedBox(height: 15.0),
       // legalStuff,
-      const SizedBox(height: 15.0),
-      Row(children: [Expanded(child: modifyProfileTile)]),
+      // const SizedBox(height: 15.0),
+      // Row(children: [Expanded(child: modifyProfileTile)]),
     ];
 
     return ListView(
