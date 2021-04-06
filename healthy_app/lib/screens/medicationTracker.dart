@@ -4,6 +4,7 @@ import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'home/medication_list.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
@@ -20,6 +21,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
 
   var userId;
   bool userIdSet = false;
+  bool loading = true;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
@@ -30,6 +32,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     getUid();
     print(userId);
     print("date = " + globals.selectedDate);
+    updateBoolean();
   }
 
 
@@ -100,6 +103,14 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     });
     print(uid);
     return uid;
+  }
+
+  updateBoolean(){
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        loading = false;
+      });
+    });
   }
 
   Widget build(BuildContext context){

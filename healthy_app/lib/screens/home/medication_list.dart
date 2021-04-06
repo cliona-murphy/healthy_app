@@ -57,6 +57,7 @@ class _MedicationListState extends State<MedicationList> {
 
       return loading ? Loading() : ListView.builder(
         shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
         itemCount: medications.length,
         itemBuilder: (context, index) {
           return MedicationTile(medication: medications[index], taken: checkIfTaken(medications[index], loggedMedications));
