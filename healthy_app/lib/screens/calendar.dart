@@ -38,17 +38,13 @@ class _CalendarViewState extends State<CalendarView> {
       onPressed:  () {
         setState(() {
           globals.selectedDate = selectedDay;
-          print("globals selected day = " + globals.selectedDate);
           globals.newDateSelected = true;
         });
         Navigator.pushNamedAndRemoveUntil(context,
             "/second",
               (r) => false,
-              arguments: {
-              'date': selectedDay
-              });
+              );
         }
-                //Arguments(date: selectedDay)});
     );
 
     // set up the AlertDialog
