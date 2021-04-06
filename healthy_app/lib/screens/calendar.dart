@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
@@ -17,12 +18,30 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   CalendarController _controller = CalendarController();
   String selectedDay = "";
-  //HomePage.newDateSelected = false;
+  DateTime newDate;
+  bool newDateSet = false;
 
   void initState() {
     super.initState();
     selectedDay = getCurrentDate();
-    //_controller = CalendarController();
+    // _controller.setFocusedDay(globals.newDate);
+    // DateTime testDate = globals.newDate;
+    // if (globals.newDateSelected)
+    //   {
+    //     //var date = globals.
+    //     //_controller.setFocusedDay(globals.newDate);
+    //     setInitialDate(testDate);
+    //   }
+    _controller.setSelectedDay(globals.newDate);
+    //Day(globals.newDate);
+    // SchedulerBinding.instance.addPostFrameCallback((_) {
+    //   _controller.setFocusedDay(globals.newDate);
+    //_controller.s
+    // });
+  }
+
+  setInitialDate(DateTime date){
+    _controller.setFocusedDay(date);
   }
 
   showAlertDialog(BuildContext context) {
@@ -39,6 +58,14 @@ class _CalendarViewState extends State<CalendarView> {
         setState(() {
           globals.selectedDate = selectedDay;
           globals.newDateSelected = true;
+          if(globals.newDate == DateTime.now()) print("agh");
+
+          //
+          //print("new date = ${globals.newDate.day}/${globals.newDate.month}/${globals.newDate.year}");
+          //print("agh" + newDate.toString());
+          globals.newDate = newDate;
+          print("aghhh" + globals.newDate.toString());
+          newDateSet = true;
         });
         Navigator.pushNamedAndRemoveUntil(context,
             "/second",
@@ -56,8 +83,6 @@ class _CalendarViewState extends State<CalendarView> {
         continueButton,
       ],
     );
-
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -84,7 +109,6 @@ class _CalendarViewState extends State<CalendarView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              //Padding(padding: EdgeInsets.only(top: 30.0)),
               Container(
                 child: TableCalendar(
                   calendarController: _controller,
@@ -97,6 +121,7 @@ class _CalendarViewState extends State<CalendarView> {
                     onDaySelected: (date, events,e) {
                     //print(date.)
                      // HomePage.newDateSelected;
+                      newDate = date;
                       selectedDay = "${date.day}/${date.month}/${date.year}";
                       print("${date.day}/${date.month}/${date.year}");
                       print(date.toUtc());
@@ -109,7 +134,6 @@ class _CalendarViewState extends State<CalendarView> {
                   child: ElevatedButton(
                     onPressed: (){
                       showAlertDialog(context);
-                     // Navigator.pop(context, selectedDay);
                     },
                     child: Text("Select date"),
                   ),
