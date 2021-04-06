@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class CalendarView extends StatefulWidget {
 
@@ -19,24 +21,70 @@ class _CalendarViewState extends State<CalendarView> {
 
   void initState() {
     super.initState();
+    selectedDay = getCurrentDate();
     //_controller = CalendarController();
   }
 
-  //EventList<Event> _markedDateMap = new EventList<Event>();
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Continue"),
+      onPressed:  () {
+        setState(() {
+          globals.selectedDate = selectedDay;
+          globals.newDateSelected = true;
+        });
+        Navigator.pushNamedAndRemoveUntil(context,
+            "/second",
+              (r) => false,
+              );
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text("Would you like to view data you entered on ${selectedDay}?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  String getCurrentDate(){
+    var date = new DateTime.now().toString();
+    var dateParse = DateTime.parse(date);
+    var formattedDate = "${dateParse.day}/${dateParse.month}/${dateParse.year}";
+    return formattedDate;
+  }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        // appBar: new AppBar(
-        //   title: new Text("Calendar"),
-        // ),
-
+        appBar: new AppBar(
+          title: new Text("Calendar"),
+        ),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Padding(padding: EdgeInsets.only(top: 30.0)),
+              //Padding(padding: EdgeInsets.only(top: 30.0)),
               Container(
                 child: TableCalendar(
                   calendarController: _controller,
@@ -60,9 +108,10 @@ class _CalendarViewState extends State<CalendarView> {
                   padding: const EdgeInsets.all(10.0),
                   child: ElevatedButton(
                     onPressed: (){
-                      Navigator.pop(context, selectedDay);
+                      showAlertDialog(context);
+                     // Navigator.pop(context, selectedDay);
                     },
-                    child: Text("Go back"),
+                    child: Text("Select date"),
                   ),
                 ),
               ),

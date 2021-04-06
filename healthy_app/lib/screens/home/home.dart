@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
 import 'package:healthy_app/screens/settings_page.dart';
 import 'package:healthy_app/services/auth.dart';
@@ -16,6 +17,8 @@ import '../progress.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
+  String date;
+  Home({ this.date});
 
   @override
   _HomeState createState() => _HomeState();
@@ -36,6 +39,8 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     getUid();
+    print("initState date = " + widget.date.toString());
+    newDate = globals.newDateSelected;
   }
 
   Future<String> getUid() async {
@@ -112,6 +117,11 @@ class _HomeState extends State<Home> {
             age = 0.0;
             weight = 0.0;
           }
+          // final Arguments args = ModalRoute.of(context).settings.arguments;
+         // final Arguments arg = ModalRoute.of(context).settings.arguments as Arguments;
+          //selectedDate = args.date;
+          //final CompactLinkedHashSet<Arguments> arguments = ModalRoute.of(context).settings.arguments as _CompactLinkedHashSet;
+          //if (arguments != null) print(arguments['date']);
           return Scaffold(
             appBar: AppBar(
               leading: GestureDetector(
@@ -124,7 +134,7 @@ class _HomeState extends State<Home> {
                   Icons.calendar_today_outlined,
                 ),
               ),
-              title: newDate ? new Text(selectedDate) : new Text(getCurrentDate()),
+              title: newDate ? new Text(globals.selectedDate) : new Text(getCurrentDate()),
               centerTitle: true,
               actions: <Widget>[
                 PopupMenuButton<String>(
