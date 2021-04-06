@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
+import 'package:healthy_app/shared/globals.dart' as globals;
 
 class CalendarView extends StatefulWidget {
 
@@ -34,12 +36,19 @@ class _CalendarViewState extends State<CalendarView> {
     Widget continueButton = FlatButton(
       child: Text("Continue"),
       onPressed:  () {
+        setState(() {
+          globals.selectedDate = selectedDay;
+          print("globals selected day = " + globals.selectedDate);
+          globals.newDateSelected = true;
+        });
         Navigator.pushNamedAndRemoveUntil(context,
             "/second",
               (r) => false,
               arguments: {
-              "date": selectedDay});
-      },
+              'date': selectedDay
+              });
+        }
+                //Arguments(date: selectedDay)});
     );
 
     // set up the AlertDialog
