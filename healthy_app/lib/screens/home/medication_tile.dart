@@ -71,7 +71,11 @@ class _MedicationTileState extends State<MedicationTile> {
       initialEntryMode: TimePickerEntryMode.input,
     );
     timeSelected = true;
-    timeString = "${selectedTime.hour}:${selectedTime.minute}";
+    String filler = "";
+    if(selectedTime.minute.toString() == "0") {
+      filler = "0";
+    }
+    timeString = "${selectedTime.hour}:${selectedTime.minute}${filler}";
   }
 
   showConfirmationDialog() {
