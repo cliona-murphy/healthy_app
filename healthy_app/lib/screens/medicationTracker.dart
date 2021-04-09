@@ -26,13 +26,30 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
 
+  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay selectedTime;
+  String timeString;
+  bool timeSelected = false;
+  String medName;
+
   void initState(){
     print("init state called");
     super.initState();
     getUid();
     print(userId);
-    print("date = " + globals.selectedDate);
     updateBoolean();
+  }
+
+  void selectTime(BuildContext context) async {
+    //animate this?
+      selectedTime = await showTimePicker(
+        context: context,
+        initialTime: _time,
+        initialEntryMode: TimePickerEntryMode.input,
+      );
+      timeSelected = true;
+      timeString = "${selectedTime.hour}:${selectedTime.minute}";
+      print(timeString);
   }
 
 
@@ -46,26 +63,21 @@ class _MedicationTrackerState extends State<MedicationTracker> {
             child : SingleChildScrollView(
               child: Column(
                 children: [
-                  //Text("Food name"),
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(
                       hintText: "medication/supplement name",
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(top: 15.0)),
                   Container(
-                    // child: Column(
-                    //   children: [
-                    //     InkWell(
-                    //       //onTap: () => _selectTime(context)
-                    //     ),
-                        child: TextField(
-                        controller: timeController,
-                        decoration: InputDecoration(
-                          hintText: "time to be taken at",
-                        ),
-                      ),
-                   // ]),
+                    child: FlatButton(
+                      color: Colors.grey,
+                      child: Text("Select Time"),
+                      onPressed: () {
+                        selectTime(context);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -76,15 +88,56 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                updateDatabase(nameController.text, timeController.text);
+                setState(() {
+                  medName = nameController.text;
+                });
                 nameController.clear();
                 timeController.clear();
                 Navigator.pop(context);
+                showConfirmationDialog();
+
+                //updateDatabase(nameController.text, timeString);
+
               },
             ),
           ],
         );
       });
+  }
+
+  showConfirmationDialog() {
+    print("fcn being called");
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed:  () {
+          updateDatabase(medName, timeString);
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Add "+medName+" to be taken at "+timeString+" to list?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future updateDatabase(String medName, String timeToTake) async {
@@ -114,7 +167,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   }
 
   Widget build(BuildContext context){
-    // rebuildAllChildren(context);
     return StreamProvider<List<Medication>>.value(
       value: DatabaseService(uid: userId).medications,
       child: Scaffold(
