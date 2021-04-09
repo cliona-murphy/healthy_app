@@ -30,7 +30,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   TimeOfDay selectedTime;
   String timeString;
   bool timeSelected = false;
-  String timeDisplayString = "no time selected";
   String medName;
 
   void initState(){
@@ -38,7 +37,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     super.initState();
     getUid();
     print(userId);
-    print("date = " + globals.selectedDate);
     updateBoolean();
   }
 
@@ -51,7 +49,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
       );
       timeSelected = true;
       timeString = "${selectedTime.hour}:${selectedTime.minute}";
-      timeDisplayString = timeString;
       print(timeString);
   }
 
@@ -73,17 +70,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                     ),
                   ),
                   Padding(padding: EdgeInsets.only(top: 15.0)),
-                  // Container(
-                  //   child: Align(
-                  //     alignment: Alignment.centerLeft,
-                  //     child: Text("time: " + timeDisplayString,
-                  //       style: TextStyle(
-                  //       color: Colors.grey[700],
-                  //     ),
-                  //     ),
-                  //   ),
-                  // ),
-                  //Padding(padding: EdgeInsets.only(top: 15.0)),
                   Container(
                     child: FlatButton(
                       color: Colors.grey,

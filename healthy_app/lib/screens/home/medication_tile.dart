@@ -21,6 +21,11 @@ class _MedicationTileState extends State<MedicationTile> {
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   bool isSelected = true;
+  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay selectedTime;
+  String timeString;
+  bool timeSelected = false;
+  String medName = "";
 
   void initState(){
     super.initState();
@@ -48,10 +53,64 @@ class _MedicationTileState extends State<MedicationTile> {
     String userId = await getUserid();
     DatabaseService(uid: userId).updateMedicationDetails(originalMedName, newMedName, timeToTake);
   }
+  updateTime(String medName, String timeToTake) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).updateMedicationTime(medName, timeToTake);
+  }
 
   deleteMedication(String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteMedication(medName);
+  }
+
+  void selectTime(BuildContext context) async {
+    //animate this?
+    selectedTime = await showTimePicker(
+      context: context,
+      initialTime: _time,
+      initialEntryMode: TimePickerEntryMode.input,
+    );
+    timeSelected = true;
+    timeString = "${selectedTime.hour}:${selectedTime.minute}";
+  }
+
+  showConfirmationDialog() {
+    print("fcn being called");
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed:  () {
+          if (medName == ""){
+            updateTime(widget.medication.medicineName, timeString);
+          } else {
+            updateDetails(widget.medication.medicineName, medName, timeString);
+          }
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Add  to list?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
@@ -70,16 +129,12 @@ class _MedicationTileState extends State<MedicationTile> {
                   ),
                 ),
                 Container(
-                  // child: Column(
-                  //   children: [
-                  //     InkWell(
-                  //       //onTap: () => _selectTime(context)
-                  //     ),
-                  child: TextField(
-                    controller: timeController,
-                    decoration: InputDecoration(
-                      hintText: timeToTake,
-                    ),
+                  child: FlatButton(
+                    color: Colors.grey,
+                    child: Text("Edit Time"),
+                    onPressed: () {
+                      selectTime(context);
+                    },
                   ),
                 ),
               ],
@@ -89,9 +144,7 @@ class _MedicationTileState extends State<MedicationTile> {
         actions: <Widget> [
           IconButton(
             icon: Icon(Icons.delete),
-            //elevation: 5.0,
             color: Colors.red,
-            //child: Text("Delete Item"),
             onPressed: () {
               deleteMedication(widget.medication.medicineName);
               nameController.clear();
@@ -103,10 +156,14 @@ class _MedicationTileState extends State<MedicationTile> {
             elevation: 5.0,
             child: Text("Update"),
             onPressed: () {
-              updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
+              setState(() {
+                medName = nameController.text;
+              });
               nameController.clear();
               timeController.clear();
               Navigator.pop(context);
+              showConfirmationDialog();
+              //updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
             },
           ),
         ],
@@ -131,16 +188,12 @@ class _MedicationTileState extends State<MedicationTile> {
                 });
               },
             ),
-           // value: timeDilation != 1.0,
             value: isSelected,
              onChanged: (bool newValue) {
               setState(() {
                 print(isSelected);
                 updateDatabase(newValue, widget.medication.medicineName);
                 isSelected = newValue;
-                //widget.taken = false;
-                //timeDilation = value ? 3.0 : 1.0;
-
           });
         },
       ),

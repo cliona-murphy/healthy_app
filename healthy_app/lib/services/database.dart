@@ -397,6 +397,17 @@ class DatabaseService {
     });
   }
 
+  updateMedicationTime(String medName, String timeToTake) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(medName)
+        .updateData({
+      'medicationName': medName,
+      'timeToTake': timeToTake,
+    });
+  }
+
   //this function works if the med name has not been previously edited
   deleteMedication(String medName) async {
     return await Firestore.instance.collection('users')
