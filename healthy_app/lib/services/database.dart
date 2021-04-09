@@ -460,6 +460,7 @@ class DatabaseService {
     return snapshot.documents.map((doc) {
       return Nutrient(
         tileContent: doc.data['content'] ?? 0,
+        hintText: doc.data['hintText'] ?? 0,
         complete: doc.data['complete'] ?? 0,
       );
     }).toList();

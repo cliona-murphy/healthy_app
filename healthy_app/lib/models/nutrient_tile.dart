@@ -34,15 +34,7 @@ class _NutrientTileState extends State<NutrientTile> {
         child: CheckboxListTile(
           title: Text(widget.tile.tileContent,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-          subtitle: Text("Take at ${widget.tile.complete}"),
-          secondary: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: (){
-              //editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
-              setState(() {
-              });
-            },
-          ),
+          subtitle: Text(widget.tile.hintText),
           value: isSelected,
           onChanged: (bool newValue) {
             setState(() {
