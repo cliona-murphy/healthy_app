@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:healthy_app/screens/home/home.dart' as HomePage;
@@ -17,12 +18,11 @@ class CalendarView extends StatefulWidget {
 class _CalendarViewState extends State<CalendarView> {
   CalendarController _controller = CalendarController();
   String selectedDay = "";
-  //HomePage.newDateSelected = false;
+  DateTime newDate;
 
   void initState() {
     super.initState();
     selectedDay = getCurrentDate();
-    //_controller = CalendarController();
   }
 
   showAlertDialog(BuildContext context) {
@@ -39,6 +39,7 @@ class _CalendarViewState extends State<CalendarView> {
         setState(() {
           globals.selectedDate = selectedDay;
           globals.newDateSelected = true;
+          globals.newDate = newDate;
         });
         Navigator.pushNamedAndRemoveUntil(context,
             "/second",
@@ -56,8 +57,6 @@ class _CalendarViewState extends State<CalendarView> {
         continueButton,
       ],
     );
-
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -84,10 +83,10 @@ class _CalendarViewState extends State<CalendarView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              //Padding(padding: EdgeInsets.only(top: 30.0)),
               Container(
                 child: TableCalendar(
                   calendarController: _controller,
+                  initialSelectedDay: globals.newDate,
                   availableCalendarFormats: const {
                     CalendarFormat.week: 'Two Weeks',
                     CalendarFormat.month: 'Week',
@@ -95,11 +94,8 @@ class _CalendarViewState extends State<CalendarView> {
                   },
                   startingDayOfWeek: StartingDayOfWeek.monday,
                     onDaySelected: (date, events,e) {
-                    //print(date.)
-                     // HomePage.newDateSelected;
+                      newDate = date;
                       selectedDay = "${date.day}/${date.month}/${date.year}";
-                      print("${date.day}/${date.month}/${date.year}");
-                      print(date.toUtc());
                     },
                 ),
               ),
@@ -109,7 +105,6 @@ class _CalendarViewState extends State<CalendarView> {
                   child: ElevatedButton(
                     onPressed: (){
                       showAlertDialog(context);
-                     // Navigator.pop(context, selectedDay);
                     },
                     child: Text("Select date"),
                   ),
