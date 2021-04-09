@@ -26,6 +26,10 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   TextEditingController nameController = TextEditingController();
   TextEditingController timeController = TextEditingController();
 
+  TimeOfDay _time = TimeOfDay.now();
+  TimeOfDay selectedTime;
+  String timeString;
+
   void initState(){
     print("init state called");
     super.initState();
@@ -35,6 +39,17 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     updateBoolean();
   }
 
+  void selectTime(BuildContext context) async {
+    //animate this?
+      selectedTime = await showTimePicker(
+        context: context,
+        initialTime: _time,
+        initialEntryMode: TimePickerEntryMode.input,
+      );
+      timeString = "${selectedTime.hour}:${selectedTime.minute}";
+      print(timeString);
+  }
+
 
   Future<String> addItem(BuildContext context) {
     print("Add item called");
@@ -42,7 +57,7 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         return AlertDialog(
           title: Text("Enter details here:"),
           content: Container(
-            height: 100,
+            height: 135,
             child : SingleChildScrollView(
               child: Column(
                 children: [
@@ -53,19 +68,28 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                       hintText: "medication/supplement name",
                     ),
                   ),
+                  Padding(padding: EdgeInsets.only(top: 15.0)),
                   Container(
-                    // child: Column(
-                    //   children: [
-                    //     InkWell(
-                    //       //onTap: () => _selectTime(context)
-                    //     ),
-                        child: TextField(
-                        controller: timeController,
-                        decoration: InputDecoration(
-                          hintText: "time to be taken at",
-                        ),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text("time: ",
+                        style: TextStyle(
+                        color: Colors.grey[700],
                       ),
-                   // ]),
+                      ),
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.only(top: 15.0)),
+                  Container(
+                    child: FlatButton(
+                      color: Colors.grey,
+                      child: Text("Select Time"),
+                      //onPressed: () => selectTime(context),
+                      onPressed: () {
+                        selectTime(context);
+                        print("90 " + timeString);
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -76,7 +100,8 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                updateDatabase(nameController.text, timeController.text);
+                print("103 " + timeString);
+                updateDatabase(nameController.text, timeString);
                 nameController.clear();
                 timeController.clear();
                 Navigator.pop(context);
@@ -114,7 +139,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   }
 
   Widget build(BuildContext context){
-    // rebuildAllChildren(context);
     return StreamProvider<List<Medication>>.value(
       value: DatabaseService(uid: userId).medications,
       child: Scaffold(
