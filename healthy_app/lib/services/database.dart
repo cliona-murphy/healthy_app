@@ -459,12 +459,34 @@ class DatabaseService {
   List<Nutrient> nutrientListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return Nutrient(
+        id: doc.data['id'] ?? 0,
         tileContent: doc.data['content'] ?? 0,
         hintText: doc.data['hintText'] ?? 0,
         complete: doc.data['complete'] ?? 0,
       );
     }).toList();
   }
+
+  checkNutrientTile(String id, bool checked) async {
+      var entryName;
+      if (globals.selectedDate != getCurrentDate()){
+        print(globals.selectedDate);
+        entryName = reformatDate(globals.selectedDate);
+        print("entry name = "+ entryName);
+      } else {
+        entryName = reformatDate(getCurrentDate());
+      }
+      return await Firestore.instance.collection('users')
+          .document(uid)
+          .collection('entries')
+          .document(entryName)
+          .collection('nutrientChecklist')
+          .document(id)
+          .setData({
+        'id': id,
+        'taken': checked,
+      });
+    }
 
   //misc
   String getCurrentDate(){

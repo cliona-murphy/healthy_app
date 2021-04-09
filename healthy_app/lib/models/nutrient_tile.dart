@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/services/database.dart';
 
 import 'nutrient.dart';
 
@@ -16,6 +18,7 @@ class NutrientTile extends StatefulWidget {
 
 class _NutrientTileState extends State<NutrientTile> {
   bool isSelected = true;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   void initState(){
     super.initState();
@@ -23,6 +26,17 @@ class _NutrientTileState extends State<NutrientTile> {
       isSelected = widget.tile.complete;
     });
     print(isSelected);
+  }
+
+  Future<String> getUserid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    return uid;
+  }
+
+  updateDatabase(String id, bool complete) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).checkNutrientTile(id, complete);
   }
 
   @override
@@ -39,7 +53,7 @@ class _NutrientTileState extends State<NutrientTile> {
           onChanged: (bool newValue) {
             setState(() {
               print(isSelected);
-              //updateDatabase(newValue, widget.medication.medicineName);
+              updateDatabase(widget.tile.id, newValue);
               isSelected = newValue;
             });
           },
