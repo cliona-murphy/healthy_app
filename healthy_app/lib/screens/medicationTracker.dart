@@ -29,6 +29,9 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   TimeOfDay _time = TimeOfDay.now();
   TimeOfDay selectedTime;
   String timeString;
+  bool timeSelected = false;
+  String timeDisplayString = "no time selected";
+  String medName;
 
   void initState(){
     print("init state called");
@@ -46,7 +49,9 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         initialTime: _time,
         initialEntryMode: TimePickerEntryMode.input,
       );
+      timeSelected = true;
       timeString = "${selectedTime.hour}:${selectedTime.minute}";
+      timeDisplayString = timeString;
       print(timeString);
   }
 
@@ -57,11 +62,10 @@ class _MedicationTrackerState extends State<MedicationTracker> {
         return AlertDialog(
           title: Text("Enter details here:"),
           content: Container(
-            height: 135,
+            height: 100,
             child : SingleChildScrollView(
               child: Column(
                 children: [
-                  //Text("Food name"),
                   TextField(
                     controller: nameController,
                     decoration: InputDecoration(
@@ -69,25 +73,23 @@ class _MedicationTrackerState extends State<MedicationTracker> {
                     ),
                   ),
                   Padding(padding: EdgeInsets.only(top: 15.0)),
-                  Container(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("time: ",
-                        style: TextStyle(
-                        color: Colors.grey[700],
-                      ),
-                      ),
-                    ),
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 15.0)),
+                  // Container(
+                  //   child: Align(
+                  //     alignment: Alignment.centerLeft,
+                  //     child: Text("time: " + timeDisplayString,
+                  //       style: TextStyle(
+                  //       color: Colors.grey[700],
+                  //     ),
+                  //     ),
+                  //   ),
+                  // ),
+                  //Padding(padding: EdgeInsets.only(top: 15.0)),
                   Container(
                     child: FlatButton(
                       color: Colors.grey,
                       child: Text("Select Time"),
-                      //onPressed: () => selectTime(context),
                       onPressed: () {
                         selectTime(context);
-                        print("90 " + timeString);
                       },
                     ),
                   ),
@@ -100,16 +102,56 @@ class _MedicationTrackerState extends State<MedicationTracker> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                print("103 " + timeString);
-                updateDatabase(nameController.text, timeString);
+                setState(() {
+                  medName = nameController.text;
+                });
                 nameController.clear();
                 timeController.clear();
                 Navigator.pop(context);
+                showConfirmationDialog();
+
+                //updateDatabase(nameController.text, timeString);
+
               },
             ),
           ],
         );
       });
+  }
+
+  showConfirmationDialog() {
+    print("fcn being called");
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed:  () {
+          updateDatabase(medName, timeString);
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Add "+medName+" to be taken at "+timeString+" to list?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   Future updateDatabase(String medName, String timeToTake) async {
