@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
@@ -447,6 +448,23 @@ class DatabaseService {
       );
     }).toList();
   }
+
+  Stream<List<Nutrient>> get nutrientContent {
+    return  Firestore.instance
+        .collection("checklist")
+        .snapshots()
+        .map(nutrientListFromSnapshot);
+  }
+
+  List<Nutrient> nutrientListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Nutrient(
+        tileContent: doc.data['content'] ?? 0,
+        complete: doc.data['complete'] ?? 0,
+      );
+    }).toList();
+  }
+
   //misc
   String getCurrentDate(){
     var date = new DateTime.now().toString();

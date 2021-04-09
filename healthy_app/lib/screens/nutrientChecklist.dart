@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
+import 'package:healthy_app/models/nutrient.dart';
+import 'package:healthy_app/models/nutrient_list.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -42,9 +44,9 @@ class _NutrientChecklistState extends State<NutrientChecklist> {
               child: Column(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 30.0)),
-                    StreamProvider<List<MedicationChecklist>>.value(
-                      value: DatabaseService(uid: userId).getLoggedMedications(),
-                      child: MedicationList(),
+                    StreamProvider<List<Nutrient>>.value(
+                      value: DatabaseService(uid: userId).nutrientContent,
+                      child: NutrientList(),
                     ),
                   ]),
             ),
