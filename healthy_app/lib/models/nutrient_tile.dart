@@ -8,9 +8,9 @@ import 'nutrient.dart';
 class NutrientTile extends StatefulWidget {
   final Nutrient tile;
   // final String tileContent;
-  // final bool complete;
+  final bool taken;
   //
-  NutrientTile({ this.tile });
+  NutrientTile({ this.tile, this.taken });
 
   @override
   _NutrientTileState createState() => _NutrientTileState();

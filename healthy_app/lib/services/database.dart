@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/logged_nutrient.dart';
 import 'package:healthy_app/models/nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
@@ -488,6 +489,32 @@ class DatabaseService {
       });
     }
 
+  Stream<List<LoggedNutrient>> getLoggedNutrient() {
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
+    return Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('nutrientChecklist')
+        .snapshots()
+        .map(loggedNutrientListFromSnapshot);
+  }
+
+  List<LoggedNutrient> loggedNutrientListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return LoggedNutrient(
+        id: doc.data['id'] ?? '',
+        taken: doc.data['taken'] ?? '',
+      );
+    }).toList();
+  }
   //misc
   String getCurrentDate(){
     var date = new DateTime.now().toString();
