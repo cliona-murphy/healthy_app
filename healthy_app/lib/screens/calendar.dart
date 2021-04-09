@@ -24,6 +24,7 @@ class _CalendarViewState extends State<CalendarView> {
   void initState() {
     super.initState();
     selectedDay = getCurrentDate();
+    print("selected date = " + globals.newDate.toString());
     // _controller.setFocusedDay(globals.newDate);
     // DateTime testDate = globals.newDate;
     // if (globals.newDateSelected)
@@ -32,7 +33,7 @@ class _CalendarViewState extends State<CalendarView> {
     //     //_controller.setFocusedDay(globals.newDate);
     //     setInitialDate(testDate);
     //   }
-    _controller.setSelectedDay(globals.newDate);
+    //_controller.setSelectedDay(globals.newDate);
     //Day(globals.newDate);
     // SchedulerBinding.instance.addPostFrameCallback((_) {
     //   _controller.setFocusedDay(globals.newDate);
@@ -112,6 +113,7 @@ class _CalendarViewState extends State<CalendarView> {
               Container(
                 child: TableCalendar(
                   calendarController: _controller,
+                  initialSelectedDay: globals.newDate,
                   availableCalendarFormats: const {
                     CalendarFormat.week: 'Two Weeks',
                     CalendarFormat.month: 'Week',
