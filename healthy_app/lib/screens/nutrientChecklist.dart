@@ -46,7 +46,7 @@ class _NutrientChecklistState extends State<NutrientChecklist> {
                   children: [
                     Padding(padding: EdgeInsets.only(top: 30.0)),
                     StreamProvider<List<LoggedNutrient>>.value(
-                      value: DatabaseService(uid: userId).getLoggedNutrient(),
+                      value: DatabaseService(uid: userId).getLoggedNutrients(),
                       child: NutrientList(),
                     ),
                   ]),

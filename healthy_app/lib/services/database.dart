@@ -442,6 +442,11 @@ class DatabaseService {
   }
 
   List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
+    print("snapshots ");
+    for(var doc in snapshot.documents){
+      print(doc.data);
+    }
+    print(snapshot.documents);
     return snapshot.documents.map((doc) {
       return MedicationChecklist(
         medicineName: doc.data['medicationName'] ?? '',
@@ -489,7 +494,8 @@ class DatabaseService {
       });
     }
 
-  Stream<List<LoggedNutrient>> getLoggedNutrient() {
+  Stream<List<LoggedNutrient>> getLoggedNutrients() {
+    print("logged nutrient stream being called");
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
       print(globals.selectedDate);
@@ -501,20 +507,24 @@ class DatabaseService {
     return Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
-        .document(entryName)
-        .collection('nutrientChecklist')
+        .document("942021")
+        .collection('foods')
         .snapshots()
         .map(loggedNutrientListFromSnapshot);
   }
 
   List<LoggedNutrient> loggedNutrientListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc) {
-      return LoggedNutrient(
-        id: doc.data['id'] ?? '',
-        taken: doc.data['taken'] ?? '',
-      );
-    }).toList();
-  }
+    print("snapshots:");
+    for(var doc in snapshot.documents) {
+      print(doc.data);
+    }
+        return snapshot.documents.map((doc) {
+          return LoggedNutrient(
+            id: doc.data['id'] ?? '',
+            taken: doc.data['taken'] ?? '',
+          );
+        }).toList();
+      }
   //misc
   String getCurrentDate(){
     var date = new DateTime.now().toString();

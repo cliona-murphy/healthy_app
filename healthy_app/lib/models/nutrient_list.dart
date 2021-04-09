@@ -30,21 +30,21 @@ class _NutrientListState extends State<NutrientList> {
   }
 
   bool checkIfTaken(Nutrient nutrient, List<LoggedNutrient> nutrientsLogged) {
-    print(nutrient.id);
+    //print("line 33 " + nutrient.id);
     bool returnBool = false;
+    // if(nutrientsLogged.isEmpty) print("it's empty");
     for (var loggedNut in nutrientsLogged) {
+      print("line 36 " + loggedNut.id);
       if (nutrient.id == loggedNut.id) {
         print("match found btw " + nutrient.id + " & " +
             loggedNut.id);
         if (loggedNut.taken) {
           print("med taken");
           returnBool = true;
-        } else {
-          returnBool = false;
         }
       }
     }
-    print("returnBool = " + returnBool.toString());
+    // print("returnBool = " + returnBool.toString());
     return returnBool;
   }
 
@@ -54,7 +54,9 @@ class _NutrientListState extends State<NutrientList> {
     final loggedNutrients = Provider.of<List<LoggedNutrient>>(context) ?? [];
 
     if (nutrientTiles.isNotEmpty) {
-      print(nutrientTiles);
+     // print(nutrientTiles);
+
+    // if (loggedNutrients.isNotEmpty) print(loggedNutrients);
 
       return loading ? Loading() : ListView.builder(
         shrinkWrap: true,
@@ -78,4 +80,5 @@ class _NutrientListState extends State<NutrientList> {
     }
   }
 }
+
 
