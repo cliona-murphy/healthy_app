@@ -86,11 +86,11 @@ class _MedicationTileState extends State<MedicationTile> {
     Widget continueButton = FlatButton(
         child: Text("Confirm"),
         onPressed:  () {
-          if (medName == ""){
+         // if (medName == ""){
             updateTime(widget.medication.medicineName, timeString);
-          } else {
-            updateDetails(widget.medication.medicineName, medName, timeString);
-          }
+          //} else {
+           // updateDetails(widget.medication.medicineName, medName, timeString);
+          //}
           Navigator.pop(context);
         }
     );
@@ -98,7 +98,7 @@ class _MedicationTileState extends State<MedicationTile> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Confirm Action"),
-      content: Text("Add  to list?"),
+      content: Text("Update time to take "+widget.medication.medicineName+" to "+timeString+"?"),
       actions: [
         cancelButton,
         continueButton,
@@ -116,25 +116,23 @@ class _MedicationTileState extends State<MedicationTile> {
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
-        title: Text("Edit details here:"),
+        title: Text("Edit "+medName+" details here:"),
         content: Container(
-          height: 100,
+          height: 60,
           child : SingleChildScrollView(
             child: Column(
               children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: medName,
-                  ),
-                ),
-                Container(
-                  child: FlatButton(
-                    color: Colors.grey,
-                    child: Text("Edit Time"),
-                    onPressed: () {
-                      selectTime(context);
-                    },
+                Padding(padding: EdgeInsets.only(top: 15.0),),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    child: FlatButton(
+                      color: Colors.grey,
+                      child: Text("Edit Time"),
+                      onPressed: () {
+                        selectTime(context);
+                      },
+                    ),
                   ),
                 ),
               ],

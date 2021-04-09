@@ -387,10 +387,15 @@ class DatabaseService {
   }
 
   updateMedicationDetails(String originalMedName, String newMedName, String timeToTake) async {
-    return await Firestore.instance.collection('users')
+    await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
         .document(originalMedName)
+        .delete();
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(newMedName)
         .updateData({
       'medicationName': newMedName,
       'timeToTake': timeToTake,
