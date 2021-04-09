@@ -19,30 +19,10 @@ class _CalendarViewState extends State<CalendarView> {
   CalendarController _controller = CalendarController();
   String selectedDay = "";
   DateTime newDate;
-  bool newDateSet = false;
 
   void initState() {
     super.initState();
     selectedDay = getCurrentDate();
-    print("selected date = " + globals.newDate.toString());
-    // _controller.setFocusedDay(globals.newDate);
-    // DateTime testDate = globals.newDate;
-    // if (globals.newDateSelected)
-    //   {
-    //     //var date = globals.
-    //     //_controller.setFocusedDay(globals.newDate);
-    //     setInitialDate(testDate);
-    //   }
-    //_controller.setSelectedDay(globals.newDate);
-    //Day(globals.newDate);
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   _controller.setFocusedDay(globals.newDate);
-    //_controller.s
-    // });
-  }
-
-  setInitialDate(DateTime date){
-    _controller.setFocusedDay(date);
   }
 
   showAlertDialog(BuildContext context) {
@@ -59,14 +39,7 @@ class _CalendarViewState extends State<CalendarView> {
         setState(() {
           globals.selectedDate = selectedDay;
           globals.newDateSelected = true;
-          if(globals.newDate == DateTime.now()) print("agh");
-
-          //
-          //print("new date = ${globals.newDate.day}/${globals.newDate.month}/${globals.newDate.year}");
-          //print("agh" + newDate.toString());
           globals.newDate = newDate;
-          print("aghhh" + globals.newDate.toString());
-          newDateSet = true;
         });
         Navigator.pushNamedAndRemoveUntil(context,
             "/second",
@@ -121,12 +94,8 @@ class _CalendarViewState extends State<CalendarView> {
                   },
                   startingDayOfWeek: StartingDayOfWeek.monday,
                     onDaySelected: (date, events,e) {
-                    //print(date.)
-                     // HomePage.newDateSelected;
                       newDate = date;
                       selectedDay = "${date.day}/${date.month}/${date.year}";
-                      print("${date.day}/${date.month}/${date.year}");
-                      print(date.toUtc());
                     },
                 ),
               ),
