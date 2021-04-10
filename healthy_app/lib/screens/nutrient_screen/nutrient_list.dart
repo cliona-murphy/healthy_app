@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_app/screens/nutrient_screen/logged_nutrient.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/logged_nutrient.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
-import 'package:healthy_app/screens/nutrient_screen/nutrient.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/nutrient.dart';
 import 'package:healthy_app/screens/nutrient_screen/nutrient_tile.dart';
 
 class NutrientList extends StatefulWidget {

@@ -4,7 +4,6 @@ import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:healthy_app/models/medication.dart';
-
 import 'medication_tile.dart';
 
 class MedicationList extends StatefulWidget {

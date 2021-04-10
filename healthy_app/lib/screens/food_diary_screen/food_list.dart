@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:provider/provider.dart';
-import 'package:healthy_app/screens/home/food_tile.dart';
+import 'package:healthy_app/screens/food_diary_screen/food_tile.dart';
 
 class FoodList extends StatefulWidget {
   @override

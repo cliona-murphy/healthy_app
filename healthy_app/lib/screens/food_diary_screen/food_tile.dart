@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/services/database.dart';
-import 'package:healthy_app/shared/constants.dart';
 
 class FoodTile extends StatefulWidget {
 

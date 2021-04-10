@@ -2,18 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/settings_list.dart';
-import 'package:healthy_app/screens/settings_page.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/screens/home/settings_page.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../calendar.dart';
-import '../foodDiary.dart';
-import '../activityDiary.dart';
-import '../medicationTracker.dart';
+import 'calendar.dart';
+import '../food_diary_screen/foodDiary.dart';
+import '../activity_diary_screen/activityDiary.dart';
+import '../medication_tracker_screen/medicationTracker.dart';
 import '../nutrient_screen/nutrientChecklist.dart';
-import '../progress.dart';
+import '../progress_screen/progress.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 // ignore: must_be_immutable
 class Home extends StatefulWidget {

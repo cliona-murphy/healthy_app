@@ -6,7 +6,7 @@ import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
-import 'home/medication_list.dart';
+import 'medication_list.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 
 class MedicationTracker extends StatefulWidget {

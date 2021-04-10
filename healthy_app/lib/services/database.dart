@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
-import 'package:healthy_app/screens/nutrient_screen/logged_nutrient.dart';
-import 'package:healthy_app/screens/nutrient_screen/nutrient.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/logged_nutrient.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';

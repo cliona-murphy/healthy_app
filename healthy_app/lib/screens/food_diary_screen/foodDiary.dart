@@ -4,7 +4,7 @@ import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'home/food_list.dart';
+import 'food_list.dart';
 
 class FoodDiary extends StatefulWidget {
 

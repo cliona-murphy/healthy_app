@@ -1,6 +1,5 @@
 import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:healthy_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 

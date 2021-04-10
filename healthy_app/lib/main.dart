@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/arguments.dart';
 import 'package:healthy_app/screens/home/home.dart';
-import 'package:healthy_app/screens/wrapper.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/screens/home/wrapper.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/models/user.dart';
 import 'package:provider/provider.dart';
