@@ -53,9 +53,6 @@ class _NutrientListState extends State<NutrientList> {
     final nutrientTiles = Provider.of<List<Nutrient>>(context) ?? [];
     final loggedNutrients = Provider.of<List<LoggedNutrient>>(context) ?? [];
 
-    if (nutrientTiles.isNotEmpty) {
-     // print(nutrientTiles);
-
     // if (loggedNutrients.isNotEmpty) print(loggedNutrients);
 
       return loading ? Loading() : ListView.builder(
@@ -66,18 +63,6 @@ class _NutrientListState extends State<NutrientList> {
           return NutrientTile(tile: nutrientTiles[index], taken: checkIfTaken(nutrientTiles[index], loggedNutrients));
         },
       );
-    } else {
-      return Container(
-        height: 80,
-        width: 300,
-        padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
-        child: Text('You have not added anything to this list yet',
-          textAlign: TextAlign.center,
-          style: new TextStyle(
-              color: Colors.blue, fontSize: 20.0),
-        ),
-      );
-    }
   }
 }
 

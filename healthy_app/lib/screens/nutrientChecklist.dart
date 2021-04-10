@@ -23,6 +23,11 @@ class _NutrientChecklistState extends State<NutrientChecklist> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   var userId;
 
+  void initState() {
+    super.initState();
+    getUid();
+    //DatabaseService(uid: userId).testFunction();
+  }
   Future<String> getUid() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;

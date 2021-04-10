@@ -507,12 +507,28 @@ class DatabaseService {
     return Firestore.instance.collection('users')
         .document(uid)
         .collection('entries')
-        .document("942021")
-        .collection('foods')
+        .document(entryName)
+        .collection('nutrientChecklist')
         .snapshots()
         .map(loggedNutrientListFromSnapshot);
   }
 
+  testFunction() {
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
+    print(Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('nutrientChecklist')
+        .snapshots());
+  }
   List<LoggedNutrient> loggedNutrientListFromSnapshot(QuerySnapshot snapshot) {
     print("snapshots:");
     for(var doc in snapshot.documents) {
@@ -521,7 +537,7 @@ class DatabaseService {
         return snapshot.documents.map((doc) {
           return LoggedNutrient(
             id: doc.data['id'] ?? '',
-            taken: doc.data['taken'] ?? '',
+            taken: doc.data['taken'] ?? false,
           );
         }).toList();
       }
