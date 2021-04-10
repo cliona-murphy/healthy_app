@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
+import 'package:healthy_app/models/logged_nutrient.dart';
+import 'package:healthy_app/models/nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
@@ -440,6 +442,11 @@ class DatabaseService {
   }
 
   List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
+    print("snapshots ");
+    for(var doc in snapshot.documents){
+      print(doc.data);
+    }
+    print(snapshot.documents);
     return snapshot.documents.map((doc) {
       return MedicationChecklist(
         medicineName: doc.data['medicationName'] ?? '',
@@ -447,6 +454,72 @@ class DatabaseService {
       );
     }).toList();
   }
+
+  Stream<List<Nutrient>> get nutrientContent {
+    return  Firestore.instance
+        .collection("checklist")
+        .snapshots()
+        .map(nutrientListFromSnapshot);
+  }
+
+  List<Nutrient> nutrientListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Nutrient(
+        id: doc.data['id'] ?? 0,
+        tileContent: doc.data['content'] ?? 0,
+        hintText: doc.data['hintText'] ?? 0,
+      );
+    }).toList();
+  }
+
+  checkNutrientTile(String id, bool checked) async {
+      var entryName;
+      if (globals.selectedDate != getCurrentDate()){
+        print(globals.selectedDate);
+        entryName = reformatDate(globals.selectedDate);
+        print("entry name = "+ entryName);
+      } else {
+        entryName = reformatDate(getCurrentDate());
+      }
+      return await Firestore.instance.collection('users')
+          .document(uid)
+          .collection('entries')
+          .document(entryName)
+          .collection('nutrientChecklist')
+          .document(id)
+          .setData({
+        'id': id,
+        'taken': checked,
+      });
+    }
+
+  Stream<List<LoggedNutrient>> getLoggedNutrients() {
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      print(globals.selectedDate);
+      entryName = reformatDate(globals.selectedDate);
+      print("entry name = "+ entryName);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
+    return Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('nutrientChecklist')
+        .snapshots()
+        .map(loggedNutrientListFromSnapshot);
+  }
+
+
+  List<LoggedNutrient> loggedNutrientListFromSnapshot(QuerySnapshot snapshot) {
+      return snapshot.documents.map((doc) {
+        return LoggedNutrient(
+          id: doc.data['id'] ?? '',
+          taken: doc.data['taken'] ?? false,
+        );
+      }).toList();
+    }
   //misc
   String getCurrentDate(){
     var date = new DateTime.now().toString();

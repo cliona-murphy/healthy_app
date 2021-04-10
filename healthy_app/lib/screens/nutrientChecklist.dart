@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/logged_nutrient.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
+import 'package:healthy_app/models/nutrient.dart';
+import 'package:healthy_app/models/nutrient_list.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +23,10 @@ class _NutrientChecklistState extends State<NutrientChecklist> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   var userId;
 
+  void initState() {
+    super.initState();
+    getUid();
+  }
   Future<String> getUid() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
@@ -31,20 +38,20 @@ class _NutrientChecklistState extends State<NutrientChecklist> {
   }
 
   Widget build(BuildContext context){
-    return StreamProvider<List<Medication>>.value(
-      value: DatabaseService(uid: userId).medications,
+    return StreamProvider<List<Nutrient>>.value(
+      value: DatabaseService(uid: userId).nutrientContent,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            height: 600,
+            height: 800,
             child: Center(
               child: Column(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 30.0)),
-                    StreamProvider<List<MedicationChecklist>>.value(
-                      value: DatabaseService(uid: userId).getLoggedMedications(),
-                      child: MedicationList(),
+                    StreamProvider<List<LoggedNutrient>>.value(
+                      value: DatabaseService(uid: userId).getLoggedNutrients(),
+                      child: NutrientList(),
                     ),
                   ]),
             ),
