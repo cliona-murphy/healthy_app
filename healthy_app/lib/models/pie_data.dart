@@ -3,6 +3,4 @@ class PieData {
   double time;
 
   PieData(this.activity, this.time);
-
-
 }

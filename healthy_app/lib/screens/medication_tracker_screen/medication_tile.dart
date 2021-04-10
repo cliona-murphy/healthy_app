@@ -1,6 +1,5 @@
 import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:healthy_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -32,7 +31,6 @@ class _MedicationTileState extends State<MedicationTile> {
     setState(() {
       isSelected = widget.taken;
     });
-    print(isSelected);
   }
   Future<String> getUserid() async {
     final FirebaseUser user = await auth.currentUser();
@@ -79,7 +77,6 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   showConfirmationDialog() {
-    print("fcn being called");
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
@@ -193,7 +190,6 @@ class _MedicationTileState extends State<MedicationTile> {
             value: isSelected,
              onChanged: (bool newValue) {
               setState(() {
-                print(isSelected);
                 updateDatabase(newValue, widget.medication.medicineName);
                 isSelected = newValue;
           });

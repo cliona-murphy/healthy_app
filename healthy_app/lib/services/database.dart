@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:healthy_app/models/food.dart';
-import 'package:healthy_app/models/logged_nutrient.dart';
-import 'package:healthy_app/models/nutrient.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/logged_nutrient.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/nutrient.dart';
 import 'package:healthy_app/models/settings.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
@@ -10,7 +10,6 @@ import 'package:healthy_app/shared/globals.dart' as globals;
 class DatabaseService {
 
   final String uid;
-  //final String documentId;
   var docId;
   var documentId;
   DatabaseService ({this.uid});
@@ -133,7 +132,6 @@ class DatabaseService {
             docId = result.documentID;
            });
         });
-    print(docId); //keep in for testing
     var entryName = reformatDate(getCurrentDate());
     return await Firestore
         .instance
@@ -153,9 +151,7 @@ class DatabaseService {
   Future addWater(int quantity, String date) async {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -187,9 +183,7 @@ class DatabaseService {
   Stream<List<Food>> get allFoods {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -207,13 +201,10 @@ class DatabaseService {
     //check if entry exists before trying to retrieve it?
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
-    print("uid from within allFoods = "+uid);
     return Firestore.instance
         .collection("users")
         .document(uid)
@@ -228,9 +219,7 @@ class DatabaseService {
   Stream<List<Food>> get lunchFoods {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -248,9 +237,7 @@ class DatabaseService {
   Stream<List<Food>> get dinnerFoods {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -268,9 +255,7 @@ class DatabaseService {
   Stream<List<Food>> get snacks {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -299,9 +284,7 @@ class DatabaseService {
   updateFoodDetails(String foodName, int calories) async {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -320,9 +303,7 @@ class DatabaseService {
   deleteFood(foodName) async {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -337,7 +318,6 @@ class DatabaseService {
 
   //medication
   Future addMedication(String medName, String time) async {
-    print("uid from inside addMedication = " +uid);
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
@@ -349,7 +329,6 @@ class DatabaseService {
   }
 
   Stream<List<Medication>> get medications {
-    //print("uid from inside stream: " +uid);
     return  Firestore.instance
         .collection("users")
         .document(uid)
@@ -370,9 +349,7 @@ class DatabaseService {
   medTaken(String medName, bool checked) async {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -426,9 +403,7 @@ class DatabaseService {
   Stream<List<MedicationChecklist>> getLoggedMedications() {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }
@@ -442,11 +417,6 @@ class DatabaseService {
   }
 
   List<MedicationChecklist> medicationChecklistFromSnapshot(QuerySnapshot snapshot) {
-    print("snapshots ");
-    for(var doc in snapshot.documents){
-      print(doc.data);
-    }
-    print(snapshot.documents);
     return snapshot.documents.map((doc) {
       return MedicationChecklist(
         medicineName: doc.data['medicationName'] ?? '',
@@ -475,9 +445,7 @@ class DatabaseService {
   checkNutrientTile(String id, bool checked) async {
       var entryName;
       if (globals.selectedDate != getCurrentDate()){
-        print(globals.selectedDate);
         entryName = reformatDate(globals.selectedDate);
-        print("entry name = "+ entryName);
       } else {
         entryName = reformatDate(getCurrentDate());
       }
@@ -496,9 +464,7 @@ class DatabaseService {
   Stream<List<LoggedNutrient>> getLoggedNutrients() {
     var entryName;
     if (globals.selectedDate != getCurrentDate()){
-      print(globals.selectedDate);
       entryName = reformatDate(globals.selectedDate);
-      print("entry name = "+ entryName);
     } else {
       entryName = reformatDate(getCurrentDate());
     }

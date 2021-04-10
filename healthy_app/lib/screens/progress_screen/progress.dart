@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/settings.dart';
-import 'package:healthy_app/screens/home/calorie_count.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/screens/progress_screen/calorie_count.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:healthy_app/services/database.dart';
@@ -12,7 +12,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:healthy_app/models/pie_data.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 
-import 'home/food_list.dart';
+import '../food_diary_screen/food_list.dart';
 
 class Progress extends StatefulWidget {
 
@@ -50,13 +50,10 @@ class _ProgressState extends State<Progress> {
     // setState(() {
     //   userIdSet = true;
     // });
-    print(uid);
     return uid;
   }
 
   Widget build(BuildContext context){
-   // final foods = Provider.of<List<Food>>(context) ?? [];
-  print("user Id = " +userId);
     return StreamBuilder(
       stream: Firestore.instance.collection('settings').document(userId).snapshots(),
       builder:  (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -66,7 +63,6 @@ class _ProgressState extends State<Progress> {
         } else {
           target = 2000;
         }
-        print("target = " +target.toString());
         return loading ? Loading() : Scaffold(
           backgroundColor: Colors.white,
           body: Row(

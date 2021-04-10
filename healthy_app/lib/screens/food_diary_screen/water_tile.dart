@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/models/food.dart';
 import 'package:provider/provider.dart';
-import 'package:healthy_app/screens/home/food_tile.dart';
+import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/screens/food_diary_screen/food_tile.dart';
 
 class WaterTile extends StatefulWidget {
   @override

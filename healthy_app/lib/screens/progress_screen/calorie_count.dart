@@ -38,7 +38,6 @@ class _CalorieCountState extends State<CalorieCount> {
     super.initState();
     updateBoolean();
     getUid();
-    print("user id within initState = " + userId);
     _pieData = List<charts.Series<PieData, String>>();
   }
 
@@ -48,7 +47,6 @@ class _CalorieCountState extends State<CalorieCount> {
     setState(() {
       userId = uid;
     });
-    print(uid);
     return uid;
   }
 
@@ -62,8 +60,6 @@ class _CalorieCountState extends State<CalorieCount> {
       if(percentageIntake >= 100) percentageIntake = 99.99;
     }
 
-    print("percentage intake = " + percentageIntake.toString());
-    print(percentageIntake);
     var piedata = [
       new PieData('Consumed', percentageIntake),
       new PieData('Remaining', 100 - percentageIntake),
@@ -85,8 +81,6 @@ class _CalorieCountState extends State<CalorieCount> {
     double kcalTarget = widget.calorieTarget.toDouble();
     double percentage = (totalCalories.toDouble() / kcalTarget);
 
-    print("Percentage " + (percentage * 100).toString() + "kcalTarget = " +
-        kcalTarget.toString() + "calories = " + totalCalories.toString());
     setState(() {
       totalCalories = 0;
     });
