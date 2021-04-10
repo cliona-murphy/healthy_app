@@ -28,21 +28,16 @@ class _MedicationListState extends State<MedicationList> {
   }
 
   bool checkIfTaken(Medication medication, List<MedicationChecklist> medsLogged){
-    print(medication.medicineName);
       bool returnBool = false;
       for(var loggedMed in medsLogged){
         if (medication.medicineName == loggedMed.medicineName){
-          print("match found btw " + medication.medicineName + " & " + loggedMed.medicineName);
           if (loggedMed.taken){
-            print("med taken");
             returnBool = true;
           } else {
-            print("line 41");
             returnBool = false;
           }
         }
       }
-      print("returnBool = " + returnBool.toString());
       return returnBool;
     }
 
@@ -52,7 +47,6 @@ class _MedicationListState extends State<MedicationList> {
     final loggedMedications = Provider.of<List<MedicationChecklist>>(context) ?? [];
 
     if(medications.isNotEmpty){
-      print(medications);
 
       return loading ? Loading() : ListView.builder(
         shrinkWrap: true,

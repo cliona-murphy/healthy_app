@@ -31,7 +31,6 @@ class _MedicationTileState extends State<MedicationTile> {
     setState(() {
       isSelected = widget.taken;
     });
-    print(isSelected);
   }
   Future<String> getUserid() async {
     final FirebaseUser user = await auth.currentUser();
@@ -78,7 +77,6 @@ class _MedicationTileState extends State<MedicationTile> {
   }
 
   showConfirmationDialog() {
-    print("fcn being called");
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
@@ -192,7 +190,6 @@ class _MedicationTileState extends State<MedicationTile> {
             value: isSelected,
              onChanged: (bool newValue) {
               setState(() {
-                print(isSelected);
                 updateDatabase(newValue, widget.medication.medicineName);
                 isSelected = newValue;
           });

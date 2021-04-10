@@ -33,10 +33,8 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   String medName;
 
   void initState(){
-    print("init state called");
     super.initState();
     getUid();
-    print(userId);
     updateBoolean();
   }
 
@@ -49,12 +47,10 @@ class _MedicationTrackerState extends State<MedicationTracker> {
       );
       timeSelected = true;
       timeString = "${selectedTime.hour}:${selectedTime.minute}";
-      print(timeString);
   }
 
 
   Future<String> addItem(BuildContext context) {
-    print("Add item called");
       return showDialog(context: context, builder: (context) {
         return AlertDialog(
           title: Text("Enter details here:"),
@@ -106,7 +102,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
   }
 
   showConfirmationDialog() {
-    print("fcn being called");
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("Cancel"),
@@ -154,7 +149,6 @@ class _MedicationTrackerState extends State<MedicationTracker> {
     setState(() {
       userIdSet = true;
     });
-    print(uid);
     return uid;
   }
 

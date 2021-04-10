@@ -27,10 +27,8 @@ class _FoodDiaryState extends State<FoodDiary> {
   TextEditingController calorieController = TextEditingController();
 
   void initState(){
-    print("init state called");
     super.initState();
     getUid();
-    print(userId);
     updateBoolean();
   }
   updateBoolean(){
@@ -41,7 +39,6 @@ class _FoodDiaryState extends State<FoodDiary> {
     });
   }
   Future <String> onContainerTapped(BuildContext context, String mealId){
-    print("Here");
     return showDialog(context: context, builder: (context) {
       return AlertDialog(
           title: Text("What did you eat?"),
@@ -73,9 +70,7 @@ class _FoodDiaryState extends State<FoodDiary> {
               elevation: 5.0,
               child: Text("Submit"),
               onPressed: () {
-                //Navigator.of(context).pop(customController.text.toString());
                 foodLogged = true;
-               // print("foodLogged true");
                 updateDatabase(customController.text, int.parse(calorieController.text), mealId);
                 customController.clear();
                 calorieController.clear();
@@ -125,15 +120,9 @@ class _FoodDiaryState extends State<FoodDiary> {
 
   updateDatabase(String name, int calories, String mealId) async{
     userId = await getUid();
-    print("user id from updateDatabase function is: " + userId);
     if(userId != ""){
       DatabaseService(uid: userId).addNewFood(name, calories, mealId, getCurrentDate());
       foods = DatabaseService(uid: userId).getFoods(mealId);
-      if(foods != null){
-        print("not null");
-      } else {
-        print("null");
-      }
       listLength = foods.length;
     }
   }
