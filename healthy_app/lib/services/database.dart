@@ -468,7 +468,6 @@ class DatabaseService {
         id: doc.data['id'] ?? 0,
         tileContent: doc.data['content'] ?? 0,
         hintText: doc.data['hintText'] ?? 0,
-        complete: doc.data['complete'] ?? 0,
       );
     }).toList();
   }

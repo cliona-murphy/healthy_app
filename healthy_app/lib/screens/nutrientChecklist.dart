@@ -44,7 +44,7 @@ class _NutrientChecklistState extends State<NutrientChecklist> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            height: 1000,
+            height: 800,
             child: Center(
               child: Column(
                   children: [
