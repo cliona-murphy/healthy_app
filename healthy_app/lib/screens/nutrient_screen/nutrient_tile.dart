@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
-
-import 'nutrient.dart';
+import 'package:healthy_app/screens/nutrient_screen/nutrient.dart';
 
 class NutrientTile extends StatefulWidget {
   final Nutrient tile;

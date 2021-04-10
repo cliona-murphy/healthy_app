@@ -1,17 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_app/models/logged_nutrient.dart';
-import 'package:healthy_app/models/medication.dart';
-import 'package:healthy_app/models/medication_checklist.dart';
-import 'package:healthy_app/models/nutrient.dart';
-import 'package:healthy_app/models/nutrient_list.dart';
-import 'package:healthy_app/services/auth.dart';
+import 'package:healthy_app/screens/nutrient_screen/logged_nutrient.dart';
+import 'package:healthy_app/screens/nutrient_screen/nutrient.dart';
+import 'package:healthy_app/screens/nutrient_screen/nutrient_list.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-
-import 'home/medication_list.dart';
 
 class NutrientChecklist extends StatefulWidget {
 

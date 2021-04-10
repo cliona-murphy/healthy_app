@@ -12,7 +12,7 @@ import '../calendar.dart';
 import '../foodDiary.dart';
 import '../activityDiary.dart';
 import '../medicationTracker.dart';
-import '../nutrientChecklist.dart';
+import '../nutrient_screen/nutrientChecklist.dart';
 import '../progress.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
 // ignore: must_be_immutable
