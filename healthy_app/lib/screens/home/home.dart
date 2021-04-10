@@ -1,13 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:healthy_app/models/arguments.dart';
-import 'package:healthy_app/screens/home/settings_list.dart';
-import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/screens/home/settings_page.dart';
+import 'package:healthy_app/models/item.dart';
+import 'package:healthy_app/screens/home/settings_page.dart';
 import 'package:healthy_app/services/auth.dart';
-import 'package:healthy_app/services/database.dart';
 import 'package:healthy_app/shared/ConstantVars.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../main.dart';
 import 'calendar.dart';
 import '../food_diary_screen/foodDiary.dart';
 import '../activity_diary_screen/activityDiary.dart';
@@ -15,6 +13,10 @@ import '../medication_tracker_screen/medicationTracker.dart';
 import '../nutrient_screen/nutrientChecklist.dart';
 import '../progress_screen/progress.dart';
 import 'package:healthy_app/shared/globals.dart' as globals;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:healthy_app/models/push_notification.dart';
+import 'package:healthy_app/services/notificationmanager.dart';
+
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
   String date;
@@ -28,6 +30,7 @@ class _HomeState extends State<Home> {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
   PageController _pageController = PageController();
+  FirebaseMessaging _messaging = FirebaseMessaging();
   List<Widget> _screens = [
     Progress(), FoodDiary(), ActivityDiary(), NutrientChecklist(), MedicationTracker(),
   ];
@@ -35,13 +38,17 @@ class _HomeState extends State<Home> {
   String selectedDate = "";
   bool newDate = false;
   String userId = "";
+  PushNotificationsManager manager;
 
-  void initState() {
-    super.initState();
-    getUid();
-    print("initState date = " + widget.date.toString());
-    newDate = globals.newDateSelected;
-  }
+  // void initState() {
+  //   super.initState();
+  //   getUid();
+  //   print("initState date = " + widget.date.toString());
+  //   newDate = globals.newDateSelected;
+  //   manager = new PushNotificationsManager();
+  //   manager.init();
+  //   //registerNotification();
+  // }
 
   Future<String> getUid() async {
     final FirebaseUser user = await auth.currentUser();
@@ -51,6 +58,90 @@ class _HomeState extends State<Home> {
     });
     print(uid);
     return uid;
+  }
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final TextEditingController _topicController =
+  TextEditingController(text: 'topic');
+
+  Widget _buildDialog(BuildContext context, Item item) {
+    return AlertDialog(
+      content: Text("${item.matchteam} with score: ${item.score}"),
+      actions: <Widget>[
+        FlatButton(
+          child: const Text('CLOSE'),
+          onPressed: () {
+            Navigator.pop(context, false);
+          },
+        ),
+        FlatButton(
+          child: const Text('SHOW'),
+          onPressed: () {
+            Navigator.pop(context, true);
+          },
+        ),
+      ],
+    );
+  }
+
+  void _showItemDialog(Map<String, dynamic> message) {
+    showDialog<bool>(
+      context: context,
+      builder: (_) => _buildDialog(context, _itemForMessage(message)),
+    ).then((bool shouldNavigate) {
+      if (shouldNavigate == true) {
+        _navigateToItemDetail(message);
+      }
+    });
+  }
+
+  void _navigateToItemDetail(Map<String, dynamic> message) {
+    final Item item = _itemForMessage(message);
+    // Clear away dialogs
+    Navigator.popUntil(context, (Route<dynamic> route) => route is PageRoute);
+    if (!item.route.isCurrent) {
+      Navigator.push(context, item.route);
+    }
+  }
+
+  final Map<String, Item> _items = <String, Item>{};
+  Item _itemForMessage(Map<String, dynamic> message) {
+    final dynamic data = message['data'] ?? message;
+    final String itemId = data['id'];
+    final Item item = _items.putIfAbsent(itemId, () => Item(itemId: itemId))
+      ..matchteam = data['matchteam']
+      ..score = data['score'];
+    return item;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUid();
+    print("initState date = " + widget.date.toString());
+    newDate = globals.newDateSelected;
+    manager = new PushNotificationsManager();
+    manager.init();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        _showItemDialog(message);
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        _navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        _navigateToItemDetail(message);
+      },
+    );
+    _firebaseMessaging.getToken().then((String token) {
+      assert(token != null);
+      print("Push Messaging token: $token");
+    });
+    _firebaseMessaging.subscribeToTopic("matchscore");
   }
 
   void _onPageChanged(int index){
