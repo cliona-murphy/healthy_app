@@ -17,15 +17,14 @@ class NutrientTile extends StatefulWidget {
 }
 
 class _NutrientTileState extends State<NutrientTile> {
-  bool isSelected = true;
+  bool isSelected;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   void initState(){
     super.initState();
     setState(() {
-      isSelected = widget.tile.complete;
+      isSelected = widget.taken;
     });
-    print(isSelected);
   }
 
   Future<String> getUserid() async {
