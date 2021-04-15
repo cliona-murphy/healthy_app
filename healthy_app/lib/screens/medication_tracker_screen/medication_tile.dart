@@ -61,6 +61,11 @@ class _MedicationTileState extends State<MedicationTile> {
     DatabaseService(uid: userId).deleteMedication(medName);
   }
 
+  logTime(String medName) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).logTime(medName);
+  }
+
   void selectTime(BuildContext context) async {
     //animate this?
     selectedTime = await showTimePicker(
@@ -192,6 +197,9 @@ class _MedicationTileState extends State<MedicationTile> {
               setState(() {
                 updateDatabase(newValue, widget.medication.medicineName);
                 isSelected = newValue;
+                if(isSelected){
+                  logTime(widget.medication.medicineName);
+                }
           });
         },
       ),
