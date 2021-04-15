@@ -486,7 +486,39 @@ class DatabaseService {
         );
       }).toList();
     }
-  //misc
+
+  //activity diary
+  Future addActivity(String activityType, double distance, double duration) async {
+    var roundedDistanceString = duration.toStringAsExponential(2);
+    double roundedDistance = double.parse(roundedDistanceString);
+    var roundedDurationString = duration.toStringAsExponential(2);
+    double roundedDuration = double.parse(roundedDurationString);
+
+    var entryName = getEntryName();
+    return await Firestore
+        .instance
+        .collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .add({
+      'type': activityType,
+      'distance': roundedDistance,
+      'duration': roundedDuration,
+    });
+  }
+
+    //misc
+  String getEntryName(){
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      entryName = reformatDate(globals.selectedDate);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
+    return entryName;
+  }
   String getCurrentDate(){
     var date = new DateTime.now().toString();
     var dateParse = DateTime.parse(date);
@@ -499,58 +531,5 @@ class DatabaseService {
     String newDate = "";
     newDate = newDate + newDateArr[0] + newDateArr[1] + newDateArr[2];
     return newDate;
-  }
-
-  //delete later
-  //need to make reference to uid in this function
-  List<Food> getFoods(mealId){
-
-    List<Food> foods = new List<Food>();
-    entryCollection.getDocuments().then((querySnapshot) {
-      Firestore.instance
-          .collection("users")
-          .document(uid)
-          .collection("entries")
-          .document(docId)
-          .collection("foods")
-          .where("mealId", isEqualTo: mealId)
-          .getDocuments()
-          .then((querySnapshot) {
-        querySnapshot.documents.forEach((result) {
-          //make food object here
-          foods.add(new Food(
-              foodName: result.data['foodName'],
-              calories: result.data['calories'],
-              mealId: result.data['mealId'])
-          );
-        });
-      });
-    });
-    return foods;
-  }
-
-  String setDocId(String date){
-    print("setDocId called");
-    print("date:" + date);
-    Firestore.instance.collection("users")
-        .document(uid)
-        .collection("entries")
-        .where('entryDate', isEqualTo: "21/2/2021")
-        .getDocuments()
-        .then((querySnapshot) {
-      print(querySnapshot.documents);
-      querySnapshot.documents.forEach((result) {
-        docId = result.documentID;
-      });
-    });
-    print("docId = " + docId.toString());
-    return docId;
-  }
-
-  setDocumentId(String docId) async {
-    print("Set doc id called");
-    print("doc Id passed in is: " + docId);
-    documentId = docId;
-    print("document Id is set to: " + documentId.toString());
   }
 }
