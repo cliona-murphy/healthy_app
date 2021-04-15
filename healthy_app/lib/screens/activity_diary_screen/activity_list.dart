@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:healthy_app/models/medication.dart';
+
+import 'activity_tile.dart';
 
 
 class ActivityList extends StatefulWidget {
@@ -43,17 +46,17 @@ class _ActivityListState extends State<ActivityList> {
 
   @override
   Widget build(BuildContext context) {
-    final medications = Provider.of<List<Medication>>(context) ?? [];
-    final loggedMedications = Provider.of<List<MedicationChecklist>>(context) ?? [];
-
-    if(medications.isNotEmpty){
+    final activities = Provider.of<List<Activity>>(context) ?? [];
+    print("activies:");
+    print(activities);
+    if(activities.isNotEmpty){
 
       return loading ? Loading() : ListView.builder(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
-        itemCount: medications.length,
+        itemCount: activities.length,
         itemBuilder: (context, index) {
-          //return MedicationTile(medication: medications[index], taken: checkIfTaken(medications[index], loggedMedications));
+          return ActivityTile(activity: activities[index]);
         },
       );
     } else {

@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:healthy_app/models/medication_checklist.dart';
 import 'package:healthy_app/screens/activity_diary_screen/activity_list.dart';
 import 'package:healthy_app/screens/medication_tracker_screen/medication_list.dart';
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
+import 'package:healthy_app/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:flushbar/flushbar.dart';
 
@@ -21,10 +23,13 @@ class _ActivityDiaryState extends State<ActivityDiary> {
   final AuthService _auth = AuthService();
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userId = "";
+  bool loading = true;
 
   void initState(){
     super.initState();
     getUid();
+    updateBoolean();
+    print("User ID act diary = " + userId);
   }
 
   Future<String> getUid() async {
@@ -33,7 +38,16 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     setState(() {
       userId = uid;
     });
+    print("User ID getUid = " + userId);
     return uid;
+  }
+
+  updateBoolean(){
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        loading = false;
+      });
+    });
   }
 
   renderActivityForm(BuildContext context) async {
@@ -46,9 +60,6 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     if(result.isNotEmpty){
       setState(() {
         showSnackBar();
-        // selectedDate = result;
-        // newDate = true;
-        // globals.selectedDate = selectedDate;
       });
     }
   }
@@ -63,17 +74,12 @@ class _ActivityDiaryState extends State<ActivityDiary> {
   }
 
   void addItem(BuildContext context){
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => ActivityForm(),
-    //     ));
     renderActivityForm(context);
   }
 
   Widget build(BuildContext context){
-    return StreamProvider<List<Medication>>.value(
-      value: DatabaseService(uid: userId).medications,
+    return loading ? Loading(): StreamProvider<List<Activity>>.value(
+      value: DatabaseService(uid: userId).activities,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -83,10 +89,10 @@ class _ActivityDiaryState extends State<ActivityDiary> {
               child: Column(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 30.0)),
-                    StreamProvider<List<MedicationChecklist>>.value(
-                      value: DatabaseService(uid: userId).getLoggedMedications(),
-                      child: ActivityList(),
-                    ),
+                    // StreamProvider<List<Activity>>.value(
+                    //   value: DatabaseService(uid: userId).activities,
+                    ActivityList(),
+                    // ),
                     Container(
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(

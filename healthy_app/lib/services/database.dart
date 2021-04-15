@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/food.dart';
 import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/logged_nutrient.dart';
 import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/nutrient.dart';
@@ -507,6 +508,32 @@ class DatabaseService {
       'distance': roundedDistance,
       'duration': roundedDuration,
     });
+  }
+
+  //not working but same functionality as med checklist
+  Stream<List<Activity>> get activities {
+    print("activity snapshot:");
+    print(Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('activities')
+        .snapshots());
+    return  Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('activities')
+        .snapshots()
+        .map(activityListFromSnapshot);
+  }
+
+  List<Activity> activityListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Activity(
+        activityType: doc.data['type'] ?? '',
+        distance: doc.data['distance'] ?? 0,
+        duration: doc.data['duration'] ?? 0,
+      );
+    }).toList();
   }
 
     //misc
