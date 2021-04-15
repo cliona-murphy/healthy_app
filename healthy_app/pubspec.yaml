@@ -33,6 +33,7 @@ dependencies:
   syncfusion_flutter_calendar: ^18.4.49
   table_calendar: ^2.1.0
   cupertino_setting_control: ^1.0.1
+  direct_select: ^1.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
