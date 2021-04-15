@@ -7,8 +7,7 @@ import 'package:healthy_app/screens/medication_tracker_screen/medication_list.da
 import 'package:healthy_app/services/auth.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flushbar/flushbar.dart';
 
 import 'activity_form.dart';
 
@@ -37,12 +36,39 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     return uid;
   }
 
-  void addItem(){
+  renderActivityForm(BuildContext context) async {
+    final result = await
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => ActivityForm(),
         ));
+    if(result.isNotEmpty){
+      setState(() {
+        showSnackBar();
+        // selectedDate = result;
+        // newDate = true;
+        // globals.selectedDate = selectedDate;
+      });
+    }
+  }
+
+  showSnackBar(){
+    return Flushbar(
+      duration: Duration(seconds: 1),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: 'Success',
+      message: "Your activity was successfully logged!",
+    )..show(context);
+  }
+
+  void addItem(BuildContext context){
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => ActivityForm(),
+    //     ));
+    renderActivityForm(context);
   }
 
   Widget build(BuildContext context){
@@ -65,7 +91,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
                         onPressed: (){
-                          addItem();
+                          addItem(context);
                           //addItem(context);
                         },
                         child: Text("Add Item"),

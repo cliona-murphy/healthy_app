@@ -160,6 +160,7 @@ class _ActivityFormState extends State<ActivityForm> {
                             });
                           } else {
                             DatabaseService(uid: userId).addActivity(activityType, distance, duration);
+                            Navigator.pop(context, "test");
                           }
                         },
                         child: Text("Save"),

@@ -489,7 +489,7 @@ class DatabaseService {
 
   //activity diary
   Future addActivity(String activityType, double distance, double duration) async {
-    var roundedDistanceString = duration.toStringAsExponential(2);
+    var roundedDistanceString = distance.toStringAsExponential(2);
     double roundedDistance = double.parse(roundedDistanceString);
     var roundedDurationString = duration.toStringAsExponential(2);
     double roundedDuration = double.parse(roundedDurationString);
