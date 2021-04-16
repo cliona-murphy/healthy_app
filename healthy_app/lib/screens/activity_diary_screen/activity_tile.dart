@@ -52,9 +52,9 @@ class _ActivityTileState extends State<ActivityTile> {
     DatabaseService(uid: userId).updateMedicationTime(medName, timeToTake);
   }
 
-  deleteActivity(String activityType) async {
+  deleteActivity() async {
     String userId = await getUserid();
-    DatabaseService(uid: userId).deleteMedication(medName);
+    DatabaseService(uid: userId).deleteActivity(widget.activity.docId);
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
@@ -110,6 +110,39 @@ class _ActivityTileState extends State<ActivityTile> {
         ],
       );
     });
+  }
+
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed:  () {
+        Navigator.pop(context);
+      },
+    );
+    Widget continueButton = FlatButton(
+        child: Text("Confirm"),
+        onPressed:  () {
+          deleteActivity();
+          Navigator.pop(context);
+        }
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Confirm Action"),
+      content: Text("Do you want to delete this activity? (${widget.activity.activityType})"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 
   String checkActivityType(String activityType) {
@@ -173,7 +206,7 @@ class _ActivityTileState extends State<ActivityTile> {
                 FlatButton(
                   textColor: const Color(0xFF6200EE),
                   onPressed: () {
-                    // Perform some action
+                    showAlertDialog(context);
                   },
                   child: const Text('DELETE'),
                 ),

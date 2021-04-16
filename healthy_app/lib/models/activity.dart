@@ -3,6 +3,7 @@ class Activity {
   double distance;
   double duration;
   double calories;
+  String docId;
 
-  Activity({this.activityType, this.distance, this.duration, this.calories});
+  Activity({this.activityType, this.distance, this.duration, this.calories, this.docId});
 }

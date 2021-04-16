@@ -533,12 +533,20 @@ class DatabaseService {
         distance: doc.data['distance'] ?? 0,
         duration: doc.data['duration'] ?? 0,
         calories: doc.data['calories'] ?? 0,
+        docId: doc.documentID,
       );
     }).toList();
   }
 
-  deleteActivity(){
-
+  deleteActivity(String docId) async {
+    var entryName = getEntryName();
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .document(docId)
+        .delete();
   }
 
     //misc
