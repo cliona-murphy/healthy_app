@@ -590,7 +590,11 @@ class DatabaseService {
   String getCurrentTime() {
     var time = new DateTime.now().toString();
     var timeParse = DateTime.parse(time);
-    var formattedTime = "${timeParse.hour}:${timeParse.minute}";
+    String minute = timeParse.minute.toString();
+    if (timeParse.minute < 10){
+      minute = "0${minute}";
+    }
+    var formattedTime = "${timeParse.hour}:${minute}";
     return formattedTime;
   }
 
