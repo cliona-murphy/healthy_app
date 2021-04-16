@@ -7,7 +7,8 @@ class MedicationTile extends StatefulWidget {
 
   final Medication medication;
   final bool taken;
-  MedicationTile({ this.medication, this.taken });
+  final String timeTaken;
+  MedicationTile({ this.medication, this.taken, this.timeTaken });
 
   @override
   _MedicationTileState createState() => _MedicationTileState();
@@ -32,6 +33,7 @@ class _MedicationTileState extends State<MedicationTile> {
       isSelected = widget.taken;
     });
   }
+
   Future<String> getUserid() async {
     final FirebaseUser user = await auth.currentUser();
     final uid = user.uid;
@@ -59,6 +61,11 @@ class _MedicationTileState extends State<MedicationTile> {
   deleteMedication(String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteMedication(medName);
+  }
+
+  updateTimeTaken(String medName) async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).updateTimeTaken(medName);
   }
 
   void selectTime(BuildContext context) async {
@@ -178,7 +185,8 @@ class _MedicationTileState extends State<MedicationTile> {
           child: CheckboxListTile(
             title: Text(widget.medication.medicineName,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-            subtitle: Text("Take at ${widget.medication.timeToTake}"),
+            subtitle: widget.taken ? Text("Taken at ${widget.timeTaken}") :
+            Text("Take at ${widget.medication.timeToTake}"),
             secondary: IconButton(
               icon: Icon(Icons.edit),
               onPressed: (){
@@ -192,6 +200,9 @@ class _MedicationTileState extends State<MedicationTile> {
               setState(() {
                 updateDatabase(newValue, widget.medication.medicineName);
                 isSelected = newValue;
+                if(isSelected){
+                  updateTimeTaken(widget.medication.medicineName);
+                }
           });
         },
       ),

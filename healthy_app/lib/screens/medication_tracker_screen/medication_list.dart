@@ -14,6 +14,7 @@ class MedicationList extends StatefulWidget {
 class _MedicationListState extends State<MedicationList> {
 
   bool loading = true;
+  String timeTaken = "";
 
   void initState(){
     super.initState();
@@ -33,6 +34,7 @@ class _MedicationListState extends State<MedicationList> {
         if (medication.medicineName == loggedMed.medicineName){
           if (loggedMed.taken){
             returnBool = true;
+            timeTaken = loggedMed.timeTaken;
           } else {
             returnBool = false;
           }
@@ -53,7 +55,7 @@ class _MedicationListState extends State<MedicationList> {
         physics: BouncingScrollPhysics(),
         itemCount: medications.length,
         itemBuilder: (context, index) {
-          return MedicationTile(medication: medications[index], taken: checkIfTaken(medications[index], loggedMedications));
+          return MedicationTile(medication: medications[index], taken: checkIfTaken(medications[index], loggedMedications), timeTaken: timeTaken);
         },
       );
     } else {
