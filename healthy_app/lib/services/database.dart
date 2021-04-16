@@ -362,6 +362,7 @@ class DatabaseService {
         .setData({
       'medicationName': medName,
       'taken': checked,
+      'timeTaken': getCurrentTime(),
     });
   }
 
@@ -392,6 +393,15 @@ class DatabaseService {
     });
   }
 
+  updateTimeTaken(String medName) async {
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('medications')
+        .document(medName)
+        .updateData({
+      'timeTaken': getCurrentTime(),
+    });
+  }
   //this function works if the med name has not been previously edited
   deleteMedication(String medName) async {
     return await Firestore.instance.collection('users')
@@ -421,6 +431,7 @@ class DatabaseService {
       return MedicationChecklist(
         medicineName: doc.data['medicationName'] ?? '',
         taken: doc.data['taken'] ?? '',
+        timeTaken: doc.data['timeTaken'] ?? '',
       );
     }).toList();
   }
@@ -487,6 +498,13 @@ class DatabaseService {
       }).toList();
     }
   //misc
+  String getCurrentTime() {
+    var time = new DateTime.now().toString();
+    var timeParse = DateTime.parse(time);
+    var formattedTime = "${timeParse.hour}:${timeParse.minute}";
+    return formattedTime;
+  }
+
   String getCurrentDate(){
     var date = new DateTime.now().toString();
     var dateParse = DateTime.parse(date);
