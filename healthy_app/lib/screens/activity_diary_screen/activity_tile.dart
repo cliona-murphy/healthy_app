@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:healthy_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'activity_form.dart';
+
 class ActivityTile extends StatefulWidget {
 
   final Activity activity;
@@ -210,7 +212,16 @@ class _ActivityTileState extends State<ActivityTile> {
                 FlatButton(
                   textColor: const Color(0xFF6200EE),
                   onPressed: () {
-                    // Perform some action
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ActivityForm(action: "Edit", activity: widget.activity),
+                        ));
+                    // if(result.isNotEmpty){
+                    //   setState(() {
+                    //     showSnackBar();
+                    //   });
+                    // }
                   },
                   child: const Text('EDIT'),
                 ),

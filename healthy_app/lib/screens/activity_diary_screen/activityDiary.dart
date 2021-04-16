@@ -53,7 +53,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ActivityForm(),
+          builder: (context) => ActivityForm(action: 'Log'),
         ));
     if(result.isNotEmpty){
       setState(() {
@@ -70,8 +70,6 @@ class _ActivityDiaryState extends State<ActivityDiary> {
       message: "Your activity was successfully logged!",
     )..show(context);
   }
-
-
 
   void addItem(BuildContext context){
     renderActivityForm(context);

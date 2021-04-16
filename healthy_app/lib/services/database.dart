@@ -549,6 +549,22 @@ class DatabaseService {
         .delete();
   }
 
+  updateActivity(String docId, String type, double distance, double duration, double calories) async {
+    var entryName = getEntryName();
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .document(docId)
+        .updateData({
+           'type': type,
+          'distance': distance,
+          'duration': duration,
+          'calories': calories,
+    });
+  }
+
     //misc
   String getEntryName(){
     var entryName;

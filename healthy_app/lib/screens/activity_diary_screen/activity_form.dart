@@ -2,9 +2,15 @@ import 'package:cupertino_setting_control/cupertino_setting_control.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/services/database.dart';
 
 class ActivityForm extends StatefulWidget {
+
+  final String action;
+  final Activity activity;
+
+  ActivityForm({ this.action, this.activity});
   @override
   _ActivityFormState createState() => _ActivityFormState();
 }
@@ -18,6 +24,8 @@ class _ActivityFormState extends State<ActivityForm> {
   String distanceError = "";
   String durationError = "";
   String calorieError = "";
+  String appBarAction = "";
+  bool argsPassed = false;
 
   final FirebaseAuth auth = FirebaseAuth.instance;
   String userId = "";
@@ -25,6 +33,15 @@ class _ActivityFormState extends State<ActivityForm> {
   void initState(){
     super.initState();
     getUid();
+    if (widget.action != ""){
+      setState(() {
+        argsPassed = true;
+        activityType = widget.activity.activityType;
+        distance = widget.activity.distance;
+        duration = widget.activity.duration;
+        calories = widget.activity.calories;
+      });
+    }
   }
 
   Future<String> getUid() async {
@@ -53,6 +70,11 @@ class _ActivityFormState extends State<ActivityForm> {
     DatabaseService(uid: userId).addActivity(activityType, distance, duration, calories);
   }
 
+  updateActivity() async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).updateActivity(widget.activity.docId, activityType, distance, duration, calories);
+  }
+
   void calculateCalories(){
     switch (activityType){
       case 'Walking': {
@@ -74,7 +96,7 @@ class _ActivityFormState extends State<ActivityForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Log your activity"),
+        title: argsPassed ? Text("${widget.action} your activity") : Text("Log your activity"),
         actions: [
            FlatButton(
             onPressed: () {
@@ -95,8 +117,12 @@ class _ActivityFormState extends State<ActivityForm> {
                   });
                 }
               } else {
-                addActivity();
-                Navigator.pop(context, "test");
+                if(widget.action == "Edit"){
+                  updateActivity();
+                } else {
+                  addActivity();
+                  Navigator.pop(context, "test");
+                }
               }
             },
             child: Row(
@@ -135,7 +161,7 @@ class _ActivityFormState extends State<ActivityForm> {
                    SettingRow(
                     rowData: SettingsDropDownConfig(
                         title: 'Activity',
-                        initialKey: 'walking',
+                        initialKey: activityType,
                         choices: {
                           'Walking': 'Walking',
                           'Running': 'Running',
@@ -163,7 +189,7 @@ class _ActivityFormState extends State<ActivityForm> {
                       title: 'Distance',
                       from: 0,
                       to: 100,
-                      initialValue: 0,
+                      initialValue: distance,
                       justIntValues: true,
                       unit: ' km',
                     ),
@@ -201,7 +227,7 @@ class _ActivityFormState extends State<ActivityForm> {
                       title: 'Duration',
                       from: 0,
                       to: 120,
-                      initialValue: 0,
+                      initialValue: duration,
                       justIntValues: true,
                       unit: ' minutes',
                     ),
@@ -239,7 +265,7 @@ class _ActivityFormState extends State<ActivityForm> {
                       title: 'Calories',
                       from: 0,
                       to: 1000,
-                      initialValue: 0,
+                      initialValue: calories,
                       justIntValues: true,
                       unit: ' kcal',
                     ),
