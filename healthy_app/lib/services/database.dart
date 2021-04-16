@@ -594,7 +594,7 @@ class DatabaseService {
     if (timeParse.minute < 10){
       minute = "0${minute}";
     }
-    var formattedTime = "${timeParse.hour}:${timeParse.minute}";
+    var formattedTime = "${timeParse.hour}:${minute}";
     return formattedTime;
   }
 
