@@ -38,10 +38,6 @@ class _ActivityTileState extends State<ActivityTile> {
     return uid;
   }
 
-  checkIfTaken() async {
-    String userId = await getUserid();
-    //DatabaseService(uid: userId).checkIfMedTaken(widget.medication.medicineName);
-  }
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
@@ -173,27 +169,44 @@ class _ActivityTileState extends State<ActivityTile> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Card(
-        margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
-        child: CheckboxListTile(
-          title: Text(widget.activity.activityType,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),),
-          //subtitle: Text("Take at ${widget.medication.timeToTake}"),
-          secondary: IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: (){
-              //editItem(context, widget.medication.medicineName, widget.medication.timeToTake);
-              setState(() {
-              });
-            },
-          ),
-          value: isSelected,
-          onChanged: (bool newValue) {
-            setState(() {
-              //updateDatabase(newValue, widget.medication.medicineName);
-              isSelected = newValue;
-            });
-          },
+      child:  Card(
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          children: [
+            ListTile(
+              leading: Icon(Icons.arrow_drop_down_circle),
+              title: Text(widget.activity.activityType.toString()),
+              subtitle: Text("${widget.activity.calories.toString()} calories",
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+              child: Text(
+                'You walked ${widget.activity.distance} km in ${widget.activity.duration} minutes',
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+              ),
+            ),
+            ButtonBar(
+              alignment: MainAxisAlignment.center,
+              children: [
+                FlatButton(
+                  textColor: const Color(0xFF6200EE),
+                  onPressed: () {
+                    // Perform some action
+                  },
+                  child: const Text('EDIT'),
+                ),
+                FlatButton(
+                  textColor: const Color(0xFF6200EE),
+                  onPressed: () {
+                    // Perform some action
+                  },
+                  child: const Text('DELETE'),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

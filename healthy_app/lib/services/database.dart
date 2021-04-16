@@ -489,11 +489,13 @@ class DatabaseService {
     }
 
   //activity diary
-  Future addActivity(String activityType, double distance, double duration) async {
+  Future addActivity(String activityType, double distance, double duration, double calories) async {
     var roundedDistanceString = distance.toStringAsExponential(2);
     double roundedDistance = double.parse(roundedDistanceString);
     var roundedDurationString = duration.toStringAsExponential(2);
     double roundedDuration = double.parse(roundedDurationString);
+    var roundedCaloriesString = calories.toStringAsExponential(2);
+    double roundedCalories = double.parse(roundedCaloriesString);
 
     var entryName = getEntryName();
     return await Firestore
@@ -507,6 +509,7 @@ class DatabaseService {
       'type': activityType,
       'distance': roundedDistance,
       'duration': roundedDuration,
+      'calories': roundedCalories,
     });
   }
 
@@ -529,6 +532,7 @@ class DatabaseService {
         activityType: doc.data['type'] ?? '',
         distance: doc.data['distance'] ?? 0,
         duration: doc.data['duration'] ?? 0,
+        calories: doc.data['calories'] ?? 0,
       );
     }).toList();
   }

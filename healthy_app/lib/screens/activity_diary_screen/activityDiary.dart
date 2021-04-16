@@ -84,7 +84,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Container(
-            height: 600,
+            height: 1000,
             child: Center(
               child: Column(
                   children: [
