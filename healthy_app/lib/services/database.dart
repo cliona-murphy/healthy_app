@@ -537,6 +537,10 @@ class DatabaseService {
     }).toList();
   }
 
+  deleteActivity(){
+
+  }
+
     //misc
   String getEntryName(){
     var entryName;

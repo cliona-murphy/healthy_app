@@ -29,7 +29,6 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     super.initState();
     getUid();
     updateBoolean();
-    print("User ID act diary = " + userId);
   }
 
   Future<String> getUid() async {
@@ -38,7 +37,6 @@ class _ActivityDiaryState extends State<ActivityDiary> {
     setState(() {
       userId = uid;
     });
-    print("User ID getUid = " + userId);
     return uid;
   }
 
@@ -79,7 +77,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
 
   Widget build(BuildContext context){
     return StreamProvider<List<Activity>>.value(
-      value: DatabaseService(uid: 'MPVEF06jRYXyQhGwWPs2BfyU6QE2').activities,
+      value: DatabaseService(uid: userId).activities,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -89,10 +87,7 @@ class _ActivityDiaryState extends State<ActivityDiary> {
               child: Column(
                   children: [
                     Padding(padding: EdgeInsets.only(top: 30.0)),
-                    // StreamProvider<List<Activity>>.value(
-                    //   value: DatabaseService(uid: userId).activities,
                     ActivityList(),
-                    // ),
                     Container(
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(

@@ -52,62 +52,9 @@ class _ActivityTileState extends State<ActivityTile> {
     DatabaseService(uid: userId).updateMedicationTime(medName, timeToTake);
   }
 
-  deleteMedication(String medName) async {
+  deleteActivity(String activityType) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteMedication(medName);
-  }
-
-  void selectTime(BuildContext context) async {
-    //animate this?
-    selectedTime = await showTimePicker(
-      context: context,
-      initialTime: _time,
-      initialEntryMode: TimePickerEntryMode.input,
-    );
-    timeSelected = true;
-    String filler = "";
-    if(selectedTime.minute.toString() == "0") {
-      filler = "0";
-    }
-    timeString = "${selectedTime.hour}:${selectedTime.minute}${filler}";
-  }
-
-  showConfirmationDialog() {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed:  () {
-        Navigator.pop(context);
-      },
-    );
-    Widget continueButton = FlatButton(
-        child: Text("Confirm"),
-        onPressed:  () {
-          // if (medName == ""){
-          //updateTime(widget.medication.medicineName, timeString);
-          //} else {
-          // updateDetails(widget.medication.medicineName, medName, timeString);
-          //}
-          Navigator.pop(context);
-        }
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Confirm Action"),
-     // content: Text("Update time to take "+widget.medication.medicineName+" to "+timeString+"?"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
@@ -127,7 +74,7 @@ class _ActivityTileState extends State<ActivityTile> {
                       color: Colors.grey,
                       child: Text("Edit Time"),
                       onPressed: () {
-                        selectTime(context);
+                        //selectTime(context);
                       },
                     ),
                   ),
@@ -157,13 +104,39 @@ class _ActivityTileState extends State<ActivityTile> {
               nameController.clear();
               timeController.clear();
               Navigator.pop(context);
-              showConfirmationDialog();
               //updateDetails(widget.medication.medicineName, nameController.text, timeController.text);
             },
           ),
         ],
       );
     });
+  }
+
+  String checkActivityType(String activityType) {
+    String string = "";
+    switch (activityType){
+      case 'Walking':
+        setState(() {
+          string = "walked";
+        });
+        break;
+      case 'Running':
+        setState(() {
+          string = "ran";
+        });
+        break;
+      case 'Cycling':
+        setState(() {
+          string = "cycled";
+        });
+        break;
+      case 'Swimming':
+        setState(() {
+          string = "swam";
+        });
+        break;
+    }
+    return string;
   }
 
   Widget build(BuildContext context) {
@@ -176,14 +149,14 @@ class _ActivityTileState extends State<ActivityTile> {
             ListTile(
               leading: Icon(Icons.arrow_drop_down_circle),
               title: Text(widget.activity.activityType.toString()),
-              subtitle: Text("${widget.activity.calories.toString()} calories",
+              subtitle: Text("${widget.activity.calories.toInt()} calories",
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
             ),
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
               child: Text(
-                'You walked ${widget.activity.distance} km in ${widget.activity.duration} minutes',
+                'You ${checkActivityType(widget.activity.activityType)} ${widget.activity.distance.toInt()} km in ${widget.activity.duration.toInt()} minutes',
                 style: TextStyle(color: Colors.black.withOpacity(0.6)),
               ),
             ),
