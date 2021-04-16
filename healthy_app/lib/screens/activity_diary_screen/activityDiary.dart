@@ -8,7 +8,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 class ActivityDiary extends StatelessWidget {
 
   final AuthService _auth = AuthService();
-
+//comment for backup
   Widget build(BuildContext context){
     return Scaffold(
         backgroundColor: Colors.white,
