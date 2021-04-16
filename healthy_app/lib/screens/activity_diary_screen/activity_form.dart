@@ -33,10 +33,21 @@ class _ActivityFormState extends State<ActivityForm> {
     return uid;
   }
 
+  Future<String> getUserid() async {
+    final FirebaseUser user = await auth.currentUser();
+    final uid = user.uid;
+    return uid;
+  }
+
   void onSearchAreaChange(String data) {
     setState(() {
       activityType = data;
     });
+  }
+
+  void addActivity() async {
+    String userId = await getUserid();
+    DatabaseService(uid: userId).addActivity(activityType, distance, duration);
   }
 
   @override
@@ -159,7 +170,7 @@ class _ActivityFormState extends State<ActivityForm> {
                               error = "Please supply valid values for all fields.";
                             });
                           } else {
-                            DatabaseService(uid: userId).addActivity(activityType, distance, duration);
+                            addActivity();
                             Navigator.pop(context, "test");
                           }
                         },

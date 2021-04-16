@@ -512,15 +512,12 @@ class DatabaseService {
 
   //not working but same functionality as med checklist
   Stream<List<Activity>> get activities {
-    print("activity snapshot:");
-    print(Firestore.instance
-        .collection("users")
-        .document(uid)
-        .collection('activities')
-        .snapshots());
+    var entryName = getEntryName();
     return  Firestore.instance
         .collection("users")
         .document(uid)
+        .collection('entries')
+        .document(entryName)
         .collection('activities')
         .snapshots()
         .map(activityListFromSnapshot);

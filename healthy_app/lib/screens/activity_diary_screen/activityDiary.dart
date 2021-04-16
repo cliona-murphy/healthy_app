@@ -78,8 +78,8 @@ class _ActivityDiaryState extends State<ActivityDiary> {
   }
 
   Widget build(BuildContext context){
-    return loading ? Loading(): StreamProvider<List<Activity>>.value(
-      value: DatabaseService(uid: userId).activities,
+    return StreamProvider<List<Activity>>.value(
+      value: DatabaseService(uid: 'MPVEF06jRYXyQhGwWPs2BfyU6QE2').activities,
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
