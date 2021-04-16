@@ -431,6 +431,7 @@ class DatabaseService {
       return MedicationChecklist(
         medicineName: doc.data['medicationName'] ?? '',
         taken: doc.data['taken'] ?? '',
+        timeTaken: doc.data['timeTaken'] ?? '',
       );
     }).toList();
   }
