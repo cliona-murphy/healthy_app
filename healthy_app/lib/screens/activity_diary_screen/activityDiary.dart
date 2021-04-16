@@ -64,12 +64,14 @@ class _ActivityDiaryState extends State<ActivityDiary> {
 
   showSnackBar(){
     return Flushbar(
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       flushbarPosition: FlushbarPosition.TOP,
       title: 'Success',
       message: "Your activity was successfully logged!",
     )..show(context);
   }
+
+
 
   void addItem(BuildContext context){
     renderActivityForm(context);

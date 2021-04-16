@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/medication.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,15 @@ class _ActivityTileState extends State<ActivityTile> {
     return uid;
   }
 
+  showSnackBarDelete(){
+    return Flushbar(
+      duration: Duration(seconds: 2),
+      flushbarPosition: FlushbarPosition.TOP,
+      title: 'Success',
+      message: "Your activity was successfully deleted!",
+    )..show(context);
+  }
+
   updateDatabase(bool checked, String medName) async {
     String userId = await getUserid();
     DatabaseService(uid: userId).medTaken(medName, checked);
@@ -55,6 +65,7 @@ class _ActivityTileState extends State<ActivityTile> {
   deleteActivity() async {
     String userId = await getUserid();
     DatabaseService(uid: userId).deleteActivity(widget.activity.docId);
+    showSnackBarDelete();
   }
 
   Future<String> editItem(BuildContext context, String medName, String timeToTake) {
