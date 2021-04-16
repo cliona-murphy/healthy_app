@@ -122,8 +122,6 @@ class _FoodDiaryState extends State<FoodDiary> {
     userId = await getUid();
     if(userId != ""){
       DatabaseService(uid: userId).addNewFood(name, calories, mealId, getCurrentDate());
-      foods = DatabaseService(uid: userId).getFoods(mealId);
-      listLength = foods.length;
     }
   }
 

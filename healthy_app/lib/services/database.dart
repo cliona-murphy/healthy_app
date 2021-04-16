@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:healthy_app/models/activity.dart';
 import 'package:healthy_app/models/food.dart';
 import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/logged_nutrient.dart';
 import 'file:///C:/Users/ClionaM/AndroidStudioProjects/healthy_app/lib/models/nutrient.dart';
@@ -497,6 +498,94 @@ class DatabaseService {
         );
       }).toList();
     }
+
+  //activity diary
+  Future addActivity(String activityType, double distance, double duration, double calories) async {
+    var roundedDistanceString = distance.toStringAsExponential(2);
+    double roundedDistance = double.parse(roundedDistanceString);
+    var roundedDurationString = duration.toStringAsExponential(2);
+    double roundedDuration = double.parse(roundedDurationString);
+    var roundedCaloriesString = calories.toStringAsExponential(2);
+    double roundedCalories = double.parse(roundedCaloriesString);
+
+    var entryName = getEntryName();
+    return await Firestore
+        .instance
+        .collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .add({
+      'type': activityType,
+      'distance': roundedDistance,
+      'duration': roundedDuration,
+      'calories': roundedCalories,
+    });
+  }
+
+  //not working but same functionality as med checklist
+  Stream<List<Activity>> get activities {
+    var entryName = getEntryName();
+    return  Firestore.instance
+        .collection("users")
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .snapshots()
+        .map(activityListFromSnapshot);
+  }
+
+  List<Activity> activityListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return Activity(
+        activityType: doc.data['type'] ?? '',
+        distance: doc.data['distance'] ?? 0,
+        duration: doc.data['duration'] ?? 0,
+        calories: doc.data['calories'] ?? 0,
+        docId: doc.documentID,
+      );
+    }).toList();
+  }
+
+  deleteActivity(String docId) async {
+    var entryName = getEntryName();
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .document(docId)
+        .delete();
+  }
+
+  updateActivity(String docId, String type, double distance, double duration, double calories) async {
+    var entryName = getEntryName();
+    return await Firestore.instance.collection('users')
+        .document(uid)
+        .collection('entries')
+        .document(entryName)
+        .collection('activities')
+        .document(docId)
+        .updateData({
+           'type': type,
+          'distance': distance,
+          'duration': duration,
+          'calories': calories,
+    });
+  }
+
+    //misc
+  String getEntryName(){
+    var entryName;
+    if (globals.selectedDate != getCurrentDate()){
+      entryName = reformatDate(globals.selectedDate);
+    } else {
+      entryName = reformatDate(getCurrentDate());
+    }
+    return entryName;
+  }
   //misc
   String getCurrentTime() {
     var time = new DateTime.now().toString();
@@ -517,58 +606,5 @@ class DatabaseService {
     String newDate = "";
     newDate = newDate + newDateArr[0] + newDateArr[1] + newDateArr[2];
     return newDate;
-  }
-
-  //delete later
-  //need to make reference to uid in this function
-  List<Food> getFoods(mealId){
-
-    List<Food> foods = new List<Food>();
-    entryCollection.getDocuments().then((querySnapshot) {
-      Firestore.instance
-          .collection("users")
-          .document(uid)
-          .collection("entries")
-          .document(docId)
-          .collection("foods")
-          .where("mealId", isEqualTo: mealId)
-          .getDocuments()
-          .then((querySnapshot) {
-        querySnapshot.documents.forEach((result) {
-          //make food object here
-          foods.add(new Food(
-              foodName: result.data['foodName'],
-              calories: result.data['calories'],
-              mealId: result.data['mealId'])
-          );
-        });
-      });
-    });
-    return foods;
-  }
-
-  String setDocId(String date){
-    print("setDocId called");
-    print("date:" + date);
-    Firestore.instance.collection("users")
-        .document(uid)
-        .collection("entries")
-        .where('entryDate', isEqualTo: "21/2/2021")
-        .getDocuments()
-        .then((querySnapshot) {
-      print(querySnapshot.documents);
-      querySnapshot.documents.forEach((result) {
-        docId = result.documentID;
-      });
-    });
-    print("docId = " + docId.toString());
-    return docId;
-  }
-
-  setDocumentId(String docId) async {
-    print("Set doc id called");
-    print("doc Id passed in is: " + docId);
-    documentId = docId;
-    print("document Id is set to: " + documentId.toString());
   }
 }
