@@ -393,7 +393,7 @@ class DatabaseService {
     });
   }
 
-  logTime(String medName) async {
+  updateTimeTaken(String medName) async {
     return await Firestore.instance.collection('users')
         .document(uid)
         .collection('medications')
