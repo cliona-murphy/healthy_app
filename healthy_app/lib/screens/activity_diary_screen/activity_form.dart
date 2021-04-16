@@ -33,7 +33,7 @@ class _ActivityFormState extends State<ActivityForm> {
   void initState(){
     super.initState();
     getUid();
-    if (widget.action != ""){
+    if (widget.action == "Edit"){
       setState(() {
         argsPassed = true;
         activityType = widget.activity.activityType;
@@ -75,22 +75,22 @@ class _ActivityFormState extends State<ActivityForm> {
     DatabaseService(uid: userId).updateActivity(widget.activity.docId, activityType, distance, duration, calories);
   }
 
-  void calculateCalories(){
-    switch (activityType){
-      case 'Walking': {
-        break;
-      }
-      case 'Running': {
-        break;
-      }
-      case 'Cycling': {
-        break;
-      }
-      case 'Swimming': {
-        break;
-      }
-    }
-  }
+  // void calculateCalories(){
+  //   switch (activityType){
+  //     case 'Walking': {
+  //       break;
+  //     }
+  //     case 'Running': {
+  //       break;
+  //     }
+  //     case 'Cycling': {
+  //       break;
+  //     }
+  //     case 'Swimming': {
+  //       break;
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
